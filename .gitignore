@@ -1,3 +1,8 @@
+.idea
+*.txt
+cmake-build-debug
+-Wno-framework-include-private-from-public
+
 # Prerequisites
 *.d
 
