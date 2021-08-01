@@ -1,3 +1,4 @@
+INCLUDE			= include
 NAME			= a.out
 SRC				=	main.cpp
 
@@ -14,7 +15,7 @@ $(OBJDIR):
 				mkdir -p $@
 
 $(OBJDIR)/%.o:	$(SRCDIR)/%.cpp | $(OBJDIR)
-				$(CC) -std=c++98 -I. -c -MD $< -o $@
+				$(CC) -std=c++98 -I$(INCLUDE) -c -MD $< -o $@
 
 include $(wildcard $(OBJDIR)/*.d)
 
