@@ -12,6 +12,9 @@ void	test_front_back();
 void	test_oper_qr(); //operator v[]
 void	test_point_allocat();
 void	test_pop_back();
+void	test_constructor();
+void	test_constructor_2();
+
 
 int				main( void )
 {
@@ -22,14 +25,38 @@ int				main( void )
 	namespace	ft = std;
 #endif
 
-	test_capac_size();
-	test_iterator_inc_decr();
-	test_operator();
-	test_front_back();
-	test_oper_qr(); //operator v[]
+	//test_capac_size();
+	//test_iterator_inc_decr();
+	//test_operator();
+	//test_front_back();
+	//test_oper_qr(); //operator v[]
 	//test_point_allocat();
-	test_pop_back();
+	//test_pop_back();
+	//test_constructor();
+	//test_constructor_2();
 
+	/*
+	std::cout << std::endl;
+	std::cout << COLO << "TEST consturct begin end" << NO_C << std::endl;
+
+	ft::vector<int>				sec(9, 34);
+	ft::vector<int>				third(sec.begin(), sec.end());
+
+	std::cout << "size = " << third.size() << std::endl;
+	std::cout << "capacity = " << third.capacity() << std::endl;
+
+	ft::vector<int>::iterator	it_i = third.begin();
+	ft::vector<int>::iterator	end_ = third.end();
+
+	while (it_i != end_)
+	{
+		std::cout << "it = " << *it_i << std::endl;
+		++it_i;
+	}
+	*/
+
+	/*
+	std::iterator_traits<ft::vector<int>::iterator>	tr;
     ft::vector<int>				v;
 	ft::vector<int>::iterator	it;
 
@@ -37,8 +64,78 @@ int				main( void )
 	v.push_back(85);
 	v.push_back(12);
 	v.push_back(-23);
+	*/
+
 
 	return (0);
+}
+
+void	test_constructor()
+{
+	std::cout << std::endl;
+	std::cout << COLO << "TEST consturct" << NO_C << std::endl;
+
+	ft::vector<int>		second(3);
+
+	std::cout << "size = " << second.size() << std::endl;
+	std::cout << "capacity = " << second.capacity() << std::endl;
+
+	second.push_back(32);
+
+	std::cout << "size = " << second.size() << std::endl;
+	std::cout << "capacity = " << second.capacity() << std::endl;
+
+	ft::vector<int>::iterator	it = second.begin();
+	ft::vector<int>::iterator	end = second.end();
+	while (it != end)
+	{
+		std::cout << "it = " << *it << std::endl;
+		++it;
+	}
+}
+
+void	test_constructor_2()
+{
+	std::cout << std::endl;
+	std::cout << COLO << "TEST consturct" << NO_C << std::endl;
+
+	ft::vector<std::string>		second(3, "lol");
+
+	std::cout << "size = " << second.size() << std::endl;
+	std::cout << "capacity = " << second.capacity() << std::endl;
+
+	second.push_back("kek");
+
+	std::cout << "size = " << second.size() << std::endl;
+	std::cout << "capacity = " << second.capacity() << std::endl;
+
+	ft::vector<std::string>::iterator	it = second.begin();
+	ft::vector<std::string>::iterator	end = second.end();
+
+	while (it != end)
+	{
+		std::cout << "it = " << *it << std::endl;
+		++it;
+	}
+
+	std::cout << std::endl;
+	std::cout << COLO << "TEST consturct begin end" << NO_C << std::endl;
+
+	ft::vector<int>				sec(9, 34);
+	ft::vector<int>				third(sec.begin(), sec.end());
+
+	std::cout << "size = " << third.size() << std::endl;
+	std::cout << "capacity = " << third.capacity() << std::endl;
+
+	ft::vector<int>::iterator	it_i = third.begin();
+	ft::vector<int>::iterator	end_ = third.end();
+
+	while (it_i != end_)
+	{
+		std::cout << "it = " << *it_i << std::endl;
+		++it_i;
+	}
+
 }
 
 void	test_capac_size(void)
@@ -118,7 +215,8 @@ void	test_operator()
 	/*
 	std::cout << "TEST n + a" << std::endl;
 	it = v.begin();
-	it = 2 + it;
+	size_t	abi = 2;
+	it = abi + it;
 	std::cout << *it << std::endl;
 	*/
 	std::cout << "TEST a - n" << std::endl;
