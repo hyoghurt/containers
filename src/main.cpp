@@ -14,6 +14,9 @@ void	test_point_allocat();
 void	test_pop_back();
 void	test_constructor();
 void	test_constructor_2();
+void	test_resize();
+void	test_reserve();
+void	test_at();
 
 
 int				main( void )
@@ -24,6 +27,7 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
+	//ERRRROR	vector<int>	v(3, 3);
 
 	//test_capac_size();
 	//test_iterator_inc_decr();
@@ -34,12 +38,53 @@ int				main( void )
 	//test_pop_back();
 	//test_constructor();
 	//test_constructor_2();
+	//test_resize();
+	//test_reserve();
+	//test_at();
 
+	ft::vector<std::string>::iterator	it_i;
+	ft::vector<std::string>::iterator	end_;
+
+	ft::vector<std::string> foo (3, "hello");
+
+	ft::vector<std::string> bar (5, "fix");
+
+  	bar = foo;
+  	foo = ft::vector<std::string>();
+
+  	std::cout << "Size of foo: " << int(foo.size()) << '\n';
+  	std::cout << "Size of bar: " << int(bar.size()) << '\n';
+  	std::cout << "capacity of foo: " << int(foo.capacity()) << '\n';
+  	std::cout << "capacity of bar: " << int(bar.capacity()) << '\n';
+
+	it_i = foo.begin();
+	end_ = foo.end();
+
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+	std::cout << std::endl;
+
+	it_i = bar.begin();
+	end_ = bar.end();
+
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+	std::cout << std::endl;
+
+  	return 0;
 	/*
 	std::cout << std::endl;
 	std::cout << COLO << "TEST consturct begin end" << NO_C << std::endl;
 
-	ft::vector<int>				sec(9, 34);
+	ft::vector<int>					sec;
+
+	sec.push_back(23);
+	sec.push_back(3);
+	sec.push_back(1);
+
+	std::cout << "size = " << sec.size() << std::endl;
+	std::cout << "capacity = " << sec.capacity() << std::endl;
+
 	ft::vector<int>				third(sec.begin(), sec.end());
 
 	std::cout << "size = " << third.size() << std::endl;
@@ -49,25 +94,154 @@ int				main( void )
 	ft::vector<int>::iterator	end_ = third.end();
 
 	while (it_i != end_)
-	{
-		std::cout << "it = " << *it_i << std::endl;
-		++it_i;
-	}
+		std::cout << " " << *it_i++;
+
+	std::cout << std::endl;
 	*/
 
-	/*
-	std::iterator_traits<ft::vector<int>::iterator>	tr;
+	return (0);
+}
+
+void	test_at()
+{
+	try
+	{
+		ft::vector<int>				v(10);
+
+		v.at(23) = 100;
+	}
+	catch (const std::out_of_range & orr)
+	{
+		std::cout << "out_of_range: " << orr.what() << std::endl;
+	}
+	catch (const std::exception & e)
+	{
+		std::cout << "exceptiron: " << e.what() << std::endl;
+	}
+	catch (...)
+	{
+		std::cout << "..." << std::endl;
+	}
+}
+
+void	test_reserve()
+{
     ft::vector<int>				v;
-	ft::vector<int>::iterator	it;
+
+	v.reserve(10);
 
 	v.push_back(32);
 	v.push_back(85);
 	v.push_back(12);
 	v.push_back(-23);
-	*/
+	v.push_back(12);
 
+	ft::vector<int>::iterator	it_i = v.begin();
+	ft::vector<int>::iterator	end_ = v.end();
 
-	return (0);
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+
+	std::cout << std::endl;
+	std::cout << "size = " << v.size() << std::endl;
+	std::cout << "capacity = " << v.capacity() << std::endl;
+
+	v.reserve(5);
+	std::cout << "size = " << v.size() << std::endl;
+	std::cout << "capacity = " << v.capacity() << std::endl;
+
+	v.reserve(20);
+
+	it_i = v.begin();
+	end_ = v.end();
+
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+
+	std::cout << std::endl;
+	std::cout << "size = " << v.size() << std::endl;
+	std::cout << "capacity = " << v.capacity() << std::endl;
+
+	return;
+}
+
+void	test_resize()
+{
+	{
+    ft::vector<int>				v;
+
+	v.push_back(32);
+	v.push_back(85);
+	v.push_back(12);
+	v.push_back(-23);
+	v.push_back(12);
+
+	ft::vector<int>::iterator	it_i = v.begin();
+	ft::vector<int>::iterator	end_ = v.end();
+
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+
+	std::cout << std::endl;
+	std::cout << "size = " << v.size() << std::endl;
+	std::cout << "capacity = " << v.capacity() << std::endl;
+
+	v.resize(3);
+
+	it_i = v.begin();
+	end_ = v.end();
+
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+
+	std::cout << std::endl;
+	std::cout << "size = " << v.size() << std::endl;
+	std::cout << "capacity = " << v.capacity() << std::endl;
+	}
+	
+	{
+    ft::vector<int>				v;
+
+	v.push_back(32);
+	v.push_back(85);
+	v.push_back(12);
+	v.push_back(-23);
+	v.push_back(12);
+
+	ft::vector<int>::iterator	it_i = v.begin();
+	ft::vector<int>::iterator	end_ = v.end();
+
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+
+	std::cout << std::endl;
+	std::cout << "size = " << v.size() << std::endl;
+	std::cout << "capacity = " << v.capacity() << std::endl;
+
+	v.resize(18, 23);
+
+	it_i = v.begin();
+	end_ = v.end();
+
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+
+	std::cout << std::endl;
+	std::cout << "size = " << v.size() << std::endl;
+	std::cout << "capacity = " << v.capacity() << std::endl;
+
+	v.resize(50);
+
+	it_i = v.begin();
+	end_ = v.end();
+
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+
+	std::cout << std::endl;
+	std::cout << "size = " << v.size() << std::endl;
+	std::cout << "capacity = " << v.capacity() << std::endl;
+	}
 }
 
 void	test_constructor()
