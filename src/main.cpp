@@ -13,10 +13,14 @@ void	test_oper_qr(); //operator v[]
 void	test_point_allocat();
 void	test_pop_back();
 void	test_constructor();
+void	test_constructor_1();
 void	test_constructor_2();
 void	test_resize();
 void	test_reserve();
 void	test_at();
+void	test_assign();
+void	test_insert_1();
+void	test_insert_2();
 
 
 int				main( void )
@@ -37,11 +41,148 @@ int				main( void )
 	//test_point_allocat();
 	//test_pop_back();
 	//test_constructor();
+	//test_constructor_1();
 	//test_constructor_2();
 	//test_resize();
 	//test_reserve();
 	//test_at();
+	//test_assign();
+	test_insert_1();
+	test_insert_2();
 
+
+	return (0);
+}
+
+void	test_insert_2()
+{
+	std::cout << std::endl;
+	std::cout << "TEST INSERT 2" << std::endl;
+
+	ft::vector<int> first;
+
+	first.push_back(23);
+	first.push_back(3);
+	first.push_back(4);
+	first.push_back(2);
+	first.push_back(34);
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	ft::vector<int>::iterator	c_b = first.begin();
+	ft::vector<int>::iterator	c_e = first.end();
+
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+
+	ft::vector<int>::iterator	nw = first.insert(++first.begin(), 10);
+
+	std::cout << std::endl;
+	std::cout << "new position = " << *nw << std::endl;
+
+	std::cout << std::endl;
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	c_b = first.begin();
+	c_e = first.end();
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+}
+
+void	test_insert_1()
+{
+	std::cout << "TEST ONE" << std::endl;
+
+	ft::vector<int> first(5, 43);
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	ft::vector<int>::iterator	c_b = first.begin();
+	ft::vector<int>::iterator	c_e = first.end();
+
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+
+	ft::vector<int>::iterator	nw = first.insert(first.begin() + 1, 300);
+
+	std::cout << std::endl;
+	std::cout << "new position = " << *nw << std::endl;
+
+	std::cout << std::endl;
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	c_b = first.begin();
+	c_e = first.end();
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+}
+
+void	test_assign()
+{
+	ft::vector<int> first;
+
+	first.push_back(23);
+	first.push_back(2);
+	first.push_back(4);
+	first.push_back(5);
+	first.push_back(56);
+
+	ft::vector<int>::iterator	c_b = first.begin();
+	ft::vector<int>::iterator	c_e = first.end();
+
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+
+
+	std::cout << std::endl;
+	std::cout << "SECOND TEST" << std::endl;
+
+	ft::vector<int> second;
+
+	c_b = first.begin() + 1;
+
+	second.assign(c_b, first.end() - 1);
+
+	c_b = second.begin();
+	c_e = second.end();
+
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+	std::cout << "size = " << second.size() << std::endl;
+	std::cout << "capacity = " << second.capacity() << std::endl;
+
+
+	std::cout << std::endl;
+	std::cout << "FIRST TEST" << std::endl;
+
+	first.assign(3, 23);
+
+	c_b = first.begin();
+	c_e = first.end();
+
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+}
+
+void	test_constructor_1()
+{
 	ft::vector<std::string>::iterator	it_i;
 	ft::vector<std::string>::iterator	end_;
 
@@ -70,36 +211,6 @@ int				main( void )
 	while (it_i != end_)
 		std::cout << " " << *it_i++;
 	std::cout << std::endl;
-
-  	return 0;
-	/*
-	std::cout << std::endl;
-	std::cout << COLO << "TEST consturct begin end" << NO_C << std::endl;
-
-	ft::vector<int>					sec;
-
-	sec.push_back(23);
-	sec.push_back(3);
-	sec.push_back(1);
-
-	std::cout << "size = " << sec.size() << std::endl;
-	std::cout << "capacity = " << sec.capacity() << std::endl;
-
-	ft::vector<int>				third(sec.begin(), sec.end());
-
-	std::cout << "size = " << third.size() << std::endl;
-	std::cout << "capacity = " << third.capacity() << std::endl;
-
-	ft::vector<int>::iterator	it_i = third.begin();
-	ft::vector<int>::iterator	end_ = third.end();
-
-	while (it_i != end_)
-		std::cout << " " << *it_i++;
-
-	std::cout << std::endl;
-	*/
-
-	return (0);
 }
 
 void	test_at()
