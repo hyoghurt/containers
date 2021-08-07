@@ -21,7 +21,15 @@ void	test_at();
 void	test_assign();
 void	test_insert_1();
 void	test_insert_2();
-
+void	test_insert_3();
+void	test_insert_4();
+void	test_insert_5();
+void	test_insert_6();
+void	test_erase_1();
+void	test_erase_2();
+void	test_swap();
+void	test_clear();
+void	test_get_alloc();
 
 int				main( void )
 {
@@ -31,8 +39,6 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
-	//ERRRROR	vector<int>	v(3, 3);
-
 	//test_capac_size();
 	//test_iterator_inc_decr();
 	//test_operator();
@@ -47,11 +53,324 @@ int				main( void )
 	//test_reserve();
 	//test_at();
 	//test_assign();
-	test_insert_1();
-	test_insert_2();
+	//test_insert_1();
+	//test_insert_2();
+	//test_insert_3();
+	//test_insert_4();
+	//test_insert_5();
+	//test_insert_6();
+	//test_erase_1();
+	//test_erase_2();
+	//test_swap();
+	//test_clear();
+	//test_get_alloc();
+	
+	ft::vector<int> myvector;
 
+	for (int i=1; i<=5; i++) myvector.push_back(i);
+
+
+  	std::cout << "myvector contains:";
+  	for (ft::vector<int>::iterator it = myvector.begin() ; it != myvector.end(); ++it)
+  	  std::cout << ' ' << *it;
+  	std::cout << '\n';
+
+	ft::vector<int>::const_iterator	c_it = myvector.begin();
+
+	std::cout << "const iterator.begin = " << *c_it << std::endl;
+	//*c_it = 3;
 
 	return (0);
+}
+
+void	test_get_alloc()
+{
+	std::cout << std::endl;
+	std::cout << "TEST GET ALLOC" << std::endl;
+
+	ft::vector<int> myvector;
+	int * p;
+  	unsigned int i;
+
+  	// allocate an array with space for 5 elements using vector's allocator:
+  	p = myvector.get_allocator().allocate(5);
+
+  	// construct values in-place on the array:
+  	for (i=0; i<5; i++) myvector.get_allocator().construct(&p[i],i);
+
+  	std::cout << "The allocated array contains:";
+  	for (i=0; i<5; i++) std::cout << ' ' << p[i];
+  	std::cout << '\n';
+
+  	// destroy and deallocate:
+  	for (i=0; i<5; i++) myvector.get_allocator().destroy(&p[i]);
+  	myvector.get_allocator().deallocate(p,5);
+}
+
+void	test_clear()
+{
+	std::cout << std::endl;
+	std::cout << "TEST CLEAR" << std::endl;
+
+	ft::vector<int> myvector;
+	myvector.push_back (100);
+  	myvector.push_back (200);
+  	myvector.push_back (300);
+
+	std::cout << "size = " << myvector.size() << std::endl;
+	std::cout << "capacity = " << myvector.capacity() << std::endl;
+
+  	std::cout << "myvector contains:";
+  	for (unsigned i=0; i<myvector.size(); i++)
+  	  std::cout << ' ' << myvector[i];
+  	std::cout << '\n';
+
+  	myvector.clear();
+  	myvector.push_back (1101);
+  	myvector.push_back (2202);
+
+	std::cout << "size = " << myvector.size() << std::endl;
+	std::cout << "capacity = " << myvector.capacity() << std::endl;
+
+  	std::cout << "myvector contains:";
+  	for (unsigned i=0; i<myvector.size(); i++)
+  	  std::cout << ' ' << myvector[i];
+  	std::cout << '\n';
+}
+
+void	test_swap()
+{
+	std::cout << std::endl;
+	std::cout << "TEST SWAP" << std::endl;
+
+	ft::vector<int> foo (3,100);   // three ints with a value of 100
+	ft::vector<int> bar (5,200);   // five ints with a value of 200
+
+  	foo.swap(bar);
+
+  	std::cout << "foo contains:";
+  	for (unsigned i=0; i<foo.size(); i++)
+  	  std::cout << ' ' << foo[i];
+  	std::cout << '\n';
+
+  	std::cout << "bar contains:";
+  	for (unsigned i=0; i<bar.size(); i++)
+  	  std::cout << ' ' << bar[i];
+  	std::cout << '\n';
+}
+
+void	test_erase_2()
+{
+	std::cout << std::endl;
+	std::cout << "TEST ERASE 2" << std::endl;
+	
+	ft::vector<int>::iterator	it;
+
+	ft::vector<int> first;
+
+	// set some values (from 1 to 10)
+  	for (int i=1; i<=10; i++) first.push_back(i);
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	std::cout << std::endl << "erase" << std::endl;
+  	// erase the 6th element
+  	it = first.erase (first.begin(), first.begin()+7);
+
+	std::cout << std::endl << "return = " << *it << std::endl;
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	std::cout << std::endl;
+  	for (unsigned i=0; i<first.size(); ++i)
+  	  std::cout << ' ' << first[i];
+  	std::cout << '\n';
+}
+
+void	test_erase_1()
+{
+	std::cout << std::endl;
+	std::cout << "TEST ERASE 1" << std::endl;
+	
+	ft::vector<int>::iterator	it;
+
+	ft::vector<int> first;
+
+	// set some values (from 1 to 10)
+  	for (int i=1; i<=10; i++) first.push_back(i);
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	std::cout << std::endl << "erase" << std::endl;
+  	// erase the 6th element
+  	it = first.erase (first.begin()+5);
+
+	std::cout << std::endl << "return = " << *it << std::endl;
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+  	// erase the first 3 elements:
+  	//first.erase (myvector.begin(),myvector.begin()+3);
+
+	std::cout << std::endl;
+  	for (unsigned i=0; i<first.size(); ++i)
+  	  std::cout << ' ' << first[i];
+  	std::cout << '\n';
+}
+
+void	test_insert_6()
+{
+	std::cout << std::endl;
+	std::cout << "TEST INSERT 6" << std::endl;
+
+	ft::vector<int> first;
+
+	first.push_back(23);
+	first.push_back(3);
+	first.push_back(4);
+	first.push_back(2);
+	first.push_back(34);
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	ft::vector<int>::iterator	c_b = first.begin();
+	ft::vector<int>::iterator	c_e = first.end();
+
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+
+	ft::vector<int> second(3,56);
+
+	std::cout << std::endl << "insert" << std::endl;
+	first.insert(first.begin() + 1, second.begin() + 1, second.end());
+
+	std::cout << std::endl;
+	std::cout << "first.size = " << first.size() << std::endl;
+	std::cout << "first.capacity = " << first.capacity() << std::endl;
+
+	c_b = first.begin();
+	c_e = first.end();
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+}
+
+void	test_insert_5()
+{
+	std::cout << std::endl;
+	std::cout << "TEST INSERT 5" << std::endl;
+
+	ft::vector<int> first;
+
+	first.push_back(23);
+	first.push_back(3);
+	first.push_back(4);
+	first.push_back(2);
+	first.push_back(34);
+	first.push_back(134);
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	ft::vector<int>::iterator	c_b = first.begin();
+	ft::vector<int>::iterator	c_e = first.end();
+
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+
+	ft::vector<int> second(3,56);
+
+	std::cout << std::endl;
+	std::cout << "second.size = " << second.size() << std::endl;
+	std::cout << "second.capacity = " << second.capacity() << std::endl;
+
+	std::cout << std::endl << "insert" << std::endl;
+	second.insert(second.begin() + 1, first.begin(), first.end());
+
+	std::cout << std::endl;
+	std::cout << "second.size = " << second.size() << std::endl;
+	std::cout << "second.capacity = " << second.capacity() << std::endl;
+
+	c_b = second.begin();
+	c_e = second.end();
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+}
+
+void	test_insert_4()
+{
+	std::cout << std::endl;
+	std::cout << "TEST INSERT 4" << std::endl;
+
+	ft::vector<int> first;
+
+	first.push_back(23);
+	first.push_back(3);
+	first.push_back(4);
+	first.push_back(2);
+	first.push_back(34);
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	ft::vector<int>::iterator	c_b = first.begin();
+	ft::vector<int>::iterator	c_e = first.end();
+
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+
+	first.insert(first.begin() + 2, 23, 99);
+
+	std::cout << std::endl;
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	c_b = first.begin();
+	c_e = first.end();
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+}
+
+void	test_insert_3()
+{
+	std::cout << std::endl;
+	std::cout << "TEST INSERT 3" << std::endl;
+
+	ft::vector<int> first(3, 100);
+
+	std::vector<int>::iterator it;
+
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	ft::vector<int>::iterator	c_b = first.begin();
+	ft::vector<int>::iterator	c_e = first.end();
+
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
+
+	first.insert (first.begin() + 1,2,300);
+
+	std::cout << std::endl;
+	std::cout << "size = " << first.size() << std::endl;
+	std::cout << "capacity = " << first.capacity() << std::endl;
+
+	c_b = first.begin();
+	c_e = first.end();
+	while (c_b != c_e)
+		std::cout << " " << *c_b++;
+	std::cout << std::endl;
 }
 
 void	test_insert_2()
@@ -77,7 +396,9 @@ void	test_insert_2()
 		std::cout << " " << *c_b++;
 	std::cout << std::endl;
 
-	ft::vector<int>::iterator	nw = first.insert(++first.begin(), 10);
+	ft::vector<int>::iterator	nw;
+
+	nw = first.insert(first.begin() + 2, 10);
 
 	std::cout << std::endl;
 	std::cout << "new position = " << *nw << std::endl;

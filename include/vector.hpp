@@ -51,6 +51,28 @@ namespace ft
     class vector
     {
         public:
+			struct iterator;
+			/*
+			struct	const_iterator : public iterator
+			{
+				typedef std::ptrdiff_t						difference_type;
+				typedef const T								value_type;
+				typedef const T*							pointer;
+				typedef const T&							reference;
+				typedef std::random_access_iterator_tag		iterator_category;
+
+				const_iterator()										{};
+				const_iterator(T* p) : iterator(p)						{};
+				~const_iterator()										{};
+
+				const_iterator(const const_iterator& oth)				{ *this = oth; };
+				const_iterator(const iterator& oth)						{ this->p = oth.p; };
+				const_iterator&	operator= (const const_iterator& oth)	{ this->p = oth.p; return *this; };
+				reference		operator* () const						{ return *iterator::p; };
+				const_iterator	operator++(int)					{ const_iterator tmp = *this; ++(this->p); return (tmp); };
+				bool			operator!= (const const_iterator& oth)	{ return (this->p != oth.p); };
+			};
+			*/
 			//struct	iterator : public std::iterator<std::random_access_iterator_tag, T, T, T*, T>
 			//struct	iterator : std::iterator<std::random_access_iterator_tag, T>
 			struct	iterator
@@ -91,49 +113,8 @@ namespace ft
 					T*	p;
 			};
 
-			struct	const_iterator : public iterator
+			struct	reverse_iterator
 			{
-				typedef std::ptrdiff_t						difference_type;
-				typedef const T								value_type;
-				typedef const T*							pointer;
-				typedef const T&							reference;
-				typedef std::random_access_iterator_tag		iterator_category;
-
-				const_iterator() {};
-				const_iterator(T* p) : iterator(p) {};
-				~const_iterator() {};
-
-				const_iterator(const const_iterator& oth)
-				{
-					*this = oth;
-				};
-
-				const_iterator(const iterator& oth)
-				{
-					this->p = oth.p;
-					//this->p = oth.p;
-				};
-
-				const_iterator&	operator= (const const_iterator& oth)
-				{
-					this->p = oth.p;
-					return *this;
-				};
-
-				reference		operator* () const { return *iterator::p; };
-
-				const_iterator	operator++(int)
-				{
-					const_iterator	tmp = *this;
-
-					++(this->p);
-					return (tmp);
-				};
-
-				bool			operator!= (const const_iterator& oth)
-				{
-					return (this->p != oth.p);
-				}
 
 			};
 
@@ -141,7 +122,7 @@ namespace ft
 			typedef Allocator									allocator_type;
 			typedef typename allocator_type::reference			reference;
 			typedef typename allocator_type::const_reference	const_reference;
-			//typedef iterator									const_iterator;
+			typedef iterator									const_iterator;
 			typedef typename allocator_type::size_type			size_type;
 			typedef typename allocator_type::difference_type	difference_type;
             typedef typename allocator_type::pointer			pointer;
@@ -155,7 +136,7 @@ namespace ft
 
 			template < typename InputIterator >
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
-				typename std::enable_if<
+				typename ft::enable_if<
 					std::is_constructible<
 						value_type, 
 						typename std::iterator_traits<InputIterator>::reference>::value
@@ -192,7 +173,7 @@ namespace ft
 			void					assign(size_type n, const value_type& val);
 
 			template <typename InputIterator>
-			typename std::enable_if
+			typename ft::enable_if
 			<
 				std::is_constructible<
 					value_type, 
@@ -204,20 +185,24 @@ namespace ft
 			void					push_back(const value_type& val);
 			void					pop_back()			{ --_end; _alloc.destroy(_end); };
 			iterator				insert(iterator position, const value_type& val);
-			void					insert(iterator position, size_type n, const value_type& val)
-			{
-				std::cout << "insert position size_t" << std::endl;
-			};
+			void					insert(iterator position, size_type n, const value_type& val);
+
 			template <typename InputIterator>
-			void					insert(iterator position, InputIterator first, InputIterator last)
-			{
-				std::cout << "insert iterator" << std::endl;
-			};
-			iterator				erase(iterator position)											{};
-			iterator				erase(iterator first, iterator last)								{};
-			void					swap(vector& x)			{};
-			void					clear()					{};
-			allocator_type			get_allocator() const	{};
+			typename ft::enable_if
+			<
+				std::is_constructible<
+					value_type, 
+					typename std::iterator_traits<InputIterator>::reference>::value,
+				void
+			>::type
+			insert(iterator position, InputIterator first, InputIterator last);
+
+			iterator				erase(iterator position);
+			iterator				erase(iterator first, iterator last);
+
+			void					swap(vector& x);
+			void					clear();
+			allocator_type			get_allocator() const	{ return (_alloc); };
 
         private:
             pointer					_begin;
@@ -227,6 +212,8 @@ namespace ft
 
 			pointer					copy_value( pointer begin, pointer end, pointer new_begin );
 			void					destroy_value( pointer begin, pointer end, size_t capacity_ );
+			iterator				copy_for_insert(iterator position, size_type n, const value_type& val);
+			iterator				copy_for_insert_no_alloc(iterator position, size_type n, const value_type& val);
 			/*
 			template <typename U, typename Alloc>
 			bool				operator== (const vector<U, Alloc>& lhs, const vector<U, Alloc>& rhs) {};

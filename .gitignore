@@ -2,6 +2,11 @@
 *.txt
 cmake-build-debug
 -Wno-framework-include-private-from-public
+my.log
+std.log
+iterator
+vector
+
 
 # Prerequisites
 *.d
