@@ -30,6 +30,7 @@ void	test_erase_2();
 void	test_swap();
 void	test_clear();
 void	test_get_alloc();
+void	test_revers_iterator();
 
 int				main( void )
 {
@@ -63,12 +64,15 @@ int				main( void )
 	//test_erase_2();
 	//test_swap();
 	//test_clear();
-	//test_get_alloc();
+	//test_gdifference_type
+	test_revers_iterator();
 	
+	/*
+	//const_iterator
+
 	ft::vector<int> myvector;
 
 	for (int i=1; i<=5; i++) myvector.push_back(i);
-
 
   	std::cout << "myvector contains:";
   	for (ft::vector<int>::iterator it = myvector.begin() ; it != myvector.end(); ++it)
@@ -76,11 +80,68 @@ int				main( void )
   	std::cout << '\n';
 
 	ft::vector<int>::const_iterator	c_it = myvector.begin();
+	ft::vector<int>::iterator		it = myvector.begin();
+	//ft::vector<int>::reverse_iterator	r_it = myvector.rbegin();
+	//ft::vector<int>::reverse_iterator	r_it_e = myvector.rend();
+	
+	if (c_it == it)
+		std::cout << "no" << std::endl;
 
 	std::cout << "const iterator.begin = " << *c_it << std::endl;
-	//*c_it = 3;
+	*c_it = 3;
+	//std::cout << "const iterator.begin = " << *c_it << std::endl;
+	*/
 
 	return (0);
+}
+
+void	test_revers_iterator()
+{
+	std::cout << std::endl;
+	std::cout << "TEST REVERSE ITERATOR" << std::endl;
+
+	ft::vector<int>	v;
+
+	for (int i=1; i<=10; i++) v.push_back(i);
+
+	ft::vector<int>::reverse_iterator	r_b = v.rbegin();
+	ft::vector<int>::reverse_iterator	r_e = v.rend();
+
+	std::cout << std::endl;
+	std::cout << *(r_e - 1) << std::endl;
+	std::cout << *r_b << std::endl;
+	std::cout << *r_b++ << std::endl;
+	std::cout << *++r_b << std::endl;
+	std::cout << *r_b-- << std::endl;
+	std::cout << *--r_b << std::endl;
+	std::cout << *(r_b + 2) << std::endl;
+	std::cout << *(r_b + 3) << std::endl;
+	r_b += 4;
+	std::cout << *r_b << std::endl;
+	std::cout << *(r_b - 2) << std::endl;
+	std::cout << *(r_b - 3) << std::endl;
+	r_b -= 3;
+	std::cout << *r_b << std::endl;
+	std::cout << r_b[4] << std::endl;
+	std::cout << *r_b << std::endl;
+	ft::vector<int>::iterator	rom = r_b.base();
+	r_b += 4;
+	std::cout << *rom << std::endl;
+
+	if (r_b == r_e)
+		std::cout << "error: r_b = r_e" << std::endl;
+	if (r_b + 5 == r_e)
+		std::cout << "success: r_b = r_e" << std::endl;
+	if (r_b + 4 != r_e)
+		std::cout << "success: r_b != r_e" << std::endl;
+	if (r_b < r_e)
+		std::cout << "success" << std::endl;
+	if (r_b > r_e)
+		std::cout << "success" << std::endl;
+	if (r_b <= r_e)
+		std::cout << "success" << std::endl;
+	if (r_b >= r_e)
+		std::cout << "success" << std::endl;
 }
 
 void	test_get_alloc()
@@ -816,17 +877,15 @@ void	test_operator()
 
 	std::cout << "TEST a + n" << std::endl;
 	it = v.begin();
+	std::cout << *it << std::endl;
+	std::cout << *(it + 2) << std::endl;
+	std::cout << *(it + 1) << std::endl;
+
 	it = it + 3;
-	std::cout << *it << std::endl;
-	/*
-	std::cout << "TEST n + a" << std::endl;
-	it = v.begin();
-	size_t	abi = 2;
-	it = abi + it;
-	std::cout << *it << std::endl;
-	*/
 	std::cout << "TEST a - n" << std::endl;
-	it = it - 2;
+	std::cout << *(it - 2) << std::endl;
+	std::cout << *(it - 1) << std::endl;
+	it = it - 1;
 	std::cout << *it << std::endl;
 	
 	std::cout << "TEST a - b" << std::endl;
