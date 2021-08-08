@@ -64,10 +64,9 @@ int				main( void )
 	//test_erase_2();
 	//test_swap();
 	//test_clear();
-	//test_gdifference_type
-	test_revers_iterator();
+	//test_get_alloc();
+	//test_revers_iterator();
 	
-	/*
 	//const_iterator
 
 	ft::vector<int> myvector;
@@ -88,9 +87,8 @@ int				main( void )
 		std::cout << "no" << std::endl;
 
 	std::cout << "const iterator.begin = " << *c_it << std::endl;
-	*c_it = 3;
+	//*c_it = 3;
 	//std::cout << "const iterator.begin = " << *c_it << std::endl;
-	*/
 
 	return (0);
 }
@@ -908,7 +906,7 @@ void	test_operator()
 		std::cout << "ts < it" << std::endl;
 
 	std::cout << "TEST a <= b" << std::endl;
-	if (it <= it)
+	if (it <= it + 1)
 		std::cout << "it <= it" << std::endl;
 	else
 		std::cout << "it >= it" << std::endl;
@@ -920,7 +918,7 @@ void	test_operator()
 		std::cout << "ts >= it" << std::endl;
 
 	std::cout << "TEST a >= b" << std::endl;
-	if (it >= it)
+	if (it >= it + 1)
 		std::cout << "it >= it" << std::endl;
 	else
 		std::cout << "it >= it" << std::endl;
