@@ -1,6 +1,9 @@
 #include <vector>
+#include <map>
 #include <memory>
 #include "vector.hpp"
+#include "map.hpp"
+#include "tree.hpp"
 
 #define	COLO "\033[1;44;1m"
 #define NO_C "\033[0m"
@@ -32,6 +35,66 @@ void	test_clear();
 void	test_get_alloc();
 void	test_revers_iterator();
 
+bool fncomp (char lhs, char rhs)
+{
+	return lhs<rhs;
+}
+
+struct classcomp
+{
+  bool operator() (const char& lhs, const char& rhs) const { return lhs<rhs; }
+};	
+
+int				main( void )
+{
+#ifdef FT
+    std::cout << COLO << "FT" << NO_C << std::endl;
+#else
+    std::cout << COLO << "STD" << NO_C << std::endl;
+	namespace	ft = std;
+#endif
+
+	/*
+	std::map<char, int>	first;
+
+	first['a']=10;
+	first['b']=30;
+	first['c']=50;
+	first['d']=70;
+	first['e']=23;
+
+
+	std::cout << first['a'] << std::endl;
+	std::cout << first.size() << std::endl;
+	*/
+
+	tree< std::pair<int, std::string> >	tr;
+
+	std::pair<int, std::string>	p1(50, "keks");
+	tr.insert_node(p1);
+
+	std::pair<int, std::string>	p2(40, "keks");
+	tr.insert_node(p2);
+
+	/*
+	std::pair<int, std::string>	p21(60, "keks");
+	tr.insert_node(p21);
+	*/
+
+	std::pair<int, std::string>	p3(30, "keks");
+	tr.insert_node(p3);
+
+	/*
+	std::pair<int, std::string>	p31(20, "keks");
+	tr.insert_node(p31);
+	*/
+
+	//while (1) ;
+	std::cout << "end main" << std::endl;
+	return (0);
+}
+
+/*
 int				main( void )
 {
 #ifdef FT
@@ -87,11 +150,12 @@ int				main( void )
 		std::cout << "no" << std::endl;
 
 	std::cout << "const iterator.begin = " << *c_it << std::endl;
-	//*c_it = 3;
+	*c_it = 3;
 	//std::cout << "const iterator.begin = " << *c_it << std::endl;
 
 	return (0);
 }
+*/
 
 void	test_revers_iterator()
 {

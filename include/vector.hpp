@@ -44,6 +44,49 @@ struct iterator_traits<const T*>
 	typedef std::random_access_iterator_tag	iterator_category;
 };
 
+/*
+template < typename _Iter >
+class	_wrap_iter
+{
+	public:
+		typedef _Iter                                                      iterator_type;
+    	typedef typename iterator_traits<iterator_type>::iterator_category iterator_category;
+    	typedef typename iterator_traits<iterator_type>::value_type        value_type;
+    	typedef typename iterator_traits<iterator_type>::difference_type   difference_type;
+    	typedef typename iterator_traits<iterator_type>::pointer           pointer;
+    	typedef typename iterator_traits<iterator_type>::reference         reference;
+
+	private:
+		iterator_type __i;
+
+	public:
+		iterator ()											{ return; };
+		~iterator ()										{ return; };
+		iterator (T* p) : p(p)								{ return; };
+		iterator (iterator const& oth)						{ *this = oth; };
+
+		iterator&	operator= (iterator const& oth)			{ this->p = oth.p; return (*this); };
+		bool		operator==(iterator const& oth) const	{ return (p == oth.p); };
+		bool		operator!=(iterator const& oth) const	{ return (p != oth.p); };
+		reference	operator* () const						{ return *p; };
+		pointer		operator->() const						{ return p; };
+		iterator&	operator++()							{ ++(this->p); return (*this); };
+		iterator	operator++(int)							{ iterator tmp(*this); ++(this->p); return (tmp); };
+		iterator&	operator--()							{ --(this->p); return (*this); };
+		iterator	operator--(int)							{ iterator tmp(*this); --(this->p); return (tmp); };
+		iterator 	operator+ (size_t const& n)				{ return iterator(p + n); };
+		iterator 	operator- (size_t const& n)				{ return iterator(p - n); };
+		size_t		operator- (iterator const& oth)			{ return (this->p - oth.p); };
+		bool		operator< (iterator const& oth) const	{ return (this->p < oth.p); };
+		bool		operator> (iterator const& oth) const	{ return (this->p > oth.p); };
+		bool		operator<=(iterator const& oth) const	{ return (this->p <= oth.p); };
+		bool		operator>=(iterator const& oth) const	{ return (this->p >= oth.p); };
+		iterator&	operator+=(size_t const& n)				{ this->p += n; return (*this); };
+		iterator&	operator-=(size_t const& n)				{ this->p -= n; return (*this); };
+		reference	operator[](size_t const& n)				{ return *(this->p + n); };
+};
+*/
+
 template < typename _Iter >
 class	reverse_iterator : public std::iterator<	typename iterator_traits<_Iter>::iterator_category,
 													typename iterator_traits<_Iter>::value_type,
