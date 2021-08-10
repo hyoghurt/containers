@@ -35,6 +35,50 @@ void	test_clear();
 void	test_get_alloc();
 void	test_revers_iterator();
 
+bool fncomp (char lhs, char rhs)
+{
+	return lhs<rhs;
+}
+
+struct classcomp
+{
+  bool operator() (const char& lhs, const char& rhs) const { return lhs<rhs; }
+};	
+
+int				main( void )
+{
+#ifdef FT
+    std::cout << COLO << "FT" << NO_C << std::endl;
+#else
+    std::cout << COLO << "STD" << NO_C << std::endl;
+	namespace	ft = std;
+#endif
+
+	tree< int, std::string >	tr;
+
+	std::pair<int, std::string>	p1(10, "keks");
+	tr.insert_node(p1);
+
+	std::pair<int, std::string>	p2(9, "keks");
+	tr.insert_node(p2);
+
+	std::pair<int, std::string>	p21(8, "keks");
+	tr.insert_node(p21);
+
+	std::pair<int, std::string>	p22(7, "keks");
+	tr.insert_node(p22);
+
+	std::cout << std::endl;
+	tr.show_debag();
+	std::cout << std::endl;
+	tr.delete_node(8);
+	tr.show_debag();
+
+	std::cout << "end main" << std::endl;
+	return (0);
+}
+
+/*
 int				main( void )
 {
 #ifdef FT
@@ -90,13 +134,13 @@ int				main( void )
 		std::cout << "no" << std::endl;
 
 	std::cout << "const iterator.begin = " << *c_it << std::endl;
-	//*c_it = 3;
+	*c_it = 3;
 	//std::cout << "const iterator.begin = " << *c_it << std::endl;
 
 	return (0);
 }
+*/
 
-/*
 void	test_revers_iterator()
 {
 	std::cout << std::endl;
@@ -145,7 +189,6 @@ void	test_revers_iterator()
 	if (r_b >= r_e)
 		std::cout << "success" << std::endl;
 }
-*/
 
 void	test_get_alloc()
 {

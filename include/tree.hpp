@@ -4,9 +4,12 @@
 # define	RED 1
 # define	BLACK 0
 
+# define	CL "\033[1;44;1m"
+# define	NC "\033[0m"
+
 # include <iostream>
 
-template < typename _T >
+template < typename T, typename U >
 class	tree;
 
 template < typename __T >
@@ -24,10 +27,11 @@ class	node
 		bool			color;
 
 	public:
-		template < typename _T >
+
+		template < typename T, typename U >
 		friend class tree;
 
-		node(node* parent, const __T& date)
+		node(pointer parent, const __T& date)
 		{
 			std::cout << "construct node date" << std::endl;
 			this->date = date;
@@ -44,10 +48,11 @@ class	node
 };
 
 //template < typename _T, typename Allocator = std::allocator<_T> >
-template < typename _T >
+template < typename T, typename U >
 class	tree
 {
 	public:
+		typedef	std::pair<T, U>								_T;
 		typedef std::allocator< node<_T> >					allocator_type;
 		/*
 		typedef _T											value_type;
@@ -71,50 +76,251 @@ class	tree
 		~tree()
 		{
 			std::cout << "destructor tree" << std::endl;
-			if (root)
+			destroy_node(root);
+		};
+
+		void	destroy_node(pointer x)
+		{
+			if (x)
 			{
-				alloc.destroy(root);
-				alloc.deallocate(root, 1);
+				destroy_node(x->left);
+				destroy_node(x->right);
+				alloc.destroy(x);
+				alloc.deallocate(x, 1);
 			}
+		};
+
+		void	insert_node(_T date)
+		{
+			pointer	current;
+			pointer	parent;
+			pointer	x;
+
+			current = root;
+			parent = nullptr;
+
+			while (current != nullptr)
+			{
+				if (date.first == current->date.first)
+					return;
+				parent = current;
+				if (date.first < parent->date.first)
+					current = parent->left;
+				else
+					current = parent->right;
+			}
+			x = alloc.allocate(1);
+			alloc.construct(x, parent, date);
+			if (parent)
+			{
+				if (date.first < parent->date.first)
+					parent->left = x;
+				else
+					parent->right = x;
+			}
+			else
+				root = x;
+
+			case_1(x);
+			//show_debag();
+		};
+
+		void	delete_node(T key)
+		{
+			pointer	del = find_node_key(key);
+			delete_one_child(del);
 		}
 
-		void	rotate_left(pointer x)
+		pointer	sibling(pointer x)
 		{
-			pointer	pivot = x->right;
-
-			pivot->parent = x->parent;
-			if (x->parent != nullptr)
-			{
-				if (x->parent->left == x)
-					x->parent->left = pivot;
-				else
-					x->parent->right = pivot;
-			}
-			x->right = pivot->left;
-			if (pivot->left != nullptr)
-				pivot->left->parent = x;
-			x->parent = pivot;
-			pivot->left = x;
+			if (x == x->parent->left)
+				return (x->parent->right);
+			else
+				return (x->parent->left);
 		};
 
-		void	rotate_right(pointer x)
+		void	replace_node(pointer x, pointer child)
 		{
-			pointer	pivot = x->left;
-
-			pivot->parent = x->parent;
+			if (child != nullptr)
+				child->parent = x->parent;
 			if (x->parent != nullptr)
 			{
-				if (x->parent->left == x)
-					x->parent->left = pivot;
+				if (x == x->parent->left)
+					x->parent->left = child;
 				else
-					x->parent->right = pivot;
+					x->parent->right = child;
 			}
-			x->left = pivot->right;
-			if (pivot->right != nullptr)
-				pivot->right->parent = x;
-			x->parent = pivot;
-			pivot->right = x;
 		};
+
+		void	delete_one_child(pointer x)
+		{
+			pointer	child;
+
+			//find child to na chto menat
+			//
+			if ((x->left != nullptr) && (x->right != nullptr))
+			{
+				child = x->left;
+				while(child->right != nullptr)
+					child = child->right;
+			}
+			else if (x->left == nullptr)
+				child = x->right;
+			else
+				child = x->left;
+
+			if (child == nullptr)
+			{
+				std::cout << "child == nullptr" << std::endl;
+				return;
+			}
+			//case for child == root
+
+			replace_node(x, child);
+
+			if (x->color == BLACK)
+			{
+				if (child->color == RED)
+					child->color = BLACK;
+				else
+					delete_case_1(child);
+			}
+			alloc.destroy(x);
+			alloc.deallocate(x, 1);
+		};
+
+		void	delete_case_1(pointer x)
+		{
+			if (x->parent != nullptr)
+				delete_case_2(x);
+		};
+
+		void	delete_case_2(pointer x)
+		{
+			pointer	s = sibling(x);
+
+			if (s->color == RED)
+			{
+				x->parent->color = RED;
+				s->color = BLACK;
+				if (x == x->parent->left)
+					rotate_left(x->parent);
+				else
+					rotate_right(x->parent);
+			}
+			delete_case_3(x);
+		};
+
+		void	delete_case_3(pointer x)
+		{
+			pointer	s = sibling(x);
+
+			if ((x->parent->color == BLACK) &&
+				(s->color == BLACK) &&
+				(s->left->color == BLACK) &&
+				(s->right->color == BLACK))
+			{
+				s->color = RED;
+				delete_case_1(x->parent);
+			}
+			else
+				delete_case_4(x);
+		};
+
+		void	delete_case_4(pointer x)
+		{
+			pointer	s = sibling(x);
+
+			if ((x->parent->color == RED) &&
+				(s->color == BLACK) &&
+				(s->left->color == BLACK) &&
+				(s->right->color == BLACK))
+			{
+				s->color = RED;
+				x->parent->color = BLACK;
+			}
+			else
+				delete_case_5(x);
+		};
+
+		void	delete_case_5(pointer x)
+		{
+			pointer	s = sibling(x);
+
+			if (s->color == BLACK)
+			{
+				if ((x == x->parent->left) &&
+					(s->right->color == BLACK) &&
+					(s->left->color == RED))
+				{
+					s->color = RED;
+					s->left->color = BLACK;
+					rotate_right(s);
+				}
+				else if ((x == x->parent->right) &&
+						(s->left->color == BLACK) &&
+						(s->right->color == RED))
+				{
+					s->color = RED;
+					s->right->color = BLACK;
+					rotate_left(s);
+				}
+			}
+			delete_case_6(x);
+		};
+
+		void	delete_case_6(pointer x)
+		{
+			pointer	s = sibling(x);
+
+			s->color = x->parent->color;
+			x->parent->color = BLACK;
+
+			if (x == x->parent->left)
+			{
+				s->right->color = BLACK;
+				rotate_left(x->parent);
+			}
+			else
+			{
+				s->left->color = BLACK;
+				rotate_right(x->parent);
+			}
+		};
+
+
+		pointer	find_node_key(T key)
+		{
+			pointer	current = root;
+
+			while(current)
+			{
+				if (current->date.first == key)
+					return (current);
+				if (key < current->date.first)
+					current = current->left;
+				else
+					current = current->right;
+			}
+			return (nullptr);
+		};
+
+		pointer	find_node(_T date)
+		{
+			pointer	current = root;
+
+			while(current)
+			{
+				if (current->date.first == date.first)
+					return (current);
+				if (date.first < current->date.first)
+					current = current->left;
+				else
+					current = current->right;
+			}
+			return (nullptr);
+		};
+
 
 		void	case_1(pointer x)
 		{
@@ -156,25 +362,11 @@ class	tree
 			if ((x == x->parent->right) && (x->parent == g->left))
 			{
 				rotate_left(x->parent);
-				/*
-				pointer	save_p = g->left;
-				pointer	save_left_x = x->left;
-				g->left = x;
-				x->left = save_p;
-				save_p->right = save_left_x;
-				*/
 				x = x->left;
 			}
 			else if ((x == x->parent->left) && (x->parent == g->right))
 			{
 				rotate_right(x->parent);
-				/*
-				pointer	save_p = g->right;
-				pointer	save_right_x = x->right;
-				g->right = x;
-				x->right = save_p;
-				save_p->left = save_right_x;
-				*/
 				x = x->right;
 			}
 			case_5(x);
@@ -190,11 +382,6 @@ class	tree
 				rotate_right(g);
 			else
 				rotate_left(g);
-		};
-
-		void	fixed_tree(pointer x)
-		{
-			case_1(x);
 		};
 
 		pointer	grandparent(pointer x)
@@ -216,101 +403,91 @@ class	tree
 				return (g->left);
 		};
 
-		void	prin(pointer x)
+		void	rotate_left(pointer x)
 		{
+			pointer	pivot = x->right;
 
-			if (x->left)
+			pivot->parent = x->parent;
+			if (pivot->parent == nullptr)
+				root = pivot;
+			if (x->parent != nullptr)
 			{
-				std::cout << "___LEFT_" << std::endl;
-				if (x->left->color)
-					std::cout << "color = RED" << std::endl;
+				if (x->parent->left == x)
+					x->parent->left = pivot;
 				else
-					std::cout << "color = BLACK" << std::endl;
-				std::cout << "date.key = " << x->left->date.first << std::endl;
-				if (x->left)
-					prin(x->left);
+					x->parent->right = pivot;
 			}
-			if (x->right)
-			{
-				std::cout << "___RIGHT_" << std::endl;
-				if (x->right->color)
-					std::cout << "color = RED" << std::endl;
-				else
-					std::cout << "color = BLACK" << std::endl;
-				std::cout << "date.key = " << x->right->date.first << std::endl;
-				if (x->right)
-					prin(x->right);
-			}
-			
-		}
+			x->right = pivot->left;
+			if (pivot->left != nullptr)
+				pivot->left->parent = x;
+			x->parent = pivot;
+			pivot->left = x;
+		};
 
-		void	show()
+		void	rotate_right(pointer x)
+		{
+			pointer	pivot = x->left;
+
+			pivot->parent = x->parent;
+			if (pivot->parent == nullptr)
+				root = pivot;
+			if (x->parent != nullptr)
+			{
+				if (x->parent->left == x)
+					x->parent->left = pivot;
+				else
+					x->parent->right = pivot;
+			}
+			x->left = pivot->right;
+			if (pivot->right != nullptr)
+				pivot->right->parent = x;
+			x->parent = pivot;
+			pivot->right = x;
+		};
+
+		void	show_debag()
 		{
 			pointer	x = root;
 
-			std::cout << "___X_" << std::endl;
+			std::cout << CL << "___ROOT_" << x << NC << std::endl;
 			if (x->color)
 				std::cout << "color = RED" << std::endl;
 			else
 				std::cout << "color = BLACK" << std::endl;
 			std::cout << "date.key = " << x->date.first << std::endl;
 
-			prin(root);
+			print_debag(root);
 		};
 
-		void	insert_node(_T date)
+		void	print_debag(pointer x)
 		{
-			pointer	current;
-			pointer	parent;
-			pointer	x;
-
-			std::cout << "insert tree" << std::endl;
-			current = root;
-			parent = nullptr;
-
-			while (current != nullptr)
+			if (x->left)
 			{
-				if (date.first == current->date.first)
-					return;
-				parent = current;
-				if (date.first < parent->date.first)
-					current = parent->left;
+				std::cout << CL << "___LEFT_" << x << NC << std::endl;
+				if (x->left->color)
+					std::cout << "color = RED" << std::endl;
 				else
-					current = parent->right;
+					std::cout << "color = BLACK" << std::endl;
+				std::cout << "date.key = " << x->left->date.first << std::endl;
+				if (x->left)
+					print_debag(x->left);
 			}
-
-			x = alloc.allocate(1);
-			alloc.construct(x, parent, date);
-
-			if (parent)
+			if (x->right)
 			{
-				if (date.first < parent->date.first)
-					parent->left = x;
+				std::cout << CL << "___RGHT_" << x << NC << std::endl;
+				if (x->right->color)
+					std::cout << "color = RED" << std::endl;
 				else
-					parent->right = x;
+					std::cout << "color = BLACK" << std::endl;
+				std::cout << "date.key = " << x->right->date.first << std::endl;
+				if (x->right)
+					print_debag(x->right);
 			}
-			else
-				root = x;
-
-			fixed_tree(x);
-
-			show();
-			/*
-			std::cout << "date.value = " << x->date.second << std::endl;
-			std::cout << "point = " << x << std::endl;
-			std::cout << "paren = " << x->parent << std::endl;
-			if (parent)
-			{
-				std::cout << "paren left = " << parent->left << std::endl;
-				std::cout << "paren right = " << parent->right << std::endl;
-			}
-			*/
-			std::cout << std::endl;
-		}
+		};
 
 	private:
 		pointer			root;
-		allocator_type	alloc;		
+		allocator_type	alloc;
 };
 
 #endif
