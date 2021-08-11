@@ -1,39 +1,41 @@
 #include <vector>
-#include <map>
 #include <memory>
+#include <iostream>
 #include "vector.hpp"
-#include "map.hpp"
-#include "tree.hpp"
 
 #define	COLO "\033[1;44;1m"
 #define NO_C "\033[0m"
+#define FIL "\033[1;48;5;55m"
 
-void	test_capac_size();
-void	test_iterator_inc_decr();
-void	test_operator();
-void	test_front_back();
-void	test_oper_qr(); //operator v[]
-void	test_point_allocat();
-void	test_pop_back();
-void	test_constructor();
-void	test_constructor_1();
-void	test_constructor_2();
-void	test_resize();
-void	test_reserve();
-void	test_at();
-void	test_assign();
-void	test_insert_1();
-void	test_insert_2();
-void	test_insert_3();
-void	test_insert_4();
-void	test_insert_5();
-void	test_insert_6();
-void	test_erase_1();
-void	test_erase_2();
-void	test_swap();
-void	test_clear();
-void	test_get_alloc();
-void	test_revers_iterator();
+void	test_capac_size(const std::string& promo);
+void	test_iterator_inc_decr(const std::string& promo);
+void	test_operator(const std::string& promo);
+void	test_front_back(const std::string& promo);
+void	test_oper_qr(const std::string& promo); //operator v[]
+void	test_point_allocat(const std::string& promo);
+void	test_pop_back(const std::string& promo);
+void	test_constructor(const std::string& promo);
+void	test_constructor_1(const std::string& promo);
+void	test_constructor_2(const std::string& promo);
+void	test_resize(const std::string& promo);
+void	test_reserve(const std::string& promo);
+void	test_at(const std::string& promo);
+void	test_assign(const std::string& promo);
+void	test_insert_1(const std::string& promo);
+void	test_insert_2(const std::string& promo);
+void	test_insert_3(const std::string& promo);
+void	test_insert_4(const std::string& promo);
+void	test_insert_5(const std::string& promo);
+void	test_insert_6(const std::string& promo);
+void	test_erase_1(const std::string& promo);
+void	test_erase_2(const std::string& promo);
+void	test_swap(const std::string& promo);
+void	test_clear(const std::string& promo);
+void	test_get_alloc(const std::string& promo);
+void	test_revers_iterator(const std::string& promo);
+void	test_const_iterator(const std::string& promo);
+void	test_operator_comp(const std::string& promo);
+
 
 int				main( void )
 {
@@ -43,34 +45,92 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
-	//test_capac_size();
-	//test_iterator_inc_decr();
-	//test_operator();
-	//test_front_back();
-	//test_oper_qr(); //operator v[]
-	//test_point_allocat();
-	//test_pop_back();
-	//test_constructor();
-	//test_constructor_1();
-	//test_constructor_2();
-	//test_resize();
-	//test_reserve();
-	//test_at();
-	//test_assign();
-	//test_insert_1();
-	//test_insert_2();
-	//test_insert_3();
-	//test_insert_4();
-	//test_insert_5();
-	//test_insert_6();
-	//test_erase_1();
-	//test_erase_2();
-	//test_swap();
-	//test_clear();
-	//test_get_alloc();
-	//test_revers_iterator();
-	
-	//const_iterator
+	//test_capac_size("TEST CAPACITY SIZE");
+	//test_iterator_inc_decr("TEST ITERATOR OPER");
+	//test_operator("TEST OPERATOR");
+	//test_front_back("TEST FRONT BACK");
+	//test_oper_qr("TEST OPER []"); //operator v[]
+	//test_point_allocat("TEST POIN ALLOCAT");
+	//test_pop_back("TEST POP_BACK");
+	//test_constructor("TEST CONST");
+	//test_constructor_1("TEST CONST 1");
+	//test_constructor_2("TEST CONST 2");
+	//test_resize("TEST RESIZE");
+	//test_reserve("TEST RESERVE");
+	//test_at("TEST AT");
+	//test_assign("TEST ASSIGN");
+	//test_insert_1("TEST INSERT 1");
+	//test_insert_2("TEST INSERT 2");
+	//test_insert_3("TEST INSERT 3");
+	//test_insert_4("TEST INSERT 4");
+	//test_insert_5("TEST INSERT 5");
+	//test_insert_6("TEST INSERT 6");
+	//test_erase_1("TEST ERASE 1");
+	//test_erase_2("TEST ERASE 2");
+	//test_swap("TEST SWAP");
+	//test_clear("TEST CLEAR");
+	//test_get_alloc("TEST GET ALLOC");
+	//test_revers_iterator("TEST REVERSE ITERATOR");
+	//test_const_iterator("TEST CONST ITERATOR");
+	//test_operator_comp("TEST OPERATOR COMP");
+
+	return (0);
+}
+
+void	test_operator_comp(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
+	ft::vector<int> myvector;
+	for (int i=1; i<=5; i++) myvector.push_back(i);
+
+	ft::vector<int> myvector_2;
+	for (int i=1; i<=4; i++) myvector_2.push_back(i);
+	myvector_2.push_back(8);
+
+	if (myvector == myvector_2)
+		std::cout << "vector ==" << std::endl;
+	if (myvector != myvector_2)
+		std::cout << "vector !=" << std::endl;
+	if (myvector < myvector_2)
+		std::cout << "vector <" << std::endl;
+	if (myvector <= myvector_2)
+		std::cout << "vector <=" << std::endl;
+	if (myvector > myvector_2)
+		std::cout << "vector >" << std::endl;
+	if (myvector >= myvector_2)
+		std::cout << "vector >=" << std::endl;
+
+	myvector_2.clear();
+	for (int i=1; i<=5; i++) myvector_2.push_back(i);
+
+	if (myvector == myvector_2)
+		std::cout << "vector ==" << std::endl;
+	if (myvector != myvector_2)
+		std::cout << "vector !=" << std::endl;
+	if (myvector < myvector_2)
+		std::cout << "vector <" << std::endl;
+	if (myvector <= myvector_2)
+		std::cout << "vector <=" << std::endl;
+	if (myvector > myvector_2)
+		std::cout << "vector >" << std::endl;
+	if (myvector >= myvector_2)
+		std::cout << "vector >=" << std::endl;
+}
+
+void	test_const_iterator(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> myvector;
 
@@ -91,16 +151,16 @@ int				main( void )
 
 	std::cout << "const iterator.begin = " << *c_it << std::endl;
 	//*c_it = 3;
-	//std::cout << "const iterator.begin = " << *c_it << std::endl;
-
-	return (0);
 }
 
-/*
-void	test_revers_iterator()
+void	test_revers_iterator(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST REVERSE ITERATOR" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int>	v;
 
@@ -145,12 +205,15 @@ void	test_revers_iterator()
 	if (r_b >= r_e)
 		std::cout << "success" << std::endl;
 }
-*/
 
-void	test_get_alloc()
+void	test_get_alloc(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST GET ALLOC" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> myvector;
 	int * p;
@@ -171,10 +234,14 @@ void	test_get_alloc()
   	myvector.get_allocator().deallocate(p,5);
 }
 
-void	test_clear()
+void	test_clear(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST CLEAR" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> myvector;
 	myvector.push_back (100);
@@ -202,10 +269,14 @@ void	test_clear()
   	std::cout << '\n';
 }
 
-void	test_swap()
+void	test_swap(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST SWAP" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> foo (3,100);   // three ints with a value of 100
 	ft::vector<int> bar (5,200);   // five ints with a value of 200
@@ -223,10 +294,14 @@ void	test_swap()
   	std::cout << '\n';
 }
 
-void	test_erase_2()
+void	test_erase_2(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST ERASE 2" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 	
 	ft::vector<int>::iterator	it;
 
@@ -253,10 +328,14 @@ void	test_erase_2()
   	std::cout << '\n';
 }
 
-void	test_erase_1()
+void	test_erase_1(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST ERASE 1" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 	
 	ft::vector<int>::iterator	it;
 
@@ -286,10 +365,14 @@ void	test_erase_1()
   	std::cout << '\n';
 }
 
-void	test_insert_6()
+void	test_insert_6(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST INSERT 6" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> first;
 
@@ -325,10 +408,14 @@ void	test_insert_6()
 	std::cout << std::endl;
 }
 
-void	test_insert_5()
+void	test_insert_5(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST INSERT 5" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> first;
 
@@ -369,10 +456,14 @@ void	test_insert_5()
 	std::cout << std::endl;
 }
 
-void	test_insert_4()
+void	test_insert_4(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST INSERT 4" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> first;
 
@@ -405,10 +496,14 @@ void	test_insert_4()
 	std::cout << std::endl;
 }
 
-void	test_insert_3()
+void	test_insert_3(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST INSERT 3" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> first(3, 100);
 
@@ -437,10 +532,14 @@ void	test_insert_3()
 	std::cout << std::endl;
 }
 
-void	test_insert_2()
+void	test_insert_2(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << "TEST INSERT 2" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> first;
 
@@ -478,9 +577,14 @@ void	test_insert_2()
 	std::cout << std::endl;
 }
 
-void	test_insert_1()
+void	test_insert_1(const std::string& promo)
 {
-	std::cout << "TEST ONE" << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int> first(5, 43);
 
@@ -510,8 +614,15 @@ void	test_insert_1()
 	std::cout << std::endl;
 }
 
-void	test_assign()
+void	test_assign(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
 	ft::vector<int> first;
 
 	first.push_back(23);
@@ -566,8 +677,15 @@ void	test_assign()
 	std::cout << "capacity = " << first.capacity() << std::endl;
 }
 
-void	test_constructor_1()
+void	test_constructor_1(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
 	ft::vector<std::string>::iterator	it_i;
 	ft::vector<std::string>::iterator	end_;
 
@@ -598,8 +716,15 @@ void	test_constructor_1()
 	std::cout << std::endl;
 }
 
-void	test_at()
+void	test_at(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
 	try
 	{
 		ft::vector<int>				v(10);
@@ -620,8 +745,15 @@ void	test_at()
 	}
 }
 
-void	test_reserve()
+void	test_reserve(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
     ft::vector<int>				v;
 
 	v.reserve(10);
@@ -661,8 +793,15 @@ void	test_reserve()
 	return;
 }
 
-void	test_resize()
+void	test_resize(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
 	{
     ft::vector<int>				v;
 
@@ -714,6 +853,15 @@ void	test_resize()
 	std::cout << "size = " << v.size() << std::endl;
 	std::cout << "capacity = " << v.capacity() << std::endl;
 
+	v.resize(3,4);
+
+	std::cout << std::endl;
+	it_i = v.begin();
+	end_ = v.end();
+	while (it_i != end_)
+		std::cout << " " << *it_i++;
+	std::cout << std::endl;
+
 	v.resize(18, 23);
 
 	it_i = v.begin();
@@ -740,10 +888,14 @@ void	test_resize()
 	}
 }
 
-void	test_constructor()
+void	test_constructor(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << COLO << "TEST consturct" << NO_C << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<int>		second(3);
 
@@ -764,10 +916,14 @@ void	test_constructor()
 	}
 }
 
-void	test_constructor_2()
+void	test_constructor_2(const std::string& promo)
 {
-	std::cout << std::endl;
-	std::cout << COLO << "TEST consturct" << NO_C << std::endl;
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::vector<std::string>		second(3, "lol");
 
@@ -808,8 +964,15 @@ void	test_constructor_2()
 
 }
 
-void	test_capac_size(void)
+void	test_capac_size(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
     ft::vector<int>				v;
 
 	std::cout << "TEST capacity size" << std::endl;
@@ -833,8 +996,15 @@ void	test_capac_size(void)
 	std::cout << "size = " << v.size() << std::endl;
 }
 
-void	test_iterator_inc_decr()
+void	test_iterator_inc_decr(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
     ft::vector<int>				v;
 	v.push_back(32);
 	v.push_back(85);
@@ -867,8 +1037,14 @@ void	test_iterator_inc_decr()
 	}
 }
 
-void	test_operator()
+void	test_operator(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
     ft::vector<int>				v;
 	ft::vector<int>::iterator	it;
 
@@ -952,8 +1128,14 @@ void	test_operator()
 	std::cout << std::endl;
 }
 
-void	test_front_back()
+void	test_front_back(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
     ft::vector<int>				v;
 
 	v.push_back(32);
@@ -974,8 +1156,14 @@ void	test_front_back()
 	std::cout << &v_b.back() << std::endl;
 }
 
-void	test_oper_qr()
+void	test_oper_qr(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
     ft::vector<int>				v;
 	ft::vector<int>::iterator	it;
 
@@ -992,8 +1180,14 @@ void	test_oper_qr()
 	std::cout << std::endl;
 }
 
-void	test_point_allocat()
+void	test_point_allocat(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
     ft::vector<int>				v;
 	ft::vector<int>::iterator	it;
 
@@ -1035,8 +1229,14 @@ void	test_point_allocat()
 	std::cout << &v.front() << std::endl;
 }
 
-void	test_pop_back()
+void	test_pop_back(const std::string& promo)
 {
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
     ft::vector<int>				v;
 	ft::vector<int>::iterator	it;
 	std::cout << std::endl;

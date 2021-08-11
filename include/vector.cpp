@@ -3,56 +3,6 @@
 namespace ft
 {
 	template < typename T, typename Allocator >
-	vector<T, Allocator>::vector (size_type n, const value_type& val, const allocator_type& alloc)
-	{
-		//std::cout << "construct size_type" << std::endl;
-		_begin = _alloc.allocate(n);
-		_end = _begin + n;
-		_end_capacity = _end;
-
-		pointer		tmp = _begin;
-
-		while (tmp != _end)
-		{
-			_alloc.construct(tmp, val);
-			++tmp;
-		}
-		return;
-	};
-
-	template < typename T, typename Allocator >
-	template < typename InputIterator >
-	vector<T, Allocator>::vector (InputIterator first, InputIterator last, const allocator_type& alloc,
-		typename ft::enable_if<
-			std::is_constructible<
-				typename vector::value_type, 
-				typename std::iterator_traits<InputIterator>::reference>::value
-			>::type*)
-	{
-		size_t			len = 0;
-		InputIterator	first_ = first;
-
-		while (first_++ != last)
-			++len;
-
-		if (len > 0)
-		{
-			_begin = _alloc.allocate(len);
-			_end = _begin;
-			_end_capacity = _begin + len;
-		}
-		while (first != last)
-			push_back(*first++);
-	};
-
-	template < typename T, typename Allocator >
-	vector<T, Allocator>::~vector ()
-	{
-		if (_begin != nullptr)
-			destroy_value(_begin, _end, capacity());
-	};
-
-	template < typename T, typename Allocator >
 	vector<T, Allocator>&	vector<T, Allocator>::operator= (const vector& x)
 	{
 		//std::cout << "operator= " << std::endl;

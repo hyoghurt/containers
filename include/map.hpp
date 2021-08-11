@@ -5,8 +5,8 @@
 # include <iterator>
 # include <type_traits>
 # include <functional>
-
-//# include <cstdder> //std::ptrdiff_t
+# include "ft.hpp"
+# include "tree.hpp"
 
 namespace ft
 {
@@ -28,7 +28,7 @@ class	map
     	typedef typename allocator_type::difference_type	difference_type;
 
     	typedef pointer										iterator;
-    	typedef pointer										const_iterator;
+    	typedef const_pointer								const_iterator;
     	typedef std::reverse_iterator<iterator>				reverse_iterator;
     	typedef std::reverse_iterator<const_iterator>		const_reverse_iterator;
 
@@ -50,6 +50,7 @@ class	map
 
 		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
 		{
+			_size = 0;
 			return;
 		};
 
@@ -65,7 +66,7 @@ class	map
 			return;
 		};
 
-		~map ()											{};
+		~map ()																				{};
 		map&										operator= (const map& x)				{};
 
 		iterator									begin()									{};
@@ -81,7 +82,16 @@ class	map
 		size_type									max_size() const						{};
 		mapped_type&								operator[] (const key_type& k)			{};
 
-		std::pair<iterator, bool>					insert (const value_type& val)						{};
+		std::pair<iterator, bool>					insert (const value_type& val)
+		{
+			pointer			tru;
+
+			std::pair<iterator, bool>	tmp(tru, true);
+			_base.insert_node(val);
+
+			_base.show_debag();
+			return (tmp);
+		}
 		iterator									insert (iterator position, const value_type& val)	{};
 		template <class InputIterator>
 		void										insert (InputIterator first, InputIterator last)	{};
@@ -105,15 +115,12 @@ class	map
 		std::pair<iterator, iterator>				equal_range (const key_type& k)			{};
 		allocator_type								get_allocator () const					{}; 
 
-
-
-
-
-
 	protected:
+		tree<Key, T>	_base;
+		size_t			_size;
 };
 
 
-};
+}
 
 #endif

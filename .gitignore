@@ -6,6 +6,8 @@ my.log
 std.log
 iterator
 vector
+map
+color.cpp
 
 
 # Prerequisites

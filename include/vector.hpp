@@ -1,98 +1,12 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include <iostream>
-# include <iterator>
+# include "ft.hpp"
+//# include <iostream>
+//# include <iterator>
 
 namespace ft
 {
-
-template < bool condition, typename Type = void >
-struct	enable_if;
-
-template < typename Type >
-struct	enable_if<true, Type>	{ typedef Type	type; };
-
-/*
-template < typename _Iterator >
-struct	iterator_traits
-{
-	typedef typename _Iterator::difference_type		difference_type;
-	typedef typename _Iterator::value_type			value_type;
-	typedef typename _Iterator::pointer				pointer;
-	typedef typename _Iterator::reference			reference;
-	typedef typename _Iterator::iterator_category	iterator_category;
-};
-
-template < typename T >
-struct iterator_traits<T*>
-{
-	typedef std::ptrdiff_t					difference_type;
-	typedef T								value_type;
-	typedef T*								pointer;
-	typedef T&								reference;
-	typedef std::random_access_iterator_tag	iterator_category;
-};
-
-template < typename T >
-struct iterator_traits<const T*>
-{
-	typedef std::ptrdiff_t					difference_type;
-	typedef T								value_type;
-	typedef const T*						pointer;
-	typedef const T&						reference;
-	typedef std::random_access_iterator_tag	iterator_category;
-};
-*/
-template < typename _Iter >
-class	reverse_iterator : public std::iterator<	typename std::iterator_traits<_Iter>::iterator_category,
-													typename std::iterator_traits<_Iter>::value_type,
-													typename std::iterator_traits<_Iter>::difference_type,
-													typename std::iterator_traits<_Iter>::pointer,
-													typename std::iterator_traits<_Iter>::reference>
-{
-	protected:
-		_Iter	current;
-
-	public:
-		typedef _Iter												iterator_type;
-		typedef typename std::iterator_traits<_Iter>::difference_type	difference_type;
-		typedef typename std::iterator_traits<_Iter>::reference			reference;
-		typedef typename std::iterator_traits<_Iter>::pointer			pointer;
-
-		reverse_iterator () : current()												{ return; };
-		reverse_iterator (_Iter __x) : current(__x)									{ return; };
-		template <typename _Up>
-		reverse_iterator (const reverse_iterator<_Up>& __u) : current(__u.base())	{ return; };
-
-		template <typename _Up>
-		reverse_iterator&	operator= (const reverse_iterator<_Up>& __u)	{ current = __u.base(); return *this; };
-		iterator_type		base() const									{ return current; };
-		reference			operator* () const								{ _Iter __tmp = current; return *--__tmp; };
-		pointer				operator->() const								{ return (operator*()); };
-		reverse_iterator&	operator++()									{ --current; return (*this); };
-		reverse_iterator	operator++(int)									{ reverse_iterator tmp(*this); --current; return (tmp); };
-		reverse_iterator&	operator--()									{ ++current; return (*this); };
-		reverse_iterator	operator--(int)									{ reverse_iterator tmp(*this); ++current; return (tmp); };
-		reverse_iterator 	operator+ (difference_type n)					{ return reverse_iterator(current - n); };
-		reverse_iterator&	operator+=(difference_type n)					{ current -= n; return (*this); };
-		reverse_iterator 	operator- (difference_type n)					{ return reverse_iterator(current + n); };
-		reverse_iterator&	operator-=(difference_type n)					{ current += n; return (*this); };
-		reference			operator[](difference_type n)					{ return *(*this + n); };
-
-		template <typename _Up>
-		bool				operator!=(const reverse_iterator<_Up>& __u) const	{ return (base() != __u.base()); };
-		template <typename _Up>
-		bool				operator==(const reverse_iterator<_Up>& __u) const	{ return (base() == __u.base()); };
-		template <typename _Up>
-		bool				operator< (const reverse_iterator<_Up>& __u) const	{ return (base() < __u.base()); };
-		template <typename _Up>
-		bool				operator> (const reverse_iterator<_Up>& __u) const	{ return (base() > __u.base()); };
-		template <typename _Up>
-		bool				operator<=(const reverse_iterator<_Up>& __u) const	{ return (base() <= __u.base()); };
-		template <typename _Up>
-		bool				operator>=(const reverse_iterator<_Up>& __u) const	{ return (base() >= __u.base()); };
-};
 
 template < typename T, typename Allocator = std::allocator<T> >
 class vector
@@ -239,16 +153,12 @@ class vector
 					typename std::iterator_traits<InputIterator>::reference>::value
 				>::type* = nullptr)
 		{
-			size_t			len = 0;
-			InputIterator	first_ = first;
-
-			while (first_++ != last)
-				++len;
+			size_t		len = len_input_iterator(first, last);
 
 			if (len > 0)
 			{
 				_begin = _alloc.allocate(len);
-				_end = _begin;
+				_end = _begin;;
 				_end_capacity = _begin + len;
 			}
 			while (first != last)
@@ -258,6 +168,8 @@ class vector
 		explicit vector (size_type n, const value_type& val = value_type(),
 							const allocator_type& alloc = allocator_type())
 		{
+			if (n == 0)
+				return;
 			_begin = _alloc.allocate(n);
 			_end = _begin + n;
 			_end_capacity = _end;
@@ -265,31 +177,28 @@ class vector
 			pointer		tmp = _begin;
 
 			while (tmp != _end)
-			{
-				_alloc.construct(tmp, val);
-				++tmp;
-			}
-			return;
+				_alloc.construct(tmp++, val);
 		};
 
-		vector (const vector& x)					{ *this = x; };
+		vector (const vector& x)
+		{
+			*this = x;
+		};
+
 		~vector ()
 		{
 			if (_begin != nullptr)
 				destroy_value(_begin, _end, capacity());
 		};
+
 		vector&					operator= (const vector& x)
 		{
-			//std::cout << "operator= " << std::endl;
 			if (this != &x)
 			{
 				size_t	size_ = size();
 
-				if (size_ != 0)
-				{
-					while (size_--)
-						pop_back();
-				}
+				while (size_--)
+					pop_back();
 				if (capacity() < x.capacity())
 				{
 					this->_begin = _alloc.allocate(x.capacity());
@@ -297,12 +206,11 @@ class vector
 					this->_end_capacity = this->_begin + x.capacity();
 				}
 				else if (x._begin != nullptr)
-				{
 					this->_end = copy_value(x._begin, x._end, this->_begin);
-				}
 			}
 			return *this;
 		};
+
 		//iterator				begin()				{ return _make_iter(_begin); };
 		//const_iterator		begin() const		{ return _make_iter(_begin); };
 		//const_iterator		begin() const		{ return begin(); };
@@ -319,11 +227,12 @@ class vector
 		size_type				max_size() const	{ return _alloc.max_size(); };
 		void					resize(size_type n, value_type val = value_type())
 		{
-			if (size() > n)
-				_end = _begin + n;
+			while (size() > n)
+				_alloc.destroy(--_end);
 			while (size() < n)
 				push_back(val);
 		};
+
 		size_type				capacity() const	{ return static_cast<size_type>(_end_capacity - _begin); };
 		bool					empty() const		{ return (this->_begin == this->_end); };
 		void					reserve(size_type n)
@@ -347,8 +256,8 @@ class vector
 				_end = _new_end;
 				_end_capacity = _begin + n;
 			}
-			return;
-		}
+		};
+
 		reference				operator[] (size_type n)		{ return *(_begin + n); };
 		const_reference			operator[] (size_type n) const	{ return *(_begin + n); };
 		reference				at (size_type n)
@@ -356,8 +265,15 @@ class vector
 			if (n > size())
 				throw std::out_of_range("vector");
 			return *(_begin + n);
-		}
-		const_reference			at (size_type n) const			{};
+		};
+
+		const_reference			at (size_type n) const
+		{
+			if (n > size())
+				throw std::out_of_range("vector");
+			return *(_begin + n);
+		};
+
 		reference				front()				{ return (*this->_begin); };
 		const_reference			front() const		{ return (*this->_begin); };
 		reference				back()				{ return *(this->_end - 1); };
@@ -366,7 +282,7 @@ class vector
 		{
 			if (n > capacity())
 			{
-				if (_begin == nullptr)
+				if (_begin != nullptr)
 					destroy_value( _begin, _end, capacity() );
 				_begin = _alloc.allocate(n);
 				_end = _begin;
@@ -565,7 +481,8 @@ class vector
 			}
 			--_end;
 			return (ret);
-		}
+		};
+
 		iterator				erase(iterator first, iterator last)
 		{
 			typename vector<T>::iterator		new_position = first;
@@ -613,7 +530,8 @@ class vector
 			x._alloc = tmp_alloc;
 
 			return;
-		}
+		};
+
 		void					clear()
 		{
 			pointer	tmp = _begin;
@@ -624,17 +542,44 @@ class vector
 				++tmp;
 			}
 			_end = _begin;
-		}
-		allocator_type			get_allocator() const	{ return allocator_type(); };
+		};
+
+		allocator_type			get_allocator() const
+		{ return allocator_type(); };
 
 		template <typename U, typename Alloc_>
-		bool					operator== (const vector<U, Alloc_>& rhs) const {};
+		bool					operator== (const vector<U, Alloc_>& rhs) const
+		{
+			if (size() != rhs.size())
+				return false;
+			return ( equal(begin(), end(), rhs.begin()) );
+		}
 
-    private:
-        pointer					_begin;
-        pointer					_end;
+		template <typename U, typename Alloc_>
+		bool					operator!= (const vector<U, Alloc_>& rhs) const
+		{ return !(*this == rhs); };
+
+		template <typename U, typename Alloc_>
+		bool					operator< (const vector<U, Alloc_>& rhs) const
+		{ return (lexicographical_compare( begin(), end(), rhs.begin(), rhs.end() )); };
+
+		template <typename U, typename Alloc_>
+		bool					operator<=(const vector<U, Alloc_>& rhs) const
+		{ return (! lexicographical_compare( rhs.begin(), rhs.end(), begin(), end() )); };
+
+		template <typename U, typename Alloc_>
+		bool					operator> (const vector<U, Alloc_>& rhs) const
+		{ return (lexicographical_compare( rhs.begin(), rhs.end(), begin(), end() )); };
+
+		template <typename U, typename Alloc_>
+		bool					operator>=(const vector<U, Alloc_>& rhs) const
+		{ return (! lexicographical_compare( begin(), end(), rhs.begin(), rhs.end() )); };
+
+	private:
+		pointer					_begin;
+		pointer					_end;
 		pointer					_end_capacity;
-        allocator_type			_alloc;
+		allocator_type			_alloc;
 
 		pointer					copy_value( pointer begin, pointer end, pointer new_begin )
 		{
@@ -646,6 +591,7 @@ class vector
 			}
 			return (new_begin);
 		};
+
 		void					destroy_value( pointer begin, pointer end, size_t capacity_ )
 		{
 			pointer	tmp = begin;
@@ -657,6 +603,7 @@ class vector
 			}
 			_alloc.deallocate(begin, capacity_);
 		};
+
 		iterator				copy_for_insert(iterator position, size_type n, const value_type& val)
 		{
 			typename vector<T>::iterator		new_position;
@@ -698,6 +645,7 @@ class vector
 
 			return new_position;
 		};
+
 		iterator				copy_for_insert_no_alloc(iterator position, size_type n, const value_type& val)
 		{
 			typename vector<T>::iterator	begin = vector<T>::begin();
@@ -727,30 +675,18 @@ class vector
 			}
 			return position;
 		};
+
+		template < typename InputIterator >
+		size_t	len_input_iterator(InputIterator first, InputIterator last)
+		{
+			size_t			len = 0;
+
+			while (first++ != last)
+				++len;
+			return (len);
+		};
 };
 
-/*
-template <typename U, typename Alloc_>
-bool					operator== (const vector<U, Alloc_>& lhs, const vector<U, Alloc_>& rhs) {};
-
-template <typename U, typename Alloc>
-bool				operator!= (const vector<U, Alloc>& lhs, const vector<U, Alloc>& rhs) {};
-
-template <typename U, typename Alloc>
-bool				operator<  (const vector<U, Alloc>& lhs, const vector<U, Alloc>& rhs) {};
-
-template <typename U, typename Alloc>
-bool				operator<= (const vector<U, Alloc>& lhs, const vector<U, Alloc>& rhs) {};
-
-template <typename U, typename Alloc>
-bool				operator>  (const vector<U, Alloc>& lhs, const vector<U, Alloc>& rhs) {};
-
-template <typename U, typename Alloc>
-bool				operator>= (const vector<U, Alloc>& lhs, const vector<U, Alloc>& rhs) {};
-*/
-
 }
-
-#include "iterator.cpp"
 
 #endif
