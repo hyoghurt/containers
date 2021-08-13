@@ -8,6 +8,24 @@
 # include "ft.hpp"
 # include "tree.hpp"
 
+/*
+template < class _Tp, class _Compare, class _Allocator >			class	_tree;
+
+template < class _Tp, class _NodePtr, class _DiffType >				class	_tree_iterator;
+template < class _Tp, class _constNodePtr, class _DiffType >		class	_tree_const_iterator;
+
+template < class _Pointer >											class	_tree_end_node;
+
+template < class _voidPtr >											class	_tree_node_base;
+
+template < class _Tp, class _VoidPtr >								class	_tree_node;
+
+template < class _Key, class _Value >								class	_value_type;
+
+template < class _TreeIterator >									class _map_iterator;
+template < class _TreeIterator >									class _map_const_iterator;
+*/
+
 namespace ft
 {
 
@@ -27,7 +45,7 @@ class	map
     	typedef typename allocator_type::size_type			size_type;
     	typedef typename allocator_type::difference_type	difference_type;
 
-    	typedef pointer										iterator;
+    	typedef typename tree<Key, T>::tree_iterator		iterator;
     	typedef const_pointer								const_iterator;
     	typedef std::reverse_iterator<iterator>				reverse_iterator;
     	typedef std::reverse_iterator<const_iterator>		const_reverse_iterator;
@@ -48,7 +66,7 @@ class	map
 				};
     	};
 
-		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+		explicit map (const key_compare& comp = key_compare(), const allocator_type& _alloc = allocator_type())
 		{
 			_size = 0;
 			return;
@@ -56,7 +74,7 @@ class	map
 
 		template < typename InputIterator >
 		map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
-				const allocator_type& alloc = allocator_type())
+				const allocator_type& _alloc = allocator_type())
 		{
 			return;
 		};
@@ -78,20 +96,20 @@ class	map
 		reverse_iterator							rend()									{};
 		const_reverse_iterator						rend() const							{};
 		bool										empty() const							{};
-		size_type									size() const							{};
-		size_type									max_size() const						{};
+		size_type									size() const							{ return this->_size; };
+		size_type									max_size() const						{ return _alloc.max_size(); };
 		mapped_type&								operator[] (const key_type& k)			{};
 
 		std::pair<iterator, bool>					insert (const value_type& val)
 		{
-			pointer			tru;
+			std::pair<iterator, bool>	res;
 
-			std::pair<iterator, bool>	tmp(tru, true);
-			_base.insert_node(val);
-
-			_base.show_debag();
-			return (tmp);
+			res = _base.insert_node(val);
+			if(res.second)
+				++_size;
+			return res;
 		}
+
 		iterator									insert (iterator position, const value_type& val)	{};
 		template <class InputIterator>
 		void										insert (InputIterator first, InputIterator last)	{};
@@ -118,6 +136,7 @@ class	map
 	protected:
 		tree<Key, T>	_base;
 		size_t			_size;
+		allocator_type	_alloc;
 };
 
 

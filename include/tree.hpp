@@ -65,12 +65,13 @@ class	tree
 		typedef typename allocator_type::pointer			pointer;
 		typedef typename allocator_type::const_pointer		const_pointer;
 
+		typedef _T*											tree_iterator;
+
 
 		tree()
 		{
 			std::cout << "construct tree" << std::endl;
 			root = nullptr;
-			//alloc = allocator_type();
 		};
 
 		~tree()
@@ -90,7 +91,7 @@ class	tree
 			}
 		};
 
-		void	insert_node(_T date)
+		std::pair<tree_iterator, bool>	insert_node(_T date)
 		{
 			pointer	current;
 			pointer	parent;
@@ -102,7 +103,7 @@ class	tree
 			while (current != nullptr)
 			{
 				if (date.first == current->date.first)
-					return;
+					return (std::pair<tree_iterator, bool>( &(current->date), false));
 				parent = current;
 				if (date.first < parent->date.first)
 					current = parent->left;
@@ -122,7 +123,8 @@ class	tree
 				root = x;
 
 			case_1(x);
-			//show_debag();
+
+			return (std::pair<tree_iterator, bool>( &(x->date), true));
 		};
 
 		void	delete_node(T key)

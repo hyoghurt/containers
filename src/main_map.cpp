@@ -18,40 +18,33 @@ int				main( void )
 	namespace	ft = std;
 #endif
 
-	std::map<int, std::string>		mp;
-	std::pair<std::map<int, std::string>::iterator, bool>		tmp;
+	ft::map<int, std::string>		mp;
 
-	tmp = mp.insert(std::pair<int, std::string>(5, "pat"));
-	std::cout << tmp.first->first << std::endl;
+	std::pair< ft::map<int, std::string>::iterator, bool >		res;
+
+	res = mp.insert(std::pair<int, std::string>(5, "pat"));
+	res = mp.insert(std::pair<int, std::string>(2, "at"));
+	res = mp.insert(std::pair<int, std::string>(5, "p"));
+
+	std::cout << res.first->first << " => " << res.first->second << std::endl;
+
+	std::cout << "size = " << mp.size() << std::endl;
+
+
+	std::pair<int, std::string>		pa(523, "sdf");
+
+	std::pair<int, std::string>::first_type	u = pa.first;
+
+	std::cout << u << std::endl;
+
+	//std::cout << "max_size = " << mp.max_size() << std::endl;
+
+
+	//res = mp.insert(std::pair<int, std::string>(5, "pat"));
+	//tmp = mp.insert(std::pair<int, std::string>(5, "one"));
+	//if (tmp.second)
+		//std::cout << tmp.first->first << " => " << tmp.first->second << std::endl;
 	//std::cout << tmp->first << " => " tmp->second << std::endl;
-
-
-
-	//std::pair<int, std::string>	p1(10, "keks");
-	//mp.insert(p1);
-	//std::cout << mp[10] << std::endl;
-
-	/*
-	tree< int, std::string >	tr;
-
-	std::pair<int, std::string>	p1(10, "keks");
-	tr.insert_node(p1);
-
-	std::pair<int, std::string>	p2(9, "keks");
-	tr.insert_node(p2);
-
-	std::pair<int, std::string>	p21(8, "keks");
-	tr.insert_node(p21);
-
-	std::pair<int, std::string>	p22(7, "keks");
-	tr.insert_node(p22);
-
-	std::cout << std::endl;
-	tr.show_debag();
-	std::cout << std::endl;
-	tr.delete_node(8);
-	tr.show_debag();
-	*/
 
 	std::cout << "end main" << std::endl;
 	return (0);
