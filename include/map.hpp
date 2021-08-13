@@ -5,7 +5,6 @@
 # include <iterator>
 # include <type_traits>
 # include <functional>
-# include "ft.hpp"
 # include "tree.hpp"
 
 /*
@@ -29,14 +28,14 @@ template < class _TreeIterator >									class _map_const_iterator;
 namespace ft
 {
 
-template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator< std::pair<const Key, T> > >
+template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator< ft::pair<const Key, T> > >
 class	map
 {
 	public:
 		typedef Key											key_type;
     	typedef T											mapped_type;
-    	//typedef std::pair<const key_type, mapped_type>		value_type;
-    	typedef std::pair<key_type, mapped_type>		value_type;
+    	//typedef ft::pair<const key_type, mapped_type>		value_type;
+    	typedef ft::pair<key_type, mapped_type>			value_type;
     	typedef Compare										key_compare;
     	typedef Allocator									allocator_type;
     	typedef typename allocator_type::reference			reference;
@@ -101,9 +100,9 @@ class	map
 		size_type									max_size() const						{ return _base.max_size(); };
 		mapped_type&								operator[] (const key_type& k)			{};
 
-		std::pair<iterator, bool>					insert (const value_type& val)
+		ft::pair<iterator, bool>					insert (const value_type& val)
 		{
-			std::pair<iterator, bool>	res;
+			ft::pair<iterator, bool>	res;
 
 			res = _base.insert_node(val);
 			if(res.second)
@@ -130,8 +129,8 @@ class	map
 		const_iterator								lower_bound (const key_type& k) const	{};
 		iterator									upper_bound (const key_type& k)			{};
 		const_iterator								upper_bound (const key_type& k) const	{};
-		std::pair<const_iterator, const_iterator>	equal_range (const key_type& k) const	{};
-		std::pair<iterator, iterator>				equal_range (const key_type& k)			{};
+		ft::pair<const_iterator, const_iterator>	equal_range (const key_type& k) const	{};
+		ft::pair<iterator, iterator>				equal_range (const key_type& k)			{};
 		allocator_type								get_allocator () const					{}; 
 
 	protected:

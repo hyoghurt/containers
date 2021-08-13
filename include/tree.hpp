@@ -1,12 +1,14 @@
 #ifndef TREE_HPP
 # define TREE_HPP
 
+
 # define	RED 1
 # define	BLACK 0
 
 # define	CL "\033[1;44;1m"
 # define	NC "\033[0m"
 
+# include "ft.hpp"
 # include <iostream>
 
 template < typename T >
@@ -52,7 +54,7 @@ template < typename T >
 class	tree
 {
 	public:
-		//typedef	std::pair<T, U>								_T;
+		//typedef	ft::pair<T, U>								_T;
 		typedef std::allocator< node<T> >					allocator_type;
 		/*
 		typedef _T											value_type;
@@ -96,7 +98,7 @@ class	tree
 			}
 		};
 
-		std::pair<tree_iterator, bool>	insert_node(T date)
+		ft::pair<tree_iterator, bool>	insert_node(T date)
 		{
 			pointer	current;
 			pointer	parent;
@@ -108,7 +110,7 @@ class	tree
 			while (current != nullptr)
 			{
 				if (date.first == current->date.first)
-					return (std::pair<tree_iterator, bool>( &(current->date), false));
+					return (ft::pair<tree_iterator, bool>( &(current->date), false));
 				parent = current;
 				if (date.first < parent->date.first)
 					current = parent->left;
@@ -129,7 +131,7 @@ class	tree
 
 			case_1(x);
 
-			return (std::pair<tree_iterator, bool>( &(x->date), true));
+			return (ft::pair<tree_iterator, bool>( &(x->date), true));
 		};
 
 		void	delete_node(typename T::first_type key)
