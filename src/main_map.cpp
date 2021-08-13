@@ -1,9 +1,7 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include "vector.hpp"
 #include "map.hpp"
-#include "tree.hpp"
 
 #define	COLO "\033[1;44;1m"
 #define NO_C "\033[0m"
@@ -11,6 +9,7 @@
 
 void	test_insert_1(const std::string& promo);
 void	test_size(const std::string& promo);
+void	test_pair(const std::string& promo);
 
 int				main( void )
 {
@@ -21,12 +20,63 @@ int				main( void )
 	namespace	ft = std;
 #endif
 
-	test_insert_1("TEST INSERT 1");
-	test_size("TEST SIZE");
-
-
+	//test_insert_1("TEST INSERT 1");
+	//test_size("TEST SIZE");
+	//test_pair("TEST PAIR");
+	
+	
+	
 	std::cout << "end main" << std::endl;
 	return (0);
+}
+
+
+
+
+
+void	test_pair(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
+	ft::pair<int, std::string>	ab(5, "pop");
+
+	std::cout << ab.first << std::endl;
+	std::cout << ab.second << std::endl;
+
+	ft::pair <std::string,double> product1;
+	ft::pair <std::string,double> product2 ("tomatoes",2.30);
+	ft::pair <std::string,double> product3 (product2);
+
+	product1 = product3;
+
+	product2.first = "shoes";                  // the type of first is string
+	product2.second = 39.90;                   // the type of second is double
+
+	std::cout << "The price of " << product1.first << " is $" << product1.second << '\n';
+	std::cout << "The price of " << product2.first << " is $" << product2.second << '\n';
+	std::cout << "The price of " << product3.first << " is $" << product3.second << '\n';
+
+	if (product1 == product2) std::cout << "==" << std::endl;
+	if (product1 != product2) std::cout << "!=" << std::endl;
+	if (product1 < product2) std::cout << "<" << std::endl;
+	if (product1 <= product2) std::cout << "<=" << std::endl;
+	if (product1 > product2) std::cout << ">" << std::endl;
+	if (product1 >= product2) std::cout << ">=" << std::endl;
+
+	
+	ft::pair <int,int> foo;
+	ft::pair <int,int> bar;
+
+	foo = ft::make_pair (10,20);
+	//bar = ft::make_pair (10.5,'A');
+
+	std::cout << "foo: " << foo.first << ", " << foo.second << '\n';
+	//std::cout << "bar: " << bar.first << ", " << bar.second << '\n'; return (0);
 }
 
 void	test_insert_1(const std::string& promo)
@@ -40,16 +90,16 @@ void	test_insert_1(const std::string& promo)
 
 	ft::map<int, std::string>		mp;
 
-	std::pair< ft::map<int, std::string>::iterator, bool >		res;
+	ft::pair< ft::map<int, std::string>::iterator, bool >		res;
 
-	res = mp.insert(std::pair<int, std::string>(5, "pat"));
+	res = mp.insert(ft::pair<int, std::string>(5, "pat"));
 	std::cout << res.first->first << " => " << res.first->second << std::endl;
 
-	res = mp.insert(std::pair<int, std::string>(2, "at"));
+	res = mp.insert(ft::pair<int, std::string>(2, "at"));
 	if (res.second)
 		std::cout << res.first->first << " => " << res.first->second << std::endl;
 
-	res = mp.insert(std::pair<int, std::string>(5, "p"));
+	res = mp.insert(ft::pair<int, std::string>(5, "p"));
 	std::cout << res.first->first << " => " << res.first->second << std::endl;
 	if (res.second)
 		std::cout << res.first->first << " => " << res.first->second << std::endl;
@@ -68,9 +118,9 @@ void	test_size(const std::string& promo)
 
 	std::cout << "size = " << mp.size() << std::endl;
 
-	mp.insert(std::pair<int, std::string>(5, "pat"));
-	mp.insert(std::pair<int, std::string>(2, "at"));
-	mp.insert(std::pair<int, std::string>(5, "p"));
+	mp.insert(ft::pair<int, std::string>(5, "pat"));
+	mp.insert(ft::pair<int, std::string>(2, "at"));
+	mp.insert(ft::pair<int, std::string>(5, "p"));
 
 	std::cout << "size = " << mp.size() << std::endl;
 	std::cout << "max_size = " << mp.max_size() << std::endl;
