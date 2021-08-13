@@ -9,7 +9,7 @@
 
 # include <iostream>
 
-template < typename T, typename U >
+template < typename T >
 class	tree;
 
 template < typename __T >
@@ -28,32 +28,32 @@ class	node
 
 	public:
 
-		template < typename T, typename U >
+		template < typename T >
 		friend class tree;
 
 		node(pointer parent, const __T& date)
 		{
-			std::cout << "construct node date" << std::endl;
 			this->date = date;
 			this->parent = parent;
 			left = nullptr;
 			right = nullptr;
 			color = RED;
+			//std::cout << date.first << ": construct node" << std::endl;
 		};
 
 		~node()
 		{
-			std::cout << "destructor nod" << std::endl;
+			//std::cout << date.first << ": destructor node" << std::endl;
 		};
 };
 
 //template < typename _T, typename Allocator = std::allocator<_T> >
-template < typename T, typename U >
+template < typename T >
 class	tree
 {
 	public:
-		typedef	std::pair<T, U>								_T;
-		typedef std::allocator< node<_T> >					allocator_type;
+		//typedef	std::pair<T, U>								_T;
+		typedef std::allocator< node<T> >					allocator_type;
 		/*
 		typedef _T											value_type;
 		typedef Allocator									allocator_type;
@@ -65,20 +65,25 @@ class	tree
 		typedef typename allocator_type::pointer			pointer;
 		typedef typename allocator_type::const_pointer		const_pointer;
 
-		typedef _T*											tree_iterator;
+		typedef T*											tree_iterator;
 
 
 		tree()
 		{
-			std::cout << "construct tree" << std::endl;
+			//std::cout << "construct tree" << std::endl;
 			root = nullptr;
 		};
 
 		~tree()
 		{
-			std::cout << "destructor tree" << std::endl;
+			//std::cout << "destructor tree" << std::endl;
 			destroy_node(root);
 		};
+
+		size_t	max_size() const
+		{
+			return alloc.max_size();
+		}
 
 		void	destroy_node(pointer x)
 		{
@@ -91,7 +96,7 @@ class	tree
 			}
 		};
 
-		std::pair<tree_iterator, bool>	insert_node(_T date)
+		std::pair<tree_iterator, bool>	insert_node(T date)
 		{
 			pointer	current;
 			pointer	parent;
@@ -127,7 +132,7 @@ class	tree
 			return (std::pair<tree_iterator, bool>( &(x->date), true));
 		};
 
-		void	delete_node(T key)
+		void	delete_node(typename T::first_type key)
 		{
 			pointer	del = find_node_key(key);
 			delete_one_child(del);
@@ -291,7 +296,7 @@ class	tree
 		};
 
 
-		pointer	find_node_key(T key)
+		pointer	find_node_key(typename T::first_type key)
 		{
 			pointer	current = root;
 
@@ -307,7 +312,7 @@ class	tree
 			return (nullptr);
 		};
 
-		pointer	find_node(_T date)
+		pointer	find_node(T date)
 		{
 			pointer	current = root;
 

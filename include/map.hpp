@@ -35,7 +35,8 @@ class	map
 	public:
 		typedef Key											key_type;
     	typedef T											mapped_type;
-    	typedef std::pair<const key_type, mapped_type>		value_type;
+    	//typedef std::pair<const key_type, mapped_type>		value_type;
+    	typedef std::pair<key_type, mapped_type>		value_type;
     	typedef Compare										key_compare;
     	typedef Allocator									allocator_type;
     	typedef typename allocator_type::reference			reference;
@@ -45,8 +46,8 @@ class	map
     	typedef typename allocator_type::size_type			size_type;
     	typedef typename allocator_type::difference_type	difference_type;
 
-    	typedef typename tree<Key, T>::tree_iterator		iterator;
-    	typedef const_pointer								const_iterator;
+    	typedef typename tree<value_type>::tree_iterator	iterator;
+    	typedef typename tree<value_type>::tree_iterator	const_iterator;
     	typedef std::reverse_iterator<iterator>				reverse_iterator;
     	typedef std::reverse_iterator<const_iterator>		const_reverse_iterator;
 
@@ -97,7 +98,7 @@ class	map
 		const_reverse_iterator						rend() const							{};
 		bool										empty() const							{};
 		size_type									size() const							{ return this->_size; };
-		size_type									max_size() const						{ return _alloc.max_size(); };
+		size_type									max_size() const						{ return _base.max_size(); };
 		mapped_type&								operator[] (const key_type& k)			{};
 
 		std::pair<iterator, bool>					insert (const value_type& val)
@@ -134,9 +135,9 @@ class	map
 		allocator_type								get_allocator () const					{}; 
 
 	protected:
-		tree<Key, T>	_base;
-		size_t			_size;
-		allocator_type	_alloc;
+		tree<value_type>	_base;
+		size_t				_size;
+		allocator_type		_alloc;
 };
 
 

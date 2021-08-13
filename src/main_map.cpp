@@ -9,6 +9,9 @@
 #define NO_C "\033[0m"
 #define FIL "\033[1;48;5;55m"
 
+void	test_insert_1(const std::string& promo);
+void	test_size(const std::string& promo);
+
 int				main( void )
 {
 #ifdef FT
@@ -18,34 +21,58 @@ int				main( void )
 	namespace	ft = std;
 #endif
 
+	test_insert_1("TEST INSERT 1");
+	test_size("TEST SIZE");
+
+
+	std::cout << "end main" << std::endl;
+	return (0);
+}
+
+void	test_insert_1(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
 	ft::map<int, std::string>		mp;
 
 	std::pair< ft::map<int, std::string>::iterator, bool >		res;
 
 	res = mp.insert(std::pair<int, std::string>(5, "pat"));
-	res = mp.insert(std::pair<int, std::string>(2, "at"));
-	res = mp.insert(std::pair<int, std::string>(5, "p"));
-
 	std::cout << res.first->first << " => " << res.first->second << std::endl;
+
+	res = mp.insert(std::pair<int, std::string>(2, "at"));
+	if (res.second)
+		std::cout << res.first->first << " => " << res.first->second << std::endl;
+
+	res = mp.insert(std::pair<int, std::string>(5, "p"));
+	std::cout << res.first->first << " => " << res.first->second << std::endl;
+	if (res.second)
+		std::cout << res.first->first << " => " << res.first->second << std::endl;
+}
+
+void	test_size(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
+	ft::map<int, std::string>		mp;
 
 	std::cout << "size = " << mp.size() << std::endl;
 
+	mp.insert(std::pair<int, std::string>(5, "pat"));
+	mp.insert(std::pair<int, std::string>(2, "at"));
+	mp.insert(std::pair<int, std::string>(5, "p"));
 
-	std::pair<int, std::string>		pa(523, "sdf");
+	std::cout << "size = " << mp.size() << std::endl;
+	std::cout << "max_size = " << mp.max_size() << std::endl;
 
-	std::pair<int, std::string>::first_type	u = pa.first;
-
-	std::cout << u << std::endl;
-
-	//std::cout << "max_size = " << mp.max_size() << std::endl;
-
-
-	//res = mp.insert(std::pair<int, std::string>(5, "pat"));
-	//tmp = mp.insert(std::pair<int, std::string>(5, "one"));
-	//if (tmp.second)
-		//std::cout << tmp.first->first << " => " << tmp.first->second << std::endl;
-	//std::cout << tmp->first << " => " tmp->second << std::endl;
-
-	std::cout << "end main" << std::endl;
-	return (0);
 }
