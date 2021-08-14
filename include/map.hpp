@@ -88,7 +88,7 @@ class	map
 
 		iterator									begin()									{ return _base.begin(); };
 		const_iterator								begin() const							{};
-		iterator									end()									{ return _base.end(); };
+		iterator									end()									{};
 		const_iterator								end() const								{};
 		reverse_iterator							rbegin()								{};
 		const_reverse_iterator						rbegin() const							{};
