@@ -23,9 +23,22 @@ int				main( void )
 	//test_insert_1("TEST INSERT 1");
 	//test_size("TEST SIZE");
 	//test_pair("TEST PAIR");
-	
-	
-	
+
+	ft::map<int, std::string>	m;
+
+	m.insert(ft::pair<int, std::string>(3, "try"));
+	m.insert(ft::pair<int, std::string>(2, "two"));
+
+	ft::map<int, std::string>::iterator		it = m.begin();
+	std::cout << "begin = " << it->first << " => " << it->second << std::endl;
+
+	it = m.end();
+	std::cout << "end = " << it->first << " => " << it->second << std::endl;
+
+	m.insert(ft::pair<int, std::string>(5, "two"));
+	it = m.end();
+	std::cout << "end = " << it->first << " => " << it->second << std::endl;
+
 	std::cout << "end main" << std::endl;
 	return (0);
 }

@@ -33,13 +33,15 @@ class	node
 		template < typename T >
 		friend class tree;
 
-		node(pointer parent, const __T& date)
+		node(pointer parent, const __T& date) : date(date), parent(parent), left(0), right(0), color(RED)
 		{
+			/*
 			this->date = date;
 			this->parent = parent;
 			left = nullptr;
 			right = nullptr;
 			color = RED;
+			*/
 			//std::cout << date.first << ": construct node" << std::endl;
 		};
 
@@ -54,7 +56,6 @@ template < typename T >
 class	tree
 {
 	public:
-		//typedef	ft::pair<T, U>								_T;
 		typedef std::allocator< node<T> >					allocator_type;
 		/*
 		typedef _T											value_type;
@@ -82,9 +83,31 @@ class	tree
 			destroy_node(root);
 		};
 
-		size_t	max_size() const
+		size_t			max_size() const				{ return alloc.max_size(); };
+
+		tree_iterator	begin()
 		{
-			return alloc.max_size();
+			if (!root)
+				return NULL;
+
+			pointer	current = root;
+
+			while (current->left)
+				current = current->left;
+			return &current->date;
+		}
+
+		tree_iterator	end()
+		{
+			if (!root)
+				return NULL;
+
+			pointer	current = root;
+
+			while (current->right)
+				current = current->right;
+			current = current->right;
+			return &current->date;
 		}
 
 		void	destroy_node(pointer x)
@@ -98,7 +121,7 @@ class	tree
 			}
 		};
 
-		ft::pair<tree_iterator, bool>	insert_node(T date)
+		ft::pair<tree_iterator, bool>	insert_node(const T& date)
 		{
 			pointer	current;
 			pointer	parent;

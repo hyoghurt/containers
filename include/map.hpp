@@ -34,8 +34,7 @@ class	map
 	public:
 		typedef Key											key_type;
     	typedef T											mapped_type;
-    	//typedef ft::pair<const key_type, mapped_type>		value_type;
-    	typedef ft::pair<key_type, mapped_type>			value_type;
+    	typedef ft::pair<const key_type, mapped_type>		value_type;
     	typedef Compare										key_compare;
     	typedef Allocator									allocator_type;
     	typedef typename allocator_type::reference			reference;
@@ -87,9 +86,9 @@ class	map
 		~map ()																				{};
 		map&										operator= (const map& x)				{};
 
-		iterator									begin()									{};
+		iterator									begin()									{ return _base.begin(); };
 		const_iterator								begin() const							{};
-		iterator									end()									{};
+		iterator									end()									{ return _base.end(); };
 		const_iterator								end() const								{};
 		reverse_iterator							rbegin()								{};
 		const_reverse_iterator						rbegin() const							{};

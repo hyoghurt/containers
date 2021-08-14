@@ -145,23 +145,25 @@ struct	pair
 {
 	typedef	T1		first_type;
 	typedef T2		second_type;
+
 	T1				first;
 	T2				second;
 
-	pair()	{};
+	//pair(pair const&) = default;
+	//pair(pair&&) = default;
+
+	pair() : first(), second()	{};
+
 	pair(const first_type& a, const second_type& b) : first(a), second(b)	{};
 
-	template < class U, class V >
-	pair (const pair<U, V>& pr)
-	{ *this = pr; };
+	template < class U1, class U2 >
+	pair (const pair<U1, U2>& pr) : first(pr.first), second(pr.second)		{};
 
-	pair&	operator= (const pair& pr)
+	template <class U1, class U2>
+	pair&	operator= (const pair<U1, U2>& pr)
 	{
-		if (this != &pr)
-		{
-			this->first = pr.first;
-			this->second = pr.second;
-		}
+		first = pr.first;
+		second = pr.second;
 		return *this;
 	}
 
