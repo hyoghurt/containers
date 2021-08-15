@@ -11,6 +11,7 @@ void	test_insert_1(const std::string& promo);
 void	test_size(const std::string& promo);
 void	test_pair(const std::string& promo);
 void	test_begin_end(const std::string& promo);
+void	test_operator_kv(const std::string& promo);
 
 int				main( void )
 {
@@ -25,15 +26,53 @@ int				main( void )
 	//test_size("TEST SIZE EMPTY");
 	//test_pair("TEST PAIR");
 	//test_begin_end("TEST BEGIN END");
+	//test_operator_kv("TEST OPERATOR []");
+	
+ft::map<char,int> mymap;
+
+  // first insert function version (single parameter):
+  mymap.insert ( ft::pair<char,int>('a',100) );
+  mymap.insert ( ft::pair<char,int>('z',200) );
+
+  ft::pair<ft::map<char,int>::iterator,bool> ret;
+  ret = mymap.insert ( ft::pair<char,int>('z',500) );
+  if (ret.second==false) {
+    std::cout << "element 'z' already existed";
+    std::cout << " with a value of " << ret.first->second << '\n';
+  }
+
+  // second insert function version (with hint position):
+  ft::map<char,int>::iterator it = mymap.begin();
+  mymap.insert (it, ft::pair<char,int>('b',300));  // max efficiency inserting
+  mymap.insert (it, ft::pair<char,int>('c',400));  // no max efficiency inserting
+
+  // showing contents:
+  std::cout << "mymap contains:\n";
+  for (it=mymap.begin(); it!=mymap.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
+
+
+
+	std::cout << "end main" << std::endl;
+	return (0);
+}
+
+void	test_operator_kv(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
 	ft::map<int, std::string>	m;
-
 	m.insert(ft::pair<int, std::string>(3, "try"));
 	m.insert(ft::pair<int, std::string>(2, "two"));
-
 	m[2] = "loli_pop";
-
 	std::cout << "m[] = " << m[2] << std::endl;
+	m[5] = "five";
+	std::cout << "m[] = " << m[6] << std::endl;
 
 	ft::map<int, std::string>::iterator		it = m.begin();
 	ft::map<int, std::string>::iterator		it_e = m.end();
@@ -42,12 +81,7 @@ int				main( void )
 		std::cout << it->first << " => " << it->second << std::endl;
 		++it;
 	}
-
-
-	std::cout << "end main" << std::endl;
-	return (0);
 }
-
 
 void	test_begin_end(const std::string& promo)
 {

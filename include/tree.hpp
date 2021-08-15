@@ -220,6 +220,8 @@ class	tree
 		template < typename Pr, typename Node >
 		friend  struct	tree_iterator;
 
+		typedef typename T::first_type						key_type;
+		typedef typename T::second_type						mapped_type;
 		typedef std::allocator< node<T> >					allocator_type;
 		typedef typename allocator_type::reference			reference;
 		typedef typename allocator_type::const_reference	const_reference;
@@ -263,16 +265,6 @@ class	tree
 		size_t			size() const							{ return this->_size_tree; }
 //EMPTY________________________________________________________________________________
 		bool			empty() const							{ return root == &_null_node; }
-//OPERATOR_[]________________________________________________________________________________
-		
-		typename T::second_type&		operator[] (const typename T::first_type& k)
-		{
-			pointer	tmp = find_node_key(k);
-
-			if (!is_null_node(tmp))
-				return (tmp->date.second);
-			return (tmp->date.second);
-		}
 //DESTROY_NODE________________________________________________________________________________
 		void	destroy_node(pointer x)
 		{
@@ -322,6 +314,45 @@ class	tree
 			insert_case_1(x);
 			++_size_tree;
 			return (ft::pair<tree_iterator, bool>( tree_iterator(x), true));
+		};
+//INSERT_ITERATOR________________________________________________________________________________
+		tree_iterator			insert_node(tree_iterator position, const T& date)
+		{
+			pointer	parent;
+			pointer	x;
+
+			pointer	current = position;
+
+			parent = &_null_node;
+			while (!is_null_node(current))
+			{
+				if (date.first == current->date.first)
+					return ( tree_iterator(current) );
+				parent = current;
+				if (date.first < parent->date.first)
+					current = parent->left;
+				else
+					current = parent->right;
+			}
+
+			x = alloc.allocate(1);
+			alloc.construct(x, date, parent);
+			x->left = &_null_node;
+			x->right = &_null_node;
+			x->_null_node = &_null_node;
+
+			if (!is_null_node(parent))
+			{
+				if (date.first < parent->date.first)
+					parent->left = x;
+				else
+					parent->right = x;
+			}
+			else
+				root = x;
+			insert_case_1(x);
+			++_size_tree;
+			return ( tree_iterator(x) );
 		};
 //DELETE_NODE________________________________________________________________________________
 		void	delete_node(typename T::first_type key)

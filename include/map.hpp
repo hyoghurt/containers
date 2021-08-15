@@ -60,9 +60,7 @@ class	map
 
     		public:
 				bool operator()(const value_type& x, const value_type& y) const
-				{
-					return comp(x.first, y.first);
-				};
+				{ return comp(x.first, y.first); }
     	};
 //DEFAULT_CONSTRUCTOR________________________________________________________________________________
 		explicit map (const key_compare& comp = key_compare(), const allocator_type& _alloc = allocator_type())		{}
@@ -74,12 +72,9 @@ class	map
 			return;
 		};
 //COPY_CONSTRUCTOR________________________________________________________________________________
-		map (const map& x)
-		{
-			return;
-		};
+		map (const map& x)																	{}
 //DISTRUCTOR___________________________________________________________________________________________________________
-		~map ()																				{};
+		~map ()																				{}
 //OPERATOR_=___________________________________________________________________________________________________________
 		map&										operator= (const map& x)				{};
 		iterator									begin()									{ return _base.begin(); }
@@ -95,20 +90,12 @@ class	map
 		size_type									max_size() const						{ return _base.max_size(); }
 //OPERATOR_[]_________________________________________________________________________________________________________________
 		mapped_type&								operator[] (const key_type& k)
-		{
-
-			return (_base[k]);
-			/*
-			ft::pair<iterator, bool>	res;
-
-			res = _base.insert_node();
-			return (&res.first->second);
-			*/
-		}
+		{ return ( *(   (this->insert( ft::make_pair( k, mapped_type() ) ) )  .first ) ).second ; }
 //INSERT_________________________________________________________________________________________________________________
 		ft::pair<iterator, bool>					insert (const value_type& val)			{ return (_base.insert_node(val)); }
-
-		iterator									insert (iterator position, const value_type& val)	{};
+//INSERT_ITERATOR_____________________________________________________________________________________________________________
+		iterator									insert (iterator position, const value_type& val)	{ return _base.insert_node(position, val); }
+//INSERT_RANGE________________________________________________________________________________________________________________
 		template <class InputIterator>
 		void										insert (InputIterator first, InputIterator last)	{};
 
