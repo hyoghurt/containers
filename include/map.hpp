@@ -48,7 +48,7 @@ class	map
     	typedef typename tree<value_type>::tree_iterator	const_iterator;
     	typedef std::reverse_iterator<iterator>				reverse_iterator;
     	typedef std::reverse_iterator<const_iterator>		const_reverse_iterator;
-
+//VALUE_COMPARE________________________________________________________________________________
 		class value_compare : public std::binary_function<value_type, value_type, bool>
     	{
 			private:
@@ -64,50 +64,49 @@ class	map
 					return comp(x.first, y.first);
 				};
     	};
-
-		explicit map (const key_compare& comp = key_compare(), const allocator_type& _alloc = allocator_type())
-		{
-			_size = 0;
-			return;
-		};
-
+//DEFAULT_CONSTRUCTOR________________________________________________________________________________
+		explicit map (const key_compare& comp = key_compare(), const allocator_type& _alloc = allocator_type())		{}
+//ITERATOR_CONSTRUCTOR________________________________________________________________________________
 		template < typename InputIterator >
 		map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
 				const allocator_type& _alloc = allocator_type())
 		{
 			return;
 		};
-
+//COPY_CONSTRUCTOR________________________________________________________________________________
 		map (const map& x)
 		{
 			return;
 		};
-
+//DISTRUCTOR___________________________________________________________________________________________________________
 		~map ()																				{};
+//OPERATOR_=___________________________________________________________________________________________________________
 		map&										operator= (const map& x)				{};
-
-		iterator									begin()									{ return _base.begin(); };
+		iterator									begin()									{ return _base.begin(); }
 		const_iterator								begin() const							{};
-		iterator									end()									{};
+		iterator									end()									{ return _base.end(); }
 		const_iterator								end() const								{};
 		reverse_iterator							rbegin()								{};
 		const_reverse_iterator						rbegin() const							{};
 		reverse_iterator							rend()									{};
 		const_reverse_iterator						rend() const							{};
-		bool										empty() const							{};
-		size_type									size() const							{ return this->_size; };
-		size_type									max_size() const						{ return _base.max_size(); };
-		mapped_type&								operator[] (const key_type& k)			{};
-
-		ft::pair<iterator, bool>					insert (const value_type& val)
+		bool										empty() const							{ return _base.empty(); }
+		size_type									size() const							{ return _base.size(); }
+		size_type									max_size() const						{ return _base.max_size(); }
+//OPERATOR_[]_________________________________________________________________________________________________________________
+		mapped_type&								operator[] (const key_type& k)
 		{
+
+			return (_base[k]);
+			/*
 			ft::pair<iterator, bool>	res;
 
-			res = _base.insert_node(val);
-			if(res.second)
-				++_size;
-			return res;
+			res = _base.insert_node();
+			return (&res.first->second);
+			*/
 		}
+//INSERT_________________________________________________________________________________________________________________
+		ft::pair<iterator, bool>					insert (const value_type& val)			{ return (_base.insert_node(val)); }
 
 		iterator									insert (iterator position, const value_type& val)	{};
 		template <class InputIterator>
@@ -134,7 +133,6 @@ class	map
 
 	protected:
 		tree<value_type>	_base;
-		size_t				_size;
 		allocator_type		_alloc;
 };
 

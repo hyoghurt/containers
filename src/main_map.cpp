@@ -10,6 +10,7 @@
 void	test_insert_1(const std::string& promo);
 void	test_size(const std::string& promo);
 void	test_pair(const std::string& promo);
+void	test_begin_end(const std::string& promo);
 
 int				main( void )
 {
@@ -21,25 +22,26 @@ int				main( void )
 #endif
 
 	//test_insert_1("TEST INSERT 1");
-	//test_size("TEST SIZE");
+	//test_size("TEST SIZE EMPTY");
 	//test_pair("TEST PAIR");
-
-
-
-
+	//test_begin_end("TEST BEGIN END");
 
 	ft::map<int, std::string>	m;
 
 	m.insert(ft::pair<int, std::string>(3, "try"));
 	m.insert(ft::pair<int, std::string>(2, "two"));
-	m.insert(ft::pair<int, std::string>(4, "try"));
+
+	m[2] = "loli_pop";
+
+	std::cout << "m[] = " << m[2] << std::endl;
 
 	ft::map<int, std::string>::iterator		it = m.begin();
-	std::cout << "begin = " << it->first << " => " << it->second << std::endl;
-	//++it;
-	//std::cout << "begin = " << it->first << " => " << it->second << std::endl;
-
-
+	ft::map<int, std::string>::iterator		it_e = m.end();
+	while (it != it_e)
+	{
+		std::cout << it->first << " => " << it->second << std::endl;
+		++it;
+	}
 
 
 	std::cout << "end main" << std::endl;
@@ -47,8 +49,34 @@ int				main( void )
 }
 
 
+void	test_begin_end(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 
+	ft::map<int, std::string>	m;
 
+	m.insert(ft::pair<int, std::string>(3, "try"));
+	m.insert(ft::pair<int, std::string>(2, "two"));
+	m.insert(ft::pair<int, std::string>(4, "try"));
+	m.insert(ft::pair<int, std::string>(1, "one"));
+	m.insert(ft::pair<int, std::string>(5, "try"));
+	m.insert(ft::pair<int, std::string>(6, "one"));
+	m.insert(ft::pair<int, std::string>(7, "try"));
+	m.insert(ft::pair<int, std::string>(8, "one"));
+
+	ft::map<int, std::string>::iterator		it = m.begin();
+	ft::map<int, std::string>::iterator		it_e = m.end();
+	while (it != it_e)
+	{
+		std::cout << it->first << " => " << it->second << std::endl;
+		++it;
+	}
+}
 
 void	test_pair(const std::string& promo)
 {
@@ -112,13 +140,17 @@ void	test_insert_1(const std::string& promo)
 	std::cout << res.first->first << " => " << res.first->second << std::endl;
 
 	res = mp.insert(ft::pair<int, std::string>(2, "at"));
-	if (res.second)
-		std::cout << res.first->first << " => " << res.first->second << std::endl;
+	std::cout << res.first->first << " => " << res.first->second << std::endl;
 
 	res = mp.insert(ft::pair<int, std::string>(5, "p"));
 	std::cout << res.first->first << " => " << res.first->second << std::endl;
 	if (res.second)
 		std::cout << res.first->first << " => " << res.first->second << std::endl;
+
+	res = mp.insert(ft::pair<int, std::string>(2, "at"));
+	std::cout << res.first->first << " => " << res.first->second << std::endl;
+	++res.first;
+	std::cout << res.first->first << " => " << res.first->second << std::endl;
 }
 
 void	test_size(const std::string& promo)
@@ -132,11 +164,17 @@ void	test_size(const std::string& promo)
 
 	ft::map<int, std::string>		mp;
 
+	if (mp.empty())
+		std::cout << "empty" <<std::endl;
+
 	std::cout << "size = " << mp.size() << std::endl;
 
 	mp.insert(ft::pair<int, std::string>(5, "pat"));
 	mp.insert(ft::pair<int, std::string>(2, "at"));
 	mp.insert(ft::pair<int, std::string>(5, "p"));
+
+	if (mp.empty())
+		std::cout << "empty" <<std::endl;
 
 	std::cout << "size = " << mp.size() << std::endl;
 	std::cout << "max_size = " << mp.max_size() << std::endl;
