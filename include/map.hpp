@@ -77,16 +77,21 @@ class	map
 		~map ()																				{}
 //OPERATOR_=___________________________________________________________________________________________________________
 		map&										operator= (const map& x)				{};
+//BEGIN_________________________________________________________________________________________________________________
 		iterator									begin()									{ return _base.begin(); }
 		const_iterator								begin() const							{};
+//END____________________________________________________________________________________________________________________
 		iterator									end()									{ return _base.end(); }
 		const_iterator								end() const								{};
 		reverse_iterator							rbegin()								{};
 		const_reverse_iterator						rbegin() const							{};
 		reverse_iterator							rend()									{};
 		const_reverse_iterator						rend() const							{};
+//EMPTY_________________________________________________________________________________________________________________
 		bool										empty() const							{ return _base.empty(); }
+//SIZE_________________________________________________________________________________________________________________
 		size_type									size() const							{ return _base.size(); }
+//MAX_SIZE_________________________________________________________________________________________________________________
 		size_type									max_size() const						{ return _base.max_size(); }
 //OPERATOR_[]_________________________________________________________________________________________________________________
 		mapped_type&								operator[] (const key_type& k)
@@ -94,20 +99,38 @@ class	map
 //INSERT_________________________________________________________________________________________________________________
 		ft::pair<iterator, bool>					insert (const value_type& val)			{ return (_base.insert_node(val)); }
 //INSERT_ITERATOR_____________________________________________________________________________________________________________
-		iterator									insert (iterator position, const value_type& val)	{ return _base.insert_node(position, val); }
+		iterator									insert (iterator position, const value_type& val)
+		{ return _base.insert_node(position, val); }
 //INSERT_RANGE________________________________________________________________________________________________________________
 		template <class InputIterator>
-		void										insert (InputIterator first, InputIterator last)	{};
-
-		void										erase (iterator position)				{};
-		size_type									erase (const key_type& k)				{};
-		void										erase (iterator first, iterator last)	{};
+		void										insert (InputIterator first, InputIterator last)
+		{
+			while (first != last)
+			{
+				_base.insert_node( ft::make_pair( first->first, first->second ) );
+				++first;
+			}
+		}
+//ERASE_______________________________________________________________________________________________________________________
+		void										erase (iterator position)				{ _base.erase(position); }
+//ERASE_KEY___________________________________________________________________________________________________________________
+		size_type									erase (const key_type& k)				{ return (_base.delete_node(k)); }
+//ERASE_INPUT_________________________________________________________________________________________________________________
+		void										erase (iterator first, iterator last)
+		{
+			while (first != last)
+			{
+				_base.delete_node( first->first );
+				++first;
+			}
+		}
 
 		void										swap (map& x)							{};
 		void										clear ()								{};
 		key_compare									key_comp () const						{};
 		value_compare								value_comp () const						{};
-		iterator									find (const key_type& k)				{};
+//FIND_______________________________________________________________________________________________________________________
+		iterator									find (const key_type& k)				{ return (_base.find(k)); };
 		const_iterator								find (const key_type& k) const			{};
 		size_type									count (const key_type& k) const			{};
 		iterator									lower_bound (const key_type& k)			{};

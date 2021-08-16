@@ -167,6 +167,9 @@ class	node
 template < typename Pr, typename Node >
 struct	tree_iterator
 {
+	template < typename T >
+	friend class	tree;
+
     typedef std::bidirectional_iterator_tag	iterator_category;
     typedef Pr								value_type;
 	typedef std::ptrdiff_t					difference_type;
@@ -300,6 +303,7 @@ class	tree
 			alloc.construct(x, date, parent);
 			x->left = &_null_node;
 			x->right = &_null_node;
+			x->color = RED;
 			x->_null_node = &_null_node;
 
 			if (!is_null_node(parent))
@@ -313,16 +317,19 @@ class	tree
 				root = x;
 			insert_case_1(x);
 			++_size_tree;
+
+
 			return (ft::pair<tree_iterator, bool>( tree_iterator(x), true));
-		};
+		}
 //INSERT_ITERATOR________________________________________________________________________________
 		tree_iterator			insert_node(tree_iterator position, const T& date)
 		{
+
 			pointer	parent;
 			pointer	x;
+			pointer	current;
 
-			pointer	current = position;
-
+			current = position.p;
 			parent = &_null_node;
 			while (!is_null_node(current))
 			{
@@ -339,6 +346,7 @@ class	tree
 			alloc.construct(x, date, parent);
 			x->left = &_null_node;
 			x->right = &_null_node;
+			x->color = RED;
 			x->_null_node = &_null_node;
 
 			if (!is_null_node(parent))
@@ -352,211 +360,9 @@ class	tree
 				root = x;
 			insert_case_1(x);
 			++_size_tree;
+
 			return ( tree_iterator(x) );
-		};
-//DELETE_NODE________________________________________________________________________________
-		void	delete_node(typename T::first_type key)
-		{
-			pointer	del = find_node_key(key);
-			if (!is_null_node(del))
-				delete_one_child(del);
 		}
-//SUBLING________________________________________________________________________________
-		pointer	sibling(pointer x)
-		{
-			if (x == x->parent->left)
-				return (x->parent->right);
-			else
-				return (x->parent->left);
-		};
-//REPLACE_NODE________________________________________________________________________________
-		void	replace_node(pointer x, pointer child)
-		{
-			if (!is_null_node(child))
-				child->parent = x->parent;
-			if (!is_null_node(x->parent))
-			{
-				if (x == x->parent->left)
-					x->parent->left = child;
-				else
-					x->parent->right = child;
-			}
-		};
-//DELETE_________________________________________________________________________________
-		void	delete_one_child(pointer x)
-		{
-			pointer	child;
-
-			//find child to na chto menat
-			//
-			if (!is_null_node(x->left) && !is_null_node(x->right))
-			{
-				child = x->left;
-				while (!is_null_node(child->right))
-					child = child->right;
-			}
-			else if (is_null_node(x->left))
-				child = x->right;
-			else
-				child = x->left;
-
-			/*
-			if (child == nullptr)
-			{
-				std::cout << "child == nullptr" << std::endl;
-				return;
-			}
-			*/
-			//case for child == root
-
-			replace_node(x, child);
-
-			if (x->color == BLACK)
-			{
-				if (child->color == RED)
-					child->color = BLACK;
-				else
-					delete_case_1(child);
-			}
-			alloc.destroy(x);
-			alloc.deallocate(x, 1);
-		};
-
-//DELETE_CASE________________________________________________________________________________
-		void	delete_case_1(pointer x)
-		{
-			if (!is_null_node(x->parent))
-				delete_case_2(x);
-		};
-
-//DELETE_CASE________________________________________________________________________________
-		void	delete_case_2(pointer x)
-		{
-			pointer	s = sibling(x);
-
-			if (s->color == RED)
-			{
-				x->parent->color = RED;
-				s->color = BLACK;
-				if (x == x->parent->left)
-					rotate_left(x->parent);
-				else
-					rotate_right(x->parent);
-			}
-			delete_case_3(x);
-		};
-
-//DELETE_CASE________________________________________________________________________________
-		void	delete_case_3(pointer x)
-		{
-			pointer	s = sibling(x);
-
-			if ((x->parent->color == BLACK) &&
-				(s->color == BLACK) &&
-				(s->left->color == BLACK) &&
-				(s->right->color == BLACK))
-			{
-				s->color = RED;
-				delete_case_1(x->parent);
-			}
-			else
-				delete_case_4(x);
-		};
-
-//DELETE_CASE________________________________________________________________________________
-		void	delete_case_4(pointer x)
-		{
-			pointer	s = sibling(x);
-
-			if ((x->parent->color == RED) &&
-				(s->color == BLACK) &&
-				(s->left->color == BLACK) &&
-				(s->right->color == BLACK))
-			{
-				s->color = RED;
-				x->parent->color = BLACK;
-			}
-			else
-				delete_case_5(x);
-		};
-
-//DELETE_CASE________________________________________________________________________________
-		void	delete_case_5(pointer x)
-		{
-			pointer	s = sibling(x);
-
-			if (s->color == BLACK)
-			{
-				if ((x == x->parent->left) &&
-					(s->right->color == BLACK) &&
-					(s->left->color == RED))
-				{
-					s->color = RED;
-					s->left->color = BLACK;
-					rotate_right(s);
-				}
-				else if ((x == x->parent->right) &&
-						(s->left->color == BLACK) &&
-						(s->right->color == RED))
-				{
-					s->color = RED;
-					s->right->color = BLACK;
-					rotate_left(s);
-				}
-			}
-			delete_case_6(x);
-		};
-//DELETE_CASE________________________________________________________________________________
-		void	delete_case_6(pointer x)
-		{
-			pointer	s = sibling(x);
-
-			s->color = x->parent->color;
-			x->parent->color = BLACK;
-
-			if (x == x->parent->left)
-			{
-				s->right->color = BLACK;
-				rotate_left(x->parent);
-			}
-			else
-			{
-				s->left->color = BLACK;
-				rotate_right(x->parent);
-			}
-		};
-//FIND_NODE________________________________________________________________________________
-		pointer	find_node_key(typename T::first_type key)
-		{
-			pointer	current = root;
-
-			while (!is_null_node(current))
-			{
-				if (current->date.first == key)
-					return (current);
-				if (key < current->date.first)
-					current = current->left;
-				else
-					current = current->right;
-			}
-			return (current);
-		};
-//FIND_NODE________________________________________________________________________________
-		pointer	find_node(T date)
-		{
-			pointer	current = root;
-
-			while (!is_null_node(current))
-			{
-				if (current->date.first == date.first)
-					return (current);
-				if (date.first < current->date.first)
-					current = current->left;
-				else
-					current = current->right;
-			}
-			return (current);
-		};
 //INSERT_CASE________________________________________________________________________________
 		void	insert_case_1(pointer x)
 		{
@@ -578,7 +384,6 @@ class	tree
 		{
 			pointer	u = unlce(x);
 			pointer	g;
-
 
 			if (!is_null_node(u) && (u->color == RED))
 			{
@@ -681,6 +486,364 @@ class	tree
 			x->parent = pivot;
 			pivot->right = x;
 		};
+//FIND______________________________________________________________________________________
+		tree_iterator			find(const key_type& key)
+			{ return ( tree_iterator( find_node_key(key) ) ); }
+//ERASE_______________________________________________________________________________________________________________________
+		void					erase (tree_iterator position)
+		{
+			delete_node_tmp(position.p);
+		}
+//DELETE_NODE_TMP
+		void	delete_node_tmp(pointer z)
+		{
+			pointer	x, y;
+
+			if (!z || is_null_node(z))
+				return;
+
+			if (!is_null_node(z->left) && !is_null_node(z->right))
+			{
+				y = z->left;
+				while (!is_null_node(y->right))
+					y = y->right;
+			}
+			else if (is_null_node(z->left))
+				y = z->right;
+			else
+				y = z->left;
+
+			/*
+			if (is_null_node(z->left) || is_null_node(z->right))
+				y = z;
+			else
+			{
+    		    y = z->right;
+    		    while (!is_null_node(y->left))
+					y = y->left;
+    		}
+			*/
+
+    		if (!is_null_node(y->left))
+    		    x = y->left;
+    		else
+    		    x = y->right;
+
+			if (!is_null_node(x))
+				x->parent = y->parent;
+
+    		if (!is_null_node(y->parent))
+			{
+    		    if (y == y->parent->left)
+    		        y->parent->left = x;
+    		    else
+    		        y->parent->right = x;
+			}
+    		else
+    		    root = x;
+
+    		if (y != z)
+			{
+				y->parent = z->parent;
+				y->left = z->left;
+				y->right = z->right;
+
+				if (is_null_node(z->parent))
+					root = y;
+				//z->date = ft::make_pair(y->date.first, y->date.second);
+			}
+			//show_debag();
+
+    		if (y->color == BLACK)
+    		    deleteFixup (x);
+
+			/*
+			--_size_tree;
+			alloc.destroy(z);
+			alloc.deallocate(z, 1);
+			*/
+		}
+
+		void deleteFixup(pointer x)
+		{
+		    while (x != root && x->color == BLACK)
+			{
+		        if (x == x->parent->left)
+				{
+		            pointer w = x->parent->right;
+		            if (w->color == RED)
+					{
+		                w->color = BLACK;
+		                x->parent->color = RED;
+		                rotate_left(x->parent);
+		                w = x->parent->right;
+		            }
+		            if (w->left->color == BLACK && w->right->color == BLACK)
+					{
+		                w->color = RED;
+		                x = x->parent;
+		            }
+					else
+					{
+		                if (w->right->color == BLACK)
+						{
+		                    w->left->color = BLACK;
+		                    w->color = RED;
+		                    rotate_right(w);
+		                    w = x->parent->right;
+		                }
+		                w->color = x->parent->color;
+		                x->parent->color = BLACK;
+		                w->right->color = BLACK;
+		                rotate_left(x->parent);
+		                x = root;
+		            }
+		        }
+				else
+				{
+		            pointer w = x->parent->left;
+		            if (w->color == RED)
+					{
+		                w->color = BLACK;
+		                x->parent->color = RED;
+		                rotate_right(x->parent);
+		                w = x->parent->left;
+		            }
+		            if (w->right->color == BLACK && w->left->color == BLACK)
+					{
+		                w->color = RED;
+		                x = x->parent;
+		            }
+					else
+					{
+		                if (w->left->color == BLACK)
+						{
+		                    w->right->color = BLACK;
+		                    w->color = RED;
+		                    rotate_left(w);
+		                    w = x->parent->left;
+		                }
+		                w->color = x->parent->color;
+		                x->parent->color = BLACK;
+		                w->left->color = BLACK;
+		                rotate_right(x->parent);
+		                x = root;
+		            }
+		        }
+		    }
+		    x->color = BLACK;
+		}
+//DELETE_NODE________________________________________________________________________________
+		size_t	delete_node(const key_type& key)
+		{
+			pointer	del = find_node_key(key);
+			if (!is_null_node(del))
+			{
+				delete_one_child(del);
+				return (1);
+			}
+			return (0);
+			//show_debag();
+		}
+//SUBLING________________________________________________________________________________
+		pointer	sibling(pointer x)
+		{
+			if (x == x->parent->left)
+				return (x->parent->right);
+			else
+				return (x->parent->left);
+		};
+//REPLACE_NODE________________________________________________________________________________
+		void	replace_node(pointer x, pointer child)
+		{
+			if (!is_null_node(child))
+				child->parent = x->parent;
+			if (!is_null_node(x->parent))
+			{
+				if (x == x->parent->left)
+					x->parent->left = child;
+				else
+					x->parent->right = child;
+			}
+			else
+				root = x;
+		};
+//DELETE_________________________________________________________________________________
+		void	delete_one_child(pointer x)
+		{
+			pointer	child;
+
+			//find child to na chto menat
+			//
+			if (!is_null_node(x->left) && !is_null_node(x->right))
+			{
+				child = x->left;
+				while (!is_null_node(child->right))
+					child = child->right;
+			}
+			else if (is_null_node(x->left))
+				child = x->right;
+			else
+				child = x->left;
+
+			//std::cout << "child = " << child->date.first << std::endl;
+
+			/*
+			if (child == nullptr)
+			{
+				std::cout << "child == nullptr" << std::endl;
+				return;
+			}
+			*/
+			//case for child == root
+
+			replace_node(x, child);
+
+			if (x->color == BLACK)
+			{
+				if (child->color == RED)
+					child->color = BLACK;
+				else
+					delete_case_1(child);
+			}
+
+			--_size_tree;
+			alloc.destroy(x);
+			alloc.deallocate(x, 1);
+		};
+//DELETE_CASE________________________________________________________________________________
+		void	delete_case_1(pointer x)
+		{
+			//std::cout << "______________del_1" << std::endl;
+			if (!is_null_node(x->parent))
+				delete_case_2(x);
+		};
+//DELETE_CASE________________________________________________________________________________
+		void	delete_case_2(pointer x)
+		{
+			//std::cout << "______________del_2" << std::endl;
+			pointer	s = sibling(x);
+
+			if (s->color == RED)
+			{
+				x->parent->color = RED;
+				s->color = BLACK;
+				if (x == x->parent->left)
+					rotate_left(x->parent);
+				else
+					rotate_right(x->parent);
+			}
+			delete_case_3(x);
+		};
+//DELETE_CASE________________________________________________________________________________
+		void	delete_case_3(pointer x)
+		{
+			pointer	s = sibling(x);
+
+			if ((x->parent->color == BLACK) &&
+				(s->color == BLACK) &&
+				(s->left->color == BLACK) &&
+				(s->right->color == BLACK))
+			{
+				s->color = RED;
+				delete_case_1(x->parent);
+			}
+			else
+				delete_case_4(x);
+		};
+//DELETE_CASE________________________________________________________________________________
+		void	delete_case_4(pointer x)
+		{
+			pointer	s = sibling(x);
+
+			if ((x->parent->color == RED) &&
+				(s->color == BLACK) &&
+				(s->left->color == BLACK) &&
+				(s->right->color == BLACK))
+			{
+				s->color = RED;
+				x->parent->color = BLACK;
+			}
+			else
+				delete_case_5(x);
+		};
+//DELETE_CASE________________________________________________________________________________
+		void	delete_case_5(pointer x)
+		{
+			pointer	s = sibling(x);
+
+			if (s->color == BLACK)
+			{
+				if ((x == x->parent->left) &&
+					(s->right->color == BLACK) &&
+					(s->left->color == RED))
+				{
+					s->color = RED;
+					s->left->color = BLACK;
+					rotate_right(s);
+				}
+				else if ((x == x->parent->right) &&
+						(s->left->color == BLACK) &&
+						(s->right->color == RED))
+				{
+					s->color = RED;
+					s->right->color = BLACK;
+					rotate_left(s);
+				}
+			}
+			delete_case_6(x);
+		};
+//DELETE_CASE________________________________________________________________________________
+		void	delete_case_6(pointer x)
+		{
+			pointer	s = sibling(x);
+
+			s->color = x->parent->color;
+			x->parent->color = BLACK;
+
+			if (x == x->parent->left)
+			{
+				s->right->color = BLACK;
+				rotate_left(x->parent);
+			}
+			else
+			{
+				s->left->color = BLACK;
+				rotate_right(x->parent);
+			}
+		};
+//FIND_NODE________________________________________________________________________________
+		pointer	find_node_key(typename T::first_type key)
+		{
+			pointer	current = root;
+
+			while (!is_null_node(current))
+			{
+				if (current->date.first == key)
+					return (current);
+				if (key < current->date.first)
+					current = current->left;
+				else
+					current = current->right;
+			}
+			return (current);
+		};
+//FIND_NODE________________________________________________________________________________
+		pointer	find_node(T date)
+		{
+			pointer	current = root;
+
+			while (!is_null_node(current))
+			{
+				if (current->date.first == date.first)
+					return (current);
+				if (date.first < current->date.first)
+					current = current->left;
+				else
+					current = current->right;
+			}
+			return (current);
+		};
 //DEBAG________________________________________________________________________________
 		void	show_debag()
 		{
@@ -724,6 +887,59 @@ class	tree
 			}
 		};
 //DEBAG________________________________________________________________________________
+
+//HEDER_STD
+//TREE_NEXT________________________________________________________________________________
+		pointer		tree_next(pointer x)
+		{
+			if (!is_null_node(x->right))
+				return tree_min(x->right);
+			while (!tree_is_left_child(x))
+				x = x->parent;
+			return x->parent;
+		};
+		
+		pointer		tree_min(pointer x)
+		{
+			while (!is_null_node(x->left))
+				x = x->left;
+			return x;
+		};
+		
+		pointer		tree_max(pointer x)
+		{
+			while (!is_null_node(x->right))
+		        x = x->right;
+		    return x;
+		};
+		
+		bool		tree_is_left_child(pointer x)
+		{
+		    return x == x->parent->left;
+		};
+
+// Returns:  pointer to a node which has no children
+// Precondition:  __x != nullptr.
+		pointer		tree_leaf(pointer x)
+		{
+		    while (true)
+		    {
+				if(!is_null_node(x->left))
+		        {
+		            x = x->left;
+		            continue;
+		        }
+				if(!is_null_node(x->right))
+		        {
+		            x = x->right;
+		            continue;
+		        }
+		        break;
+		    }
+		    return x;
+		};
+
+
 
 	protected:
 		node<T>			_null_node;
