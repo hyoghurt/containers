@@ -127,12 +127,15 @@ class	map
 
 		void										swap (map& x)							{};
 		void										clear ()								{};
-		key_compare									key_comp () const						{};
-		value_compare								value_comp () const						{};
+//KET_COMPARE________________________________________________________________________________________________________________
+		key_compare									key_comp () const						{ return Compare(); };
+//VALUE_COMPARE_______________________________________________________________________________________________________________
+		value_compare								value_comp () const						{ return value_compare(key_compare()); };
 //FIND_______________________________________________________________________________________________________________________
 		iterator									find (const key_type& k)				{ return (_base.find(k)); };
 		const_iterator								find (const key_type& k) const			{};
-		size_type									count (const key_type& k) const			{};
+//COUNT_______________________________________________________________________________________________________________________
+		size_type									count (const key_type& k) const			{ return _base.count(k); };
 		iterator									lower_bound (const key_type& k)			{};
 		const_iterator								lower_bound (const key_type& k) const	{};
 		iterator									upper_bound (const key_type& k)			{};

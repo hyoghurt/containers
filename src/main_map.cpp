@@ -17,6 +17,9 @@ void	test_find(const std::string& promo);
 
 //napisat delete tree correct
 void	test_erase(const std::string& promo);
+void	test_key_compare(const std::string& promo);
+void	test_value_compare(const std::string& promo);
+void	test_count(const std::string& promo);
 
 
 int				main( void )
@@ -35,7 +38,14 @@ int				main( void )
 	//test_operator_kv("TEST OPERATOR []");
 	//test_find("TEST FIND");
 	//test_insert_iterator("TEST INSERT INTERATOR");
-	test_erase("TEST ERASE");
+	//test_erase("TEST ERASE");
+	//test_key_compare("TEST KEY COMPARE");
+	//test_value_compare("TEST VALUE COMPARE");
+	//test_count("TEST COUNT");
+
+
+
+
 
 
 
@@ -43,6 +53,87 @@ int				main( void )
 
 	return (0);
 }
+
+void	test_count(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
+	ft::map<char,int> mymap;
+	char c;
+	
+	mymap ['a']=101;
+	mymap ['c']=202;
+	mymap ['f']=303;
+	
+	for (c='a'; c<'h'; c++)
+	{
+		std::cout << "count = " << mymap.count(c) << std::endl;
+		std::cout << c;
+		if (mymap.count(c)>0)
+			std::cout << " is an element of mymap.\n";
+		else 
+			std::cout << " is not an element of mymap.\n";
+	}
+}
+
+void	test_value_compare(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
+	ft::map<char,int> mymap;
+
+	mymap['x']=1001;
+	mymap['y']=2002;
+	mymap['z']=3003;
+
+	ft::pair<char,int> highest = *mymap.begin();
+	ft::map<char,int>::iterator it = mymap.begin();
+	++it;
+
+	if (mymap.value_comp()(*it, highest))
+		std::cout << it->first << " => " << it->second << '\n';
+
+	if (mymap.value_comp()(highest, *it))
+		std::cout << it->first << " => " << it->second << '\n';
+}
+
+void	test_key_compare(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+
+	ft::map<char,int> mymap;
+	ft::map<char,int>::key_compare mycomp = mymap.key_comp();
+	
+	mymap['a']=100;
+	mymap['b']=200;
+	mymap['c']=300;
+	
+	ft::map<char,int>::iterator it = mymap.begin();
+	ft::map<char,int>::iterator sec = it;
+	++sec;
+	if (mycomp (it->first, sec->first))
+		std::cout << "less" << std::endl;
+	++it;
+	++it;
+	if (mycomp (it->first, sec->first))
+		std::cout << "less" << std::endl;
+}
+
 
 void	test_erase(const std::string& promo)
 {

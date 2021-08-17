@@ -244,7 +244,7 @@ class	tree
 //MAX_SIZE________________________________________________________________________________
 		size_t			max_size() const						{ return alloc.max_size(); };
 //IS_NULL_NODE________________________________________________________________________________
-		bool			is_null_node(pointer x)
+		bool			is_null_node(pointer x) const
 		{
 			if (x == x->_null_node)
 				return true;
@@ -812,8 +812,11 @@ class	tree
 				rotate_right(x->parent);
 			}
 		};
+//COUT_____________________________________________________________________________________
+		size_t	count(const key_type& key) const
+		{ return (!is_null_node(find_node_key(key))); }
 //FIND_NODE________________________________________________________________________________
-		pointer	find_node_key(typename T::first_type key)
+		pointer	find_node_key(const key_type& key) const
 		{
 			pointer	current = root;
 
