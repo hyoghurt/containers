@@ -654,6 +654,7 @@ class	tree
 				return (x->parent->left);
 		};
 //REPLACE_NODE________________________________________________________________________________
+/*
 		void	replace_node(pointer x, pointer child)
 		{
 			if (!is_null_node(child))
@@ -668,34 +669,85 @@ class	tree
 			else
 				root = x;
 		};
+		*/
+		void	replace_node(pointer x, pointer child)
+		{
+			if (!is_null_node(child))
+				child->parent = x->parent;
+			if (!is_null_node(x->parent))
+			{
+				if (x == x->parent->left)
+					x->parent->left = child;
+				else
+					x->parent->right = child;
+			}
+		}
+
+		void	delete_node_p(pointer x)
+		{
+			pointer	tmp;
+			pointer	child;
+
+			if (!is_null_node(x->left) && !is_null_node(x->right))
+			{
+				tmp = x->left;
+				while (!is_null_node(tmp->right))
+					tmp = tmp->right;
+			}
+			else if (is_null_node(x->left))
+				tmp = x->right;
+			else
+				tmp = x->left;
+
+			std::cout << "tmp = " << tmp->date.first << std::endl;
+
+
+    		if (!is_null_node(tmp->left))
+    		    child = tmp->left;
+    		else
+    		    child = tmp->right;
+
+
+			replace_node(tmp, child);
+
+
+			tmp->parent = x->parent;
+			tmp->left = x->left;
+			tmp->right = x->right;
+			tmp->color = x->color;
+
+			if (is_null_node(x->parent))
+				root = tmp;
+
+
+
+			/*
+			--_size_tree;
+			alloc.destroy(x);
+			alloc.deallocate(x, 1);
+			*/
+
+
+			if (tmp->color == BLACK)
+			{
+				if (child->color == RED)
+					child->color = BLACK;
+				else
+					delete_case_1(child);
+			}
+			std::cout << std::endl;
+			show_debag();
+			std::cout << std::endl;
+		}
 //DELETE_________________________________________________________________________________
 		void	delete_one_child(pointer x)
 		{
 			pointer	child;
 
-			//find child to na chto menat
-			//
-			if (!is_null_node(x->left) && !is_null_node(x->right))
-			{
-				child = x->left;
-				while (!is_null_node(child->right))
-					child = child->right;
-			}
-			else if (is_null_node(x->left))
-				child = x->right;
-			else
-				child = x->left;
-
-			//std::cout << "child = " << child->date.first << std::endl;
-
-			/*
-			if (child == nullptr)
-			{
-				std::cout << "child == nullptr" << std::endl;
-				return;
-			}
-			*/
-			//case for child == root
+    		if (!is_null_node(x->left))
+    		    child = x->left;
+    		else
+    		    child = x->right;
 
 			replace_node(x, child);
 
@@ -706,22 +758,16 @@ class	tree
 				else
 					delete_case_1(child);
 			}
-
-			--_size_tree;
-			alloc.destroy(x);
-			alloc.deallocate(x, 1);
 		};
 //DELETE_CASE________________________________________________________________________________
 		void	delete_case_1(pointer x)
 		{
-			//std::cout << "______________del_1" << std::endl;
 			if (!is_null_node(x->parent))
 				delete_case_2(x);
-		};
+		}
 //DELETE_CASE________________________________________________________________________________
 		void	delete_case_2(pointer x)
 		{
-			//std::cout << "______________del_2" << std::endl;
 			pointer	s = sibling(x);
 
 			if (s->color == RED)
@@ -734,7 +780,7 @@ class	tree
 					rotate_right(x->parent);
 			}
 			delete_case_3(x);
-		};
+		}
 //DELETE_CASE________________________________________________________________________________
 		void	delete_case_3(pointer x)
 		{
@@ -750,7 +796,7 @@ class	tree
 			}
 			else
 				delete_case_4(x);
-		};
+		}
 //DELETE_CASE________________________________________________________________________________
 		void	delete_case_4(pointer x)
 		{
@@ -766,7 +812,7 @@ class	tree
 			}
 			else
 				delete_case_5(x);
-		};
+		}
 //DELETE_CASE________________________________________________________________________________
 		void	delete_case_5(pointer x)
 		{
@@ -792,7 +838,7 @@ class	tree
 				}
 			}
 			delete_case_6(x);
-		};
+		}
 //DELETE_CASE________________________________________________________________________________
 		void	delete_case_6(pointer x)
 		{
@@ -811,7 +857,7 @@ class	tree
 				s->left->color = BLACK;
 				rotate_right(x->parent);
 			}
-		};
+		}
 //COUT_____________________________________________________________________________________
 		size_t	count(const key_type& key) const
 		{ return (!is_null_node(find_node_key(key))); }
