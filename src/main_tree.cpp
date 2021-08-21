@@ -22,34 +22,53 @@ int				main( void )
 		//std::cout << "ok" << std::endl;
 
 	tr.insert_node(ft::pair<char, int>('a', 10));
-	tr.insert_node(ft::pair<char, int>('b', 20));
-	tr.insert_node(ft::pair<char, int>('c', 30));
-	tr.insert_node(ft::pair<char, int>('d', 40));
-	tr.insert_node(ft::pair<char, int>('e', 50));
-	tr.insert_node(ft::pair<char, int>('f', 60));
-	
+	/*
+	tr.insert_node(new ft::pair<char, int>('b', 20));
+	tr.insert_node(new ft::pair<char, int>('c', 30));
+	tr.insert_node(new ft::pair<char, int>('d', 40));
+	tr.insert_node(new ft::pair<char, int>('e', 50));
+	tr.insert_node(new ft::pair<char, int>('f', 60));
+
 	for (it = tr.begin(); it != tr.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
+		*/
 
-	std::cout << std::endl;
-	tr.show_debag();
-	std::cout << std::endl;
 
-	it = tr.find('b');
+	//it = tr.find('b');
 	//tr.delete_node_tmp(it.p);
 
-
-	std::cout << "first = " << it->first << std::endl;
-	tr.delete_node_p(it.p);
-	//tr.delete_node('b');
-
+	//std::cout << "first = " << it->first << std::endl;
+	//tr.delete_node_p(it.p);
+	/*
+	*/
+	/*
 	std::cout << std::endl;
+	std::cout << "show debag main" << std::endl;
 	tr.show_debag();
 	std::cout << std::endl;
 
+	tr.delete_node('b');
+	tr.delete_node('a');
+	tr.delete_node('e');
+	tr.delete_node('d');
+	tr.delete_node('f');
+	tr.delete_node('c');
+	*/
 
+	/*
+	std::cout << std::endl << std::endl << std::endl;
+	tr.delete_node('a');
+	*/
 
+	std::cout << std::endl;
+	std::cout << "show debag main" << std::endl;
+	tr.show_debag();
+	std::cout << std::endl;
 
+	/*
+	for (it = tr.begin(); it != tr.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+		*/
 	/*
 	it = mymap.find('b');
 	mymap.erase (it);                   // erasing by iterator
@@ -63,7 +82,6 @@ int				main( void )
 	for (it = mymap.begin(); it != mymap.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
 		*/
-
 
 	return (0);
 }

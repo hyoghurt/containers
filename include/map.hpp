@@ -97,17 +97,50 @@ class	map
 		mapped_type&								operator[] (const key_type& k)
 		{ return ( *(   (this->insert( ft::make_pair( k, mapped_type() ) ) )  .first ) ).second ; }
 //INSERT_________________________________________________________________________________________________________________
-		ft::pair<iterator, bool>					insert (const value_type& val)			{ return (_base.insert_node(val)); }
+		ft::pair<iterator, bool>					insert (const value_type& val)
+		{
+			pointer						x;
+			ft::pair<iterator, bool>	res;
+
+			x = _alloc.allocate(1);
+			_alloc.construct(x, val);
+
+			res = _base.insert_node(x);
+			if (!res.second)
+			{
+				_alloc.destroy(x);
+				_alloc.deallocate(x, 1);
+			}
+			return (res);
+		}
 //INSERT_ITERATOR_____________________________________________________________________________________________________________
 		iterator									insert (iterator position, const value_type& val)
-		{ return _base.insert_node(position, val); }
+		{
+			pointer						x;
+
+			x = _alloc.allocate(1);
+			_alloc.construct(x, val);
+
+			return (_base.insert_node(position, x));
+		}
 //INSERT_RANGE________________________________________________________________________________________________________________
 		template <class InputIterator>
 		void										insert (InputIterator first, InputIterator last)
 		{
+			pointer						x;
+			ft::pair<iterator, bool>	res;
+
 			while (first != last)
 			{
-				_base.insert_node( ft::make_pair( first->first, first->second ) );
+				x = _alloc.allocate(1);
+				_alloc.construct(x, ft::make_pair(first->first, first->second) );
+
+				res = _base.insert_node(x);
+				if (!res.second)
+				{
+					_alloc.destroy(x);
+					_alloc.deallocate(x, 1);
+				}
 				++first;
 			}
 		}
@@ -120,7 +153,7 @@ class	map
 		{
 			while (first != last)
 			{
-				_base.delete_node( first->first );
+				_base.delete_node(first->first);
 				++first;
 			}
 		}

@@ -30,27 +30,22 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
-
-	//test_insert_1("TEST INSERT 1");
-	//test_size("TEST SIZE EMPTY");
-	//test_pair("TEST PAIR");
-	//test_begin_end("TEST BEGIN END");
-	//test_operator_kv("TEST OPERATOR []");
-	//test_find("TEST FIND");
-	//test_insert_iterator("TEST INSERT INTERATOR");
-	//test_erase("TEST ERASE");
-	//test_key_compare("TEST KEY COMPARE");
-	//test_value_compare("TEST VALUE COMPARE");
-	//test_count("TEST COUNT");
-
-
-
+	test_insert_1("TEST INSERT 1");
+	test_size("TEST SIZE EMPTY");
+	test_pair("TEST PAIR");
+	test_begin_end("TEST BEGIN END");
+	test_operator_kv("TEST OPERATOR []");
+	test_find("TEST FIND");
+	test_insert_iterator("TEST INSERT INTERATOR");
+	test_erase("TEST ERASE");
+	test_key_compare("TEST KEY COMPARE");
+	test_value_compare("TEST VALUE COMPARE");
+	test_count("TEST COUNT");
 
 
 
 
 	std::cout << "end main" << std::endl;
-
 	return (0);
 }
 
@@ -133,7 +128,6 @@ void	test_key_compare(const std::string& promo)
 	if (mycomp (it->first, sec->first))
 		std::cout << "less" << std::endl;
 }
-
 
 void	test_erase(const std::string& promo)
 {
@@ -232,8 +226,6 @@ void	test_insert_iterator(const std::string& promo)
 	std::cout << "anothermap contains:\n";
 	for (it=anothermap.begin(); it!=anothermap.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
-
-
 }
 
 
