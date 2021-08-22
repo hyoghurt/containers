@@ -20,6 +20,12 @@ void	test_erase(const std::string& promo);
 void	test_key_compare(const std::string& promo);
 void	test_value_compare(const std::string& promo);
 void	test_count(const std::string& promo);
+void	test_insert_2(const std::string& promo);
+void	test_rbegin_rend(const std::string& promo);
+void	test_clear(const std::string& promo);
+void	test_lower_upper(const std::string& promo);
+void	test_equal(const std::string& promo);
+void	test_get_alloc(const std::string& promo);
 
 
 int				main( void )
@@ -30,6 +36,7 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
+	/*
 	test_insert_1("TEST INSERT 1");
 	test_size("TEST SIZE EMPTY");
 	test_pair("TEST PAIR");
@@ -41,12 +48,195 @@ int				main( void )
 	test_key_compare("TEST KEY COMPARE");
 	test_value_compare("TEST VALUE COMPARE");
 	test_count("TEST COUNT");
+	test_insert_2("TEST INSERT 2");
+	*/
+	//test_rbegin_rend("TEST RBEGIN REND");
+	/*
+	test_clear("TEST CLEAR");
+	test_lower_upper("TEST LOWER UPPER");
+	test_equal("TEST EQUAL");
+	test_get_alloc("TEST GET ALLOCATOR");
+	*/
 
+	ft::map<char, int>	ma;
 
+	ft::map<char, int>::iterator	it;
+	ft::map<char, int>::iterator	it_e;
 
+	ma.insert(ft::make_pair<char,int>('a', 34));
+	ma.insert(ft::make_pair<char,int>('b', 4));
+	ma.insert(ft::make_pair<char,int>('d', 3));
+	ma.insert(ft::make_pair<char,int>('r', 23));
+
+	it = ma.begin();
+	std::cout << it->first << std::endl;
+	std::cout << (it++)->first << std::endl;
+	std::cout << it->first << std::endl;
+	std::cout << (++it)->first << std::endl;
+	std::cout << (++it)->first << std::endl;
+	std::cout << (--it)->first << std::endl;
+	std::cout << (it--)->first << std::endl;
+	std::cout << (it)->first << std::endl;
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	it = ma.begin();
+	it_e = ma.end();
+
+	--it_e;
+	std::cout << it_e->first << std::endl;
+
+	while (it != it_e)
+	{
+		std::cout << (it_e)->first << std::endl;
+		--it_e;
+	}
 
 	std::cout << "end main" << std::endl;
-	return (0);
+	return 0;
+}
+
+void	test_get_alloc(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	int psize;
+	ft::map<char,int> mymap;
+  	ft::pair<const char,int>* p;
+
+  	// allocate an array of 5 elements using mymap's allocator:
+  	p = mymap.get_allocator().allocate(5);
+
+  	// assign some values to array
+  	psize = sizeof(ft::map<char,int>::value_type) * 5;
+
+  	std::cout << "The allocated array has a size of " << psize << " bytes.\n";
+
+  	mymap.get_allocator().deallocate(p,5);
+}
+void	test_equal(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::map<char,int> mymap;
+
+	mymap['a']=10;
+	mymap['b']=20;
+	mymap['c']=30;
+	
+	ft::pair<ft::map<char,int>::iterator,ft::map<char,int>::iterator> ret;
+	ret = mymap.equal_range('b');
+	
+	std::cout << "lower bound points to: ";
+	std::cout << ret.first->first << " => " << ret.first->second << '\n';
+	
+	std::cout << "upper bound points to: ";
+	std::cout << ret.second->first << " => " << ret.second->second << '\n';
+}
+void	test_lower_upper(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::map<char,int> mymap;
+	ft::map<char,int>::iterator itlow,itup;
+	mymap['a']=20;
+	mymap['d']=40;
+	mymap['h']=60;
+	mymap['r']=80;
+	mymap['x']=100;
+	itlow = mymap.upper_bound('h');
+	if (itlow != mymap.end())
+		std::cout << itlow->first << std::endl;
+	itlow = mymap.lower_bound('d');
+	if (itlow != mymap.end())
+		std::cout << itlow->first << std::endl;
+	itlow = mymap.lower_bound ('b');  // itlow points to b
+	itup = mymap.upper_bound ('d');   // itup points to e (not d!)
+	mymap.erase(itlow,itup);        // erases [itlow,itup)
+	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+}
+void	test_clear(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::map<char,int> mymap;
+
+	mymap['x']=100;
+	mymap['y']=200;
+	mymap['z']=300;
+	
+	std::cout << "mymap contains:\n";
+	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+	  std::cout << it->first << " => " << it->second << '\n';
+	
+	mymap.clear();
+	mymap['a']=1101;
+	mymap['b']=2202;
+	
+	std::cout << "mymap contains:\n";
+	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+}
+void	test_rbegin_rend(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::map<char,int> mymap;
+	mymap['x'] = 100;
+	mymap['y'] = 200;
+	mymap['z'] = 300;
+	ft::map<char,int>::reverse_iterator rit;
+	for (rit=mymap.rbegin(); rit!=mymap.rend(); ++rit)
+		std::cout << rit->first << " => " << rit->second << '\n';
+}
+void	test_insert_2(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::map<char,int> first;
+
+	first['a']=10;
+	first['b']=30;
+	first['c']=50;
+	first['d']=70;
+
+	ft::map<char,int> second (first.begin(),first.end());
+	ft::map<char,int>::iterator	it;
+
+	for (it = second.begin(); it != second.end(); ++it)
+		std::cout << it->first << " => " << it->second << std::endl;
+	std::cout << second.size() << std::endl;
+
+	for (it = first.begin(); it != first.end(); ++it)
+		std::cout << it->first << " => " << it->second << std::endl;
+	std::cout << first.size() << std::endl;
 }
 
 void	test_count(const std::string& promo)
@@ -173,8 +363,8 @@ void	test_find(const std::string& promo)
 	std::cout << FIL << "FT " << promo << NO_C << std::endl;
 #endif
 
-	std::map<char,int> mymap;
-	std::map<char,int>::iterator it;
+	ft::map<char,int> mymap;
+	ft::map<char,int>::iterator it;
 
 	mymap['a']=50;
 	mymap['b']=100;
@@ -384,5 +574,4 @@ void	test_size(const std::string& promo)
 
 	std::cout << "size = " << mp.size() << std::endl;
 	std::cout << "max_size = " << mp.max_size() << std::endl;
-
 }

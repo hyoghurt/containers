@@ -105,19 +105,20 @@ __tree_next_iter(_NodePtr __x)
 # define	RED 1
 # define	BLACK 0
 
-template < typename T >
+template <class T, class Compare, class Allocator>
 class	tree;
 
 template < typename Pr, typename Node >
 struct	tree_iterator;
 
-template < typename __T >
+template < typename __T, class node_allocator = std::allocator< __T > >
 class	node
 {
 	public:
-		typedef __T				date_type;
-		typedef __T*			pointer_date;
-		typedef	node<__T>*		pointer;
+		typedef __T					value_type;
+		typedef value_type*			pointer_date;
+		typedef	node<value_type>*	pointer;
+		typedef node_allocator		allocator_type;
 
 	private:
 		pointer_date	date;
@@ -126,33 +127,30 @@ class	node
 		pointer			right;
 		int				color;
 		pointer			null_node;
+		allocator_type	_alloc;
 
 	public:
 		template < typename Pr, typename Node >
 		friend struct	tree_iterator;
-		template < typename T >
+		template <class T, class Compare, class Allocator>
 		friend class tree;
 
 		node ()
 		{
-			/*std::cout << date.first << ": node construct default" << std::endl;*/
-			date = nullptr;
+			this->date = _alloc.allocate(1);
+			_alloc.construct(this->date, value_type());
 			parent = nullptr;
 			left = nullptr;
 			right = nullptr;
 			color = BLACK;
 			null_node = nullptr;
+			/*std::cout << date.first << ": node construct default" << std::endl;*/
 		}
 
-		node (pointer_date date, pointer parent)
+		node (const value_type& date)
 		{
-			/*std::cout << date.first << ": node construct node" << std::endl;*/
-			date = date;
-			parent = parent;
-		}
-
-		node (pointer_date date) : date(date)
-		{
+			this->date = _alloc.allocate(1);
+			_alloc.construct(this->date, date);
 			/*std::cout << date.first << ": node construct node" << std::endl;*/
 		}
 
@@ -160,7 +158,11 @@ class	node
 		node (const node<U>& oth)	{ *this = oth; }
 
 		~node()
-		{ /*std::cout << date.first << ": destructor node" << std::endl;*/ };
+		{
+			_alloc.destroy(date);
+			_alloc.deallocate(date, 1);
+			/*std::cout << date.first << ": destructor node" << std::endl;*/
+		}
 
 		template < typename U >
 		node&		operator= (const node<U>& oth)
@@ -179,11 +181,13 @@ class	node
 };
 
 template < typename Pr, typename Node >
-struct	tree_iterator
+class	tree_iterator
 {
-	template < typename T >
+	private:
+	template <class T, class Compare, class Allocator>
 	friend class	tree;
 
+	public:
     typedef std::bidirectional_iterator_tag	iterator_category;
     typedef Pr								value_type;
 	typedef std::ptrdiff_t					difference_type;
@@ -224,12 +228,39 @@ struct	tree_iterator
 		}
 		return (*this);
 	}
+	tree_iterator	operator++(int)						{ tree_iterator tmp(*this); ++(*this); return (tmp); }
+	tree_iterator&	operator--()
+	{
+		/*
+		if (p == p->null_node)
+			return 
+			*/
+		if (p->left != p->null_node)
+		{
+			p = p->left;
+			while (p->right != p->null_node)
+				p = p->right;
+		}
+		else
+		{
+			while (p == p->parent->left)
+			{
+				p = p->parent;
+				if (p == p->null_node)
+					return (*this);
+			}
+			p = p->parent;
+		}
+		return (*this);
+	}
+	tree_iterator	operator--(int)						{ tree_iterator tmp(*this); --(*this); return (tmp); }
 
+	private:
 	pointer_node	p;
+
 };
 
-//template < typename _T, typename Allocator = std::allocator<_T> >
-template < typename T >
+template <class T, class Compare = std::less<typename T::first_type>, class Allocator = std::allocator< node<T> > >
 class	tree
 {
 	public:
@@ -239,7 +270,8 @@ class	tree
 //TYPEDEF________________________________________________________________________________
 		typedef typename T::first_type						key_type;
 		typedef typename T::second_type						mapped_type;
-		typedef std::allocator< node<T> >					allocator_type;
+		typedef Compare										key_compare;
+		typedef Allocator									allocator_type;
 		typedef typename allocator_type::reference			reference;
 		typedef typename allocator_type::const_reference	const_reference;
 		typedef typename allocator_type::size_type			size_type;
@@ -250,14 +282,13 @@ class	tree
 		typedef T*											pointer_date_type;
 		typedef tree_iterator< T, node<T> >					tree_iterator;
 //CONSTRUCTOR________________________________________________________________________________
-		tree()
+		tree(const key_compare& comp = key_compare()) : comp(comp), _size_tree(0)
 		{
 			/*std::cout << "construct tree" << std::endl;*/
 			null_node = alloc.allocate(1);
 			alloc.construct(null_node);
 			root = null_node;
 			root->null_node = null_node;
-			_size_tree = 0;
 		}
 //DISTRUCTOR________________________________________________________________________________
 		~tree()
@@ -302,7 +333,7 @@ class	tree
 			}
 		}
 //INSERT_NODE________________________________________________________________________________
-		pointer	insert_node_p (pointer start, pointer_date_type date)
+		pointer	insert_node_p (pointer start, date_type date)
 		{
 			pointer	current;
 			pointer	parent;
@@ -313,10 +344,10 @@ class	tree
 
 			while (!is_null_node(current))
 			{
-				if (date->first == current->date->first)
+				if (date.first == current->date->first)
 					return current;
 				parent = current;
-				if (date->first < parent->date->first)
+				if (date.first < parent->date->first)
 					current = parent->left;
 				else
 					current = parent->right;
@@ -333,7 +364,7 @@ class	tree
 
 			if (!is_null_node(parent))
 			{
-				if (date->first < parent->date->first)
+				if (date.first < parent->date->first)
 					parent->left = x;
 				else
 					parent->right = x;
@@ -569,9 +600,9 @@ class	tree
 			x->parent = y;
 		}
 //INSERT________________________________________________________________________________________
-		ft::pair<tree_iterator, bool>	insert_node(pointer_date_type date)
+		ft::pair<tree_iterator, bool>	insert_node(date_type date)
 		{
-			pointer	x = find_node_key(date->first);
+			pointer	x = find_node_key(date.first);
 
 			if (!is_null_node(x))
 				return (ft::pair<tree_iterator, bool>( tree_iterator(x), false));
@@ -579,7 +610,7 @@ class	tree
 			return (ft::pair<tree_iterator, bool>( tree_iterator(x), true));
 		}
 //INSERT_ITERATOR________________________________________________________________________________
-		tree_iterator					insert_node(tree_iterator position, pointer_date_type date)
+		tree_iterator					insert_node(tree_iterator position, date_type date)
 		{
 			pointer	current = position.p;
 			pointer x = insert_node_p (this->root, date);
@@ -590,9 +621,7 @@ class	tree
 		{ return ( tree_iterator( find_node_key(key) ) ); }
 //ERASE_______________________________________________________________________________________________________________________
 		void					erase (tree_iterator position)
-		{
-				delete_node_p(position.p);
-		}
+		{ delete_node_p(position.p); }
 //DELETE_NODE________________________________________________________________________________
 		size_t	delete_node(const key_type& key)
 		{
@@ -625,16 +654,16 @@ class	tree
 			return (current);
 		};
 //FIND_NODE________________________________________________________________________________
-		pointer	find_node (pointer_date_type date) const
+		pointer	find_node (date_type date) const
 
 		{
 			pointer	current = root;
 
 			while (!is_null_node(current))
 			{
-				if (current->date->first == date->first)
+				if (current->date->first == date.first)
 					return (current);
-				if (current->date->first < date->first)
+				if (current->date->first < date.first)
 					current = current->left;
 				else
 					current = current->right;
@@ -740,6 +769,7 @@ class	tree
 		pointer			null_node;
 		pointer			root;
 		size_t			_size_tree;
+		key_compare		comp;
 		allocator_type	alloc;
 };
 
