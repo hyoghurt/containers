@@ -35,6 +35,7 @@ void	test_get_alloc(const std::string& promo);
 void	test_revers_iterator(const std::string& promo);
 void	test_const_iterator(const std::string& promo);
 void	test_operator_comp(const std::string& promo);
+void	test_const_iterator_operat(const std::string& promo);
 
 
 int				main( void )
@@ -45,38 +46,125 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
-	//test_capac_size("TEST CAPACITY SIZE");
-	//test_iterator_inc_decr("TEST ITERATOR OPER");
-	//test_operator("TEST OPERATOR");
-	//test_front_back("TEST FRONT BACK");
-	//test_oper_qr("TEST OPER []"); //operator v[]
-	//test_point_allocat("TEST POIN ALLOCAT");
-	//test_pop_back("TEST POP_BACK");
-	//test_constructor("TEST CONST");
-	//test_constructor_1("TEST CONST 1");
-	//test_constructor_2("TEST CONST 2");
-	//test_resize("TEST RESIZE");
-	//test_reserve("TEST RESERVE");
-	//test_at("TEST AT");
-	//test_assign("TEST ASSIGN");
-	//test_insert_1("TEST INSERT 1");
-	//test_insert_2("TEST INSERT 2");
-	//test_insert_3("TEST INSERT 3");
-	//test_insert_4("TEST INSERT 4");
-	//test_insert_5("TEST INSERT 5");
-	//test_insert_6("TEST INSERT 6");
-	//test_erase_1("TEST ERASE 1");
-	//test_erase_2("TEST ERASE 2");
-	//test_swap("TEST SWAP");
-	//test_clear("TEST CLEAR");
-	//test_get_alloc("TEST GET ALLOC");
-	//test_revers_iterator("TEST REVERSE ITERATOR");
-	//test_const_iterator("TEST CONST ITERATOR");
-	//test_operator_comp("TEST OPERATOR COMP");
+	test_capac_size("TEST CAPACITY SIZE");
+	test_iterator_inc_decr("TEST ITERATOR OPER");
+	test_operator("TEST OPERATOR");
+	/*
+	test_front_back("TEST FRONT BACK");
+	test_oper_qr("TEST OPER []"); //operator v[]
+	test_point_allocat("TEST POIN ALLOCAT");
+	test_pop_back("TEST POP_BACK");
+	test_constructor("TEST CONST");
+	test_constructor_1("TEST CONST 1");
+	test_constructor_2("TEST CONST 2");
+	test_resize("TEST RESIZE");
+	test_reserve("TEST RESERVE");
+	test_at("TEST AT");
+	test_assign("TEST ASSIGN");
+	test_insert_1("TEST INSERT 1");
+	test_insert_2("TEST INSERT 2");
+	test_insert_3("TEST INSERT 3");
+	test_insert_4("TEST INSERT 4");
+	test_insert_5("TEST INSERT 5");
+	test_insert_6("TEST INSERT 6");
+	test_erase_1("TEST ERASE 1");
+	test_erase_2("TEST ERASE 2");
+	test_swap("TEST SWAP");
+	test_clear("TEST CLEAR");
+	test_get_alloc("TEST GET ALLOC");
+	test_revers_iterator("TEST REVERSE ITERATOR");
+	 */
+	test_const_iterator("TEST CONST ITERATOR");
+	/*
+	*/
+	test_operator_comp("TEST OPERATOR COMP");
+	test_const_iterator_operat("TEST CONT ITERATOR OPER");
+
 
 	return (0);
 }
 
+void	test_const_iterator_operat(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::vector<int>		vec;
+	vec.push_back(3);
+	vec.push_back(4);
+
+	ft::vector<int>::iterator		it = vec.begin();
+	ft::vector<int>::iterator		it_t = vec.begin();
+
+	std::cout << *it_t << std::endl;
+	if (it == it_t)
+		std::cout << "==" << std::endl;
+	if (it != it_t)
+		std::cout << "!=" << std::endl;
+	if (it < it_t)
+		std::cout << "<" << std::endl;
+	if (it <= it_t)
+		std::cout << "<=" << std::endl;
+	if (it > it_t)
+		std::cout << ">" << std::endl;
+	if (it >= it_t)
+		std::cout << ">=" << std::endl;
+
+	++it_t;
+
+	std::cout << *it_t << std::endl;
+	if (it == it_t)
+		std::cout << "==" << std::endl;
+	if (it != it_t)
+		std::cout << "!=" << std::endl;
+	if (it < it_t)
+		std::cout << "<" << std::endl;
+	if (it <= it_t)
+		std::cout << "<=" << std::endl;
+	if (it > it_t)
+		std::cout << ">" << std::endl;
+	if (it >= it_t)
+		std::cout << ">=" << std::endl;
+
+	ft::vector<int>::const_iterator	it_c = vec.begin();
+
+	std::cout << *it_c << std::endl;
+	if (it == it_c)
+		std::cout << "==" << std::endl;
+	if (it != it_c)
+		std::cout << "!=" << std::endl;
+	if (it < it_c)
+		std::cout << "<" << std::endl;
+	if (it <= it_c)
+		std::cout << "<=" << std::endl;
+	if (it > it_c)
+		std::cout << ">" << std::endl;
+	if (it >= it_c)
+		std::cout << ">=" << std::endl;
+
+	++it_c;
+	std::cout << *it_c << std::endl;
+	if (it == it_c)
+		std::cout << "==" << std::endl;
+	if (it != it_c)
+		std::cout << "!=" << std::endl;
+	if (it < it_c)
+		std::cout << "<" << std::endl;
+	if (it <= it_c)
+		std::cout << "<=" << std::endl;
+	if (it > it_c)
+		std::cout << ">" << std::endl;
+	if (it >= it_c)
+		std::cout << ">=" << std::endl;
+
+	it = vec.begin();
+	it_c = it;
+
+	std::cout << *it_c << std::endl;
+}
 void	test_operator_comp(const std::string& promo)
 {
 #ifndef FT
@@ -147,6 +235,8 @@ void	test_const_iterator(const std::string& promo)
 	//ft::vector<int>::reverse_iterator	r_it_e = myvector.rend();
 	
 	if (c_it == it)
+		std::cout << "no" << std::endl;
+	if (++c_it < it)
 		std::cout << "no" << std::endl;
 
 	std::cout << "const iterator.begin = " << *c_it << std::endl;

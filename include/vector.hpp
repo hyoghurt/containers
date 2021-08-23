@@ -3,7 +3,7 @@
 
 # include "ft.hpp"
 //# include <iostream>
-//# include <iterator>
+# include <iterator>
 
 namespace ft
 {
@@ -11,134 +11,71 @@ namespace ft
 template < typename T, typename Allocator = std::allocator<T> >
 class vector
 {
-    public:
-		//struct	iterator : public std::iterator<std::random_access_iterator_tag, T, T, T*, T>
-		//struct	iterator : std::iterator<std::random_access_iterator_tag, T>
 
-		template < typename _T >
-		struct	my_iterator
-		{
-			typedef std::ptrdiff_t					difference_type;
-			typedef _T								value_type;
-			typedef _T*								pointer;
-			typedef _T&								reference;
-			typedef std::random_access_iterator_tag	iterator_category;
+public:
+	template <typename Pointer>
+	class	my_iterator
+	{
+	protected:
+		Pointer	p;
+		typedef ft::iterator_traits<Pointer>	_iter_traits;
 
-			my_iterator ()										{ return; };
-			~my_iterator ()										{ return; };
-			my_iterator (pointer p) : p(p)				{ return; };
-			my_iterator (my_iterator const& oth)				{ *this = oth; };
+	public:
+		typedef typename _iter_traits::difference_type		difference_type;
+		typedef typename _iter_traits::value_type			value_type;
+		typedef typename _iter_traits::pointer				pointer;
+		typedef typename _iter_traits::reference			reference;
+		typedef typename _iter_traits::iterator_category	iterator_category;
 
-			my_iterator&	operator= (my_iterator const& oth)			{ this->p = oth.p; return (*this); };
-			bool			operator==(my_iterator const& oth) const	{ return (p == oth.p); };
-			bool			operator!=(my_iterator const& oth) const	{ return (p != oth.p); };
-			reference		operator* () const							{ return *p; };
-			pointer			operator->() const							{ return p; };
-			my_iterator&	operator++()								{ ++(this->p); return (*this); };
-			my_iterator		operator++(int)								{ my_iterator tmp(*this); ++(this->p); return (tmp); };
-			my_iterator&	operator--()								{ --(this->p); return (*this); };
-			my_iterator		operator--(int)								{ my_iterator tmp(*this); --(this->p); return (tmp); };
-			my_iterator 	operator+ (size_t const& n)					{ return my_iterator(p + n); };
-			my_iterator 	operator- (size_t const& n)					{ return my_iterator(p - n); };
-			size_t			operator- (my_iterator const& oth)			{ return (this->p - oth.p); };
-			bool			operator< (my_iterator const& oth) const	{ return (this->p < oth.p); };
-			bool			operator> (my_iterator const& oth) const	{ return (this->p > oth.p); };
-			bool			operator<=(my_iterator const& oth) const	{ return (this->p <= oth.p); };
-			bool			operator>=(my_iterator const& oth) const	{ return (this->p >= oth.p); };
-			my_iterator&	operator+=(size_t const& n)					{ this->p += n; return (*this); };
-			my_iterator&	operator-=(size_t const& n)					{ this->p -= n; return (*this); };
-			reference		operator[](size_t const& n)					{ return *(this->p + n); };
+		my_iterator ()												{}
+		~my_iterator ()												{}
+		my_iterator (const Pointer& p) : p(p)						{}
+		template <typename U>
+		my_iterator (const my_iterator<U>& oth) : p(oth.base())		{}
 
-			friend		struct const_iterator;
-			protected:
-				pointer	p;
-		};
+		reference		operator* () const							{ return *p; }
+		pointer			operator->() const							{ return p; }
+		my_iterator&	operator++()								{ ++p; return (*this); }
+		my_iterator		operator++(int)								{ my_iterator tmp(*this); ++p; return (tmp); }
+		my_iterator&	operator--()								{ --p; return (*this); }
+		my_iterator		operator--(int)								{ my_iterator tmp(*this); --p; return (tmp); }
+		my_iterator 	operator+ (const difference_type& n)		{ return my_iterator(p + n); }
+		my_iterator 	operator- (const difference_type& n)		{ return my_iterator(p - n); }
+		template <typename U>
+		difference_type	operator- (const my_iterator<U>& oth)		{ return (base() - oth.base()); }
+		//template <typename U>
+		//my_iterator		operator+ (const difference_type& n, const my_iterator<U>& oth) { p = oth.base() + n; return *this; }
+		my_iterator&	operator+=(const difference_type& n)		{ this->p += n; return (*this); }
+		my_iterator&	operator-=(const difference_type& n)		{ this->p -= n; return (*this); }
+		reference		operator[](const difference_type& n)		{ return *(p + n); }
+		const Pointer&	base() const								{ return p; }
 
-		struct	const_iterator;
+		template <typename U>
+		bool			operator==(const my_iterator<U>& b)			{ return base() == b.base(); }
+		template <typename U>
+		bool			operator!=(const my_iterator<U>& b)			{ return base() != b.base(); }
+		template <typename U>
+		bool			operator< (const my_iterator<U>& b)			{ return base() < b.base(); }
+		template <typename U>
+		bool			operator<=(const my_iterator<U>& b)			{ return !(base() > b.base()); }
+		template <typename U>
+		bool			operator> (const my_iterator<U>& b)			{ return base() > b.base() ; }
+		template <typename U>
+		bool			operator>=(const my_iterator<U>& b)			{ return !(base() < b.base()); }
+	};
 
-		struct	iterator
-		{
-			typedef std::ptrdiff_t					difference_type;
-			typedef T								value_type;
-			typedef T*								pointer;
-			typedef T&								reference;
-			typedef std::random_access_iterator_tag	iterator_category;
-
-			iterator ()										{ return; };
-			~iterator ()										{ return; };
-			iterator (pointer p) : p(p)				{ return; };
-			iterator (iterator const& oth)				{ *this = oth; };
-
-			iterator&	operator= (iterator const& oth)			{ this->p = oth.p; return (*this); };
-			bool		operator==(iterator const& oth) const	{ return (p == oth.p); };
-			bool		operator!=(iterator const& oth) const	{ return (p != oth.p); };
-			reference	operator* () const						{ return *p; };
-			pointer		operator->() const						{ return p; };
-			iterator&	operator++()							{ ++(this->p); return (*this); };
-			iterator	operator++(int)							{ iterator tmp(*this); ++(this->p); return (tmp); };
-			iterator&	operator--()							{ --(this->p); return (*this); };
-			iterator	operator--(int)							{ iterator tmp(*this); --(this->p); return (tmp); };
-			iterator 	operator+ (size_t const& n)				{ return iterator(p + n); };
-			iterator 	operator- (size_t const& n)				{ return iterator(p - n); };
-			size_t		operator- (iterator const& oth)			{ return (this->p - oth.p); };
-			bool		operator< (iterator const& oth) const	{ return (this->p < oth.p); };
-			bool		operator> (iterator const& oth) const	{ return (this->p > oth.p); };
-			bool		operator<=(iterator const& oth) const	{ return (this->p <= oth.p); };
-			bool		operator>=(iterator const& oth) const	{ return (this->p >= oth.p); };
-			iterator&	operator+=(size_t const& n)				{ this->p += n; return (*this); };
-			iterator&	operator-=(size_t const& n)				{ this->p -= n; return (*this); };
-			reference	operator[](size_t const& n)				{ return *(this->p + n); };
-
-			friend		struct const_iterator;
-			protected:
-				pointer	p;
-		};
-
-		struct	const_iterator : public iterator
-		{
-			typedef std::ptrdiff_t					difference_type;
-			typedef T								value_type;
-			typedef const T*						pointer;
-			typedef const T&						reference;
-			typedef std::random_access_iterator_tag	iterator_category;
-
-			const_iterator () {};
-			const_iterator (T* p) : iterator(p) {};
-			~const_iterator () {};
-			const_iterator (const const_iterator& oth)					{ *this = oth; };
-			const_iterator (const iterator& oth)						{ this->p = oth.p; };
-
-			const_iterator&	operator= (const_iterator const& oth)		{ this->p = oth.p; return (*this); };
-			bool			operator==(const_iterator const& oth) const	{ return (this->p == oth.p); };
-			bool			operator!=(const_iterator const& oth) const	{ return (this->p != oth.p); };
-			reference		operator* () const							{ return *this->p; };
-			pointer			operator->() const							{ return this->p; };
-			const_iterator&	operator++()								{ ++(this->p); return (*this); };
-			const_iterator	operator++(int)								{ const_iterator tmp(*this); ++(this->p); return (tmp); };
-			const_iterator&	operator--()								{ --(this->p); return (*this); };
-			const_iterator	operator--(int)								{ const_iterator tmp(*this); --(this->p); return (tmp); };
-			const_iterator 	operator+ (size_t const& n)					{ return const_iterator(this->p + n); };
-			const_iterator 	operator- (size_t const& n)					{ return const_iterator(this->p - n); };
-			size_t			operator- (const_iterator const& oth)		{ return (this->p - oth.p); };
-			bool			operator< (const_iterator const& oth) const	{ return (this->p < oth.p); };
-			bool			operator> (const_iterator const& oth) const	{ return (this->p > oth.p); };
-			bool			operator<=(const_iterator const& oth) const	{ return (this->p <= oth.p); };
-			bool			operator>=(const_iterator const& oth) const	{ return (this->p >= oth.p); };
-			const_iterator&	operator+=(size_t const& n)					{ this->p += n; return (*this); };
-			const_iterator&	operator-=(size_t const& n)					{ this->p -= n; return (*this); };
-			reference		operator[](size_t const& n)					{ return *(this->p + n); };
-		};
-
-		typedef T											value_type;
-		typedef Allocator									allocator_type;
-		typedef typename allocator_type::reference			reference;
-		typedef typename allocator_type::const_reference	const_reference;
-		typedef typename allocator_type::size_type			size_type;
-		typedef typename allocator_type::difference_type	difference_type;
-		typedef typename allocator_type::pointer			pointer;
-		typedef typename allocator_type::const_pointer		const_pointer;
-		typedef ft::reverse_iterator< iterator >			reverse_iterator;
-		typedef ft::reverse_iterator< const_iterator >		const_reverse_iterator;
+	typedef T											value_type;
+	typedef Allocator									allocator_type;
+	typedef typename allocator_type::reference			reference;
+	typedef typename allocator_type::const_reference	const_reference;
+	typedef typename allocator_type::size_type			size_type;
+	typedef typename allocator_type::difference_type	difference_type;
+	typedef typename allocator_type::pointer			pointer;
+	typedef typename allocator_type::const_pointer		const_pointer;
+	typedef my_iterator<pointer>						iterator;
+	typedef my_iterator<const_pointer>					const_iterator;
+	typedef ft::reverse_iterator< iterator >			reverse_iterator;
+	typedef ft::reverse_iterator< const_iterator >		const_reverse_iterator;
 
     public:
 
@@ -215,8 +152,8 @@ class vector
 		//const_iterator		begin() const		{ return _make_iter(_begin); };
 		//const_iterator		begin() const		{ return begin(); };
 		//const_iterator		end() const			{ return end(); };
-		iterator				begin()				{ return iterator(_begin); };
-		const_iterator			begin() const		{ return const_iterator(_begin); };
+		iterator				begin()				{ return iterator(_begin); }
+		const_iterator			begin() const		{ return const_iterator(_begin); }
 		iterator				end()				{ return iterator(_end); };
 		const_iterator			end() const			{ return const_iterator(_end); };
 		reverse_iterator		rbegin()			{ return reverse_iterator(end()); };

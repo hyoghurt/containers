@@ -36,13 +36,13 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
-	/*
 	test_insert_1("TEST INSERT 1");
 	test_size("TEST SIZE EMPTY");
 	test_pair("TEST PAIR");
 	test_begin_end("TEST BEGIN END");
 	test_operator_kv("TEST OPERATOR []");
 	test_find("TEST FIND");
+	/*
 	test_insert_iterator("TEST INSERT INTERATOR");
 	test_erase("TEST ERASE");
 	test_key_compare("TEST KEY COMPARE");
@@ -56,7 +56,6 @@ int				main( void )
 	test_lower_upper("TEST LOWER UPPER");
 	test_equal("TEST EQUAL");
 	test_get_alloc("TEST GET ALLOCATOR");
-	*/
 
 	ft::map<char, int>	ma;
 
@@ -93,6 +92,7 @@ int				main( void )
 		std::cout << (it_e)->first << std::endl;
 		--it_e;
 	}
+	*/
 
 	std::cout << "end main" << std::endl;
 	return 0;
