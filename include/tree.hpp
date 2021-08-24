@@ -286,6 +286,7 @@ class	tree
 		typedef T											date_type;
 		typedef T*											pointer_date_type;
 		typedef tree_iterator< T, node<T> >					tree_iterator;
+		//typedef tree_const_iterator< T, node<T> >			tree_const_iterator;
 //CONSTRUCTOR________________________________________________________________________________
 		tree(const key_compare& comp = key_compare()) : comp(comp), _size_tree(0)
 		{
@@ -305,27 +306,22 @@ class	tree
 			alloc.deallocate(null_node, 1);
 		}
 
+		tree(const tree& oth)
+		{
+			*this = oth;
+		}
+
 		tree&	operator= (const tree& oth)
 		{
 			if (this != &oth)
 			{
 				destroy_node(root);
-
-				this->root = null_node;
-				root->null_node = null_node;
-				root->begin_node = &root;
+				root = null_node;
 				_size_tree = 0;
 				comp = oth.comp;
 				alloc = oth.alloc;
-
-				pointer	it = oth.root;
-				pointer	it_e = oth.null_node;
-
-				while (it != it_e)
-				{
-					insert_node_p (this->root, ft::make_pair<key_type, mapped_type>(it->date->first, it->date->second));
-					++it;
-				}
+				for (tree_iterator it = oth.begin(); it != oth.end(); ++it)
+					insert_node_p(this->root, ft::make_pair<key_type, mapped_type>(it->first, it->second));
 			}
 			return (*this);
 		}
@@ -345,8 +341,15 @@ class	tree
 				return (root);
 			return (tree_iterator(tree_min(root)));
 		}
+		tree_iterator	begin() const
+		{
+			if (is_null_node(root))
+				return (root);
+			return (tree_iterator(tree_min(root)));
+		}
 //END________________________________________________________________________________
 		tree_iterator	end()									{ return (tree_iterator(null_node)); }
+		tree_iterator	end() const								{ return (tree_iterator(null_node)); }
 //SIZE________________________________________________________________________________
 		size_t			size() const							{ return this->_size_tree; }
 //EMPTY________________________________________________________________________________
@@ -778,6 +781,13 @@ class	tree
 		}
 		
 		pointer		tree_min(pointer x)
+		{
+			while (!is_null_node(x->left))
+				x = x->left;
+			return x;
+		}
+
+		const pointer		tree_min(pointer x) const
 		{
 			while (!is_null_node(x->left))
 				x = x->left;

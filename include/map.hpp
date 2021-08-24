@@ -44,10 +44,10 @@ class	map
     	typedef typename allocator_type::size_type			size_type;
     	typedef typename allocator_type::difference_type	difference_type;
 
-    	typedef typename tree<value_type>::tree_iterator	iterator;
-    	typedef typename tree<value_type>::tree_iterator	const_iterator;
-    	typedef std::reverse_iterator<iterator>				reverse_iterator;
-    	typedef std::reverse_iterator<const_iterator>		const_reverse_iterator;
+    	typedef typename tree<value_type>::tree_iterator		iterator;
+    	typedef typename tree<const value_type>::tree_iterator	const_iterator;
+    	typedef std::reverse_iterator<iterator>					reverse_iterator;
+    	typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
 //VALUE_COMPARE________________________________________________________________________________
 		class value_compare : public std::binary_function<value_type, value_type, bool>
     	{

@@ -11,7 +11,7 @@ int				main( void )
 {
 	tree< ft::pair<char, int> >	tr;
 
-	tree< ft::pair<char, int> >::tree_iterator	it;
+	//tree< ft::pair<char, int> >::tree_iterator	it;
 
 	//ft::pair< tree< ft::pair<int, std::string> >::tree_iterator, bool>	ret;
 
@@ -22,10 +22,16 @@ int				main( void )
 		//std::cout << "ok" << std::endl;
 
 	tr.insert_node(ft::pair<char, int>('a', 10));
+	tr.insert_node(ft::pair<char, int>('b', 20));
+	tr.insert_node(ft::pair<char, int>('c', 30));
+	tr.insert_node(ft::pair<char, int>('d', 40));
+
+	tree< ft::pair<char, int> >	first;
+
+	first.insert_node(ft::pair<char, int>('h', 11));
+
+	first = tr;
 	/*
-	tr.insert_node(new ft::pair<char, int>('b', 20));
-	tr.insert_node(new ft::pair<char, int>('c', 30));
-	tr.insert_node(new ft::pair<char, int>('d', 40));
 	tr.insert_node(new ft::pair<char, int>('e', 50));
 	tr.insert_node(new ft::pair<char, int>('f', 60));
 
@@ -62,9 +68,15 @@ int				main( void )
 
 	std::cout << std::endl;
 	std::cout << "show debag main" << std::endl;
+	std::cout << "tr" << std::endl;
 	tr.show_debag();
 	std::cout << std::endl;
 
+	std::cout << std::endl;
+	std::cout << "show debag main" << std::endl;
+	std::cout << "first" << std::endl;
+	first.show_debag();
+	std::cout << std::endl;
 	/*
 	for (it = tr.begin(); it != tr.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
