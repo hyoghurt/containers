@@ -127,6 +127,7 @@ class	node
 		pointer			right;
 		int				color;
 		pointer			null_node;
+		pointer			*begin_node;
 		allocator_type	_alloc;
 
 	public:
@@ -144,6 +145,7 @@ class	node
 			right = nullptr;
 			color = BLACK;
 			null_node = nullptr;
+			begin_node = nullptr;
 			/*std::cout << date.first << ": node construct default" << std::endl;*/
 		}
 
@@ -175,6 +177,7 @@ class	node
 				right = oth.right;
 				color = oth.color;
 				null_node = oth.null_node;
+				begin_node = oth.begin_node;
 			}
 			return *this;
 		}
@@ -183,17 +186,16 @@ class	node
 template < typename Pr, typename Node >
 class	tree_iterator
 {
-	private:
+private:
 	template <class T, class Compare, class Allocator>
 	friend class	tree;
 
-	public:
+public:
     typedef std::bidirectional_iterator_tag	iterator_category;
     typedef Pr								value_type;
 	typedef std::ptrdiff_t					difference_type;
     typedef value_type&						reference;
     typedef value_type*						pointer;
-
 	typedef Node							value_node;
 	typedef Node*							pointer_node;
 	typedef Node&							reference_node;
@@ -231,10 +233,13 @@ class	tree_iterator
 	tree_iterator	operator++(int)						{ tree_iterator tmp(*this); ++(*this); return (tmp); }
 	tree_iterator&	operator--()
 	{
-		/*
 		if (p == p->null_node)
-			return 
-			*/
+		{
+			p = *p->begin_node;
+			while (p->right != p->null_node)
+		        p = p->right;
+			return (*this);
+		}
 		if (p->left != p->null_node)
 		{
 			p = p->left;
@@ -255,7 +260,7 @@ class	tree_iterator
 	}
 	tree_iterator	operator--(int)						{ tree_iterator tmp(*this); --(*this); return (tmp); }
 
-	private:
+private:
 	pointer_node	p;
 
 };
@@ -289,6 +294,7 @@ class	tree
 			alloc.construct(null_node);
 			root = null_node;
 			root->null_node = null_node;
+			root->begin_node = &root;
 		}
 //DISTRUCTOR________________________________________________________________________________
 		~tree()
@@ -297,6 +303,31 @@ class	tree
 			destroy_node(root);
 			alloc.destroy(null_node);
 			alloc.deallocate(null_node, 1);
+		}
+
+		tree&	operator= (const tree& oth)
+		{
+			if (this != &oth)
+			{
+				destroy_node(root);
+
+				this->root = null_node;
+				root->null_node = null_node;
+				root->begin_node = &root;
+				_size_tree = 0;
+				comp = oth.comp;
+				alloc = oth.alloc;
+
+				pointer	it = oth.root;
+				pointer	it_e = oth.null_node;
+
+				while (it != it_e)
+				{
+					insert_node_p (this->root, ft::make_pair<key_type, mapped_type>(it->date->first, it->date->second));
+					++it;
+				}
+			}
+			return (*this);
 		}
 //MAX_SIZE________________________________________________________________________________
 		size_t			max_size() const						{ return alloc.max_size(); };
@@ -360,6 +391,7 @@ class	tree
 			x->right = null_node;
 			x->color = RED;
 			x->null_node = null_node;
+			x->begin_node = &root;
 			++_size_tree;
 
 			if (!is_null_node(parent))
@@ -655,7 +687,6 @@ class	tree
 		};
 //FIND_NODE________________________________________________________________________________
 		pointer	find_node (date_type date) const
-
 		{
 			pointer	current = root;
 
@@ -744,26 +775,26 @@ class	tree
 			while (!tree_is_left_child(x))
 				x = x->parent;
 			return x->parent;
-		};
+		}
 		
 		pointer		tree_min(pointer x)
 		{
 			while (!is_null_node(x->left))
 				x = x->left;
 			return x;
-		};
+		}
 		
 		pointer		tree_max(pointer x)
 		{
 			while (!is_null_node(x->right))
 		        x = x->right;
 		    return x;
-		};
+		}
 		
 		bool		tree_is_left_child(pointer x)
 		{
 		    return x == x->parent->left;
-		};
+		}
 
 	protected:
 		pointer			null_node;

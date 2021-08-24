@@ -81,7 +81,7 @@ class	map
 		}
 		map (const map& x)																	{}
 		~map ()																				{}
-		map&										operator= (const map& x)				{};
+		map&										operator= (const map& x);
 		iterator									begin()									{ return _base.begin(); }
 		const_iterator								begin() const							{};
 		iterator									end()									{ return _base.end(); }
@@ -121,6 +121,19 @@ class	map
 		allocator_type		_alloc;
 		key_compare			_comp;
 };
+
+template <class Key, class T, class Compare, class Allocator>
+map<Key,T,Compare,Allocator>&
+map<Key,T,Compare,Allocator>::operator= (const map& x)
+{
+	if (this != &x)
+	{
+		_base = x._base;
+		_alloc = x.get_allocator();
+		_comp = x.key_comp();
+	}
+	return *this;
+}
 //OPERATOR_[]_________________________________________________________________________________________________________________
 template <class Key, class T, class Compare, class Allocator>
 typename map<Key,T,Compare,Allocator>::mapped_type&				map<Key,T,Compare,Allocator>::operator[] (const key_type& k)

@@ -1,4 +1,4 @@
-dir_test="src/main.cpp"
+dir_test="src/main_map.cpp"
 
 clang++ $dir_test -Iinclude -std=c++98 -o test
 ./test > std.log

@@ -26,6 +26,8 @@ void	test_clear(const std::string& promo);
 void	test_lower_upper(const std::string& promo);
 void	test_equal(const std::string& promo);
 void	test_get_alloc(const std::string& promo);
+void	test_iterator_dec_icr(const std::string& promo);
+void	test_reverse_iterator(const std::string& promo);
 
 
 int				main( void )
@@ -36,27 +38,75 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
+	/*
 	test_insert_1("TEST INSERT 1");
 	test_size("TEST SIZE EMPTY");
 	test_pair("TEST PAIR");
 	test_begin_end("TEST BEGIN END");
 	test_operator_kv("TEST OPERATOR []");
 	test_find("TEST FIND");
-	/*
 	test_insert_iterator("TEST INSERT INTERATOR");
 	test_erase("TEST ERASE");
 	test_key_compare("TEST KEY COMPARE");
 	test_value_compare("TEST VALUE COMPARE");
 	test_count("TEST COUNT");
 	test_insert_2("TEST INSERT 2");
-	*/
 	//test_rbegin_rend("TEST RBEGIN REND");
-	/*
 	test_clear("TEST CLEAR");
 	test_lower_upper("TEST LOWER UPPER");
 	test_equal("TEST EQUAL");
+	*/
 	test_get_alloc("TEST GET ALLOCATOR");
+	test_iterator_dec_icr("TEST ITERATOR INC DEC");
+	test_reverse_iterator("TEST REVERSE ITERATOR");
+	/*
+	*/
 
+	ft::map<char,int> first;
+	ft::map<char,int> second;
+	
+	first['x']=8;
+	first['y']=16;
+	first['z']=32;
+	
+	second=first;                // second now contains 3 ints
+	first=ft::map<char,int>();  // and first is now empty
+	
+	std::cout << "Size of first: " << first.size() << '\n';
+	std::cout << "Size of second: " << second.size() << '\n';
+
+	std::cout << "end main" << std::endl;
+	return 0;
+}
+
+void	test_reverse_iterator(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::map<char,int> mymap;
+
+	mymap['x'] = 100;
+	mymap['y'] = 200;
+	mymap['z'] = 300;
+	
+	// show content:
+	ft::map<char,int>::reverse_iterator rit;
+	for (rit=mymap.rbegin(); rit!=mymap.rend(); ++rit)
+		std::cout << rit->first << " => " << rit->second << '\n';
+}
+
+void	test_iterator_dec_icr(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 	ft::map<char, int>	ma;
 
 	ft::map<char, int>::iterator	it;
@@ -89,13 +139,9 @@ int				main( void )
 
 	while (it != it_e)
 	{
-		std::cout << (it_e)->first << std::endl;
+		std::cout << it_e->first << std::endl;
 		--it_e;
 	}
-	*/
-
-	std::cout << "end main" << std::endl;
-	return 0;
 }
 
 void	test_get_alloc(const std::string& promo)
