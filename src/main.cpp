@@ -46,10 +46,11 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
+	/*
+	 */
 	test_capac_size("TEST CAPACITY SIZE");
 	test_iterator_inc_decr("TEST ITERATOR OPER");
 	test_operator("TEST OPERATOR");
-	/*
 	test_front_back("TEST FRONT BACK");
 	test_oper_qr("TEST OPER []"); //operator v[]
 	test_point_allocat("TEST POIN ALLOCAT");
@@ -73,12 +74,29 @@ int				main( void )
 	test_clear("TEST CLEAR");
 	test_get_alloc("TEST GET ALLOC");
 	test_revers_iterator("TEST REVERSE ITERATOR");
-	 */
 	test_const_iterator("TEST CONST ITERATOR");
-	/*
-	*/
 	test_operator_comp("TEST OPERATOR COMP");
 	test_const_iterator_operat("TEST CONT ITERATOR OPER");
+	/*
+	*/
+
+	ft::vector<int>	m;
+
+	m.push_back(5);
+	m.push_back(15);
+	m.push_back(4);
+
+	std::cout << m.size() << std::endl;
+	std::cout << m.capacity() << std::endl;
+
+	m.assign(2, 9);
+
+	std::cout << m.size() << std::endl;
+	std::cout << m.capacity() << std::endl;
+
+	for (ft::vector<int>::iterator it = m.begin(); it != m.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
 
 
 	return (0);
