@@ -28,7 +28,17 @@ void	test_equal(const std::string& promo);
 void	test_get_alloc(const std::string& promo);
 void	test_iterator_dec_icr(const std::string& promo);
 void	test_reverse_iterator(const std::string& promo);
+void	test_operator_copy(const std::string& promo);
+void	test_constructor(const std::string& promo);
 
+
+//TEST__________________________________________________FIL
+bool fncomp (char lhs, char rhs) {return lhs<rhs;}
+//TEST__________________________________________________FIL
+struct classcomp {
+  bool operator() (const char& lhs, const char& rhs) const
+  {return lhs<rhs;}
+};
 
 int				main( void )
 {
@@ -56,12 +66,93 @@ int				main( void )
 	test_lower_upper("TEST LOWER UPPER");
 	test_equal("TEST EQUAL");
 	*/
+	/*
 	test_get_alloc("TEST GET ALLOCATOR");
 	test_iterator_dec_icr("TEST ITERATOR INC DEC");
 	test_reverse_iterator("TEST REVERSE ITERATOR");
-	/*
+	test_operator_copy("TEST OPERATOR COPY");
+	test_constructor("TEST CONSTRUCT");
+	*/
+	
+	ft::map<char,int> mymap;
+
+	mymap['b'] = 100;
+	mymap['a'] = 200;
+	mymap['c'] = 300;
+
+	ft::map<char,int>::const_iterator it = mymap.begin();
+
+	std::cout << it->first << " => " << it->second << '\n';
+
+	// show content:
+	 /*
+	for (ft::map<char,int>::const_iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
 	*/
 
+	std::cout << "end main" << std::endl;
+	return 0;
+}
+/*
+void	test_constructor(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::map<char,int> first;
+	
+	first['a']=10;
+	first['b']=30;
+	first['c']=50;
+	first['d']=70;
+	
+	ft::map<char,int> second (first.begin(),first.end());
+	
+	ft::map<char,int> third (second);
+	second['c']=865;
+	
+	ft::map<char,int,classcomp> fourth;                 // class as Compare
+	fourth['p']=230;
+	fourth['z']=25;
+	fourth['b']=545;
+	fourth['t']=599;
+
+	bool(*fn_pt)(char,char) = fncomp;
+
+	ft::map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
+	fifth['a']=230;
+	fifth['z']=25;
+	fifth['b']=545;
+	fifth['t']=599;
+
+	for (ft::map<char,int>::iterator it = second.begin(); it != second.end(); ++it)
+		std::cout << it->first << " " << it->second;
+	std::cout << std::endl;
+
+	for (ft::map<char,int>::iterator it = fourth.begin(); it != fourth.end(); ++it)
+		std::cout << it->first << " " << it->second;
+	std::cout << std::endl;
+
+	for (ft::map<char,int>::iterator it = third.begin(); it != third.end(); ++it)
+		std::cout << it->first << " " << it->second;
+	std::cout << std::endl;
+
+	for (ft::map<char,int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
+		std::cout << it->first << "" << it->second;
+	std::cout << std::endl;
+}
+void	test_operator_copy(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::map<char,int> mymap;
 	ft::map<char,int> first;
 	ft::map<char,int> second;
 	
@@ -74,11 +165,7 @@ int				main( void )
 	
 	std::cout << "Size of first: " << first.size() << '\n';
 	std::cout << "Size of second: " << second.size() << '\n';
-
-	std::cout << "end main" << std::endl;
-	return 0;
 }
-
 void	test_reverse_iterator(const std::string& promo)
 {
 #ifndef FT
@@ -621,3 +708,4 @@ void	test_size(const std::string& promo)
 	std::cout << "size = " << mp.size() << std::endl;
 	std::cout << "max_size = " << mp.max_size() << std::endl;
 }
+*/

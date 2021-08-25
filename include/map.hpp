@@ -45,7 +45,7 @@ class	map
     	typedef typename allocator_type::difference_type	difference_type;
 
     	typedef typename tree<value_type>::tree_iterator		iterator;
-    	typedef typename tree<const value_type>::tree_iterator	const_iterator;
+    	typedef typename tree<value_type>::tree_const_iterator	const_iterator;
     	typedef std::reverse_iterator<iterator>					reverse_iterator;
     	typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
 //VALUE_COMPARE________________________________________________________________________________
@@ -79,11 +79,11 @@ class	map
 			insert(first, last);
 			return;
 		}
-		map (const map& x)																	{}
+		map (const map& x)																	{ *this = x; }
 		~map ()																				{}
 		map&										operator= (const map& x);
-		iterator									begin()									{ return _base.begin(); }
-		const_iterator								begin() const							{};
+		iterator									begin()						{ return iterator(_base.begin()); }
+		const_iterator								begin() const				{ return const_iterator(_base.begin()); }
 		iterator									end()									{ return _base.end(); }
 		const_iterator								end() const								{};
 		reverse_iterator							rbegin()								{ return reverse_iterator(end()); };

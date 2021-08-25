@@ -2,7 +2,7 @@
 # define VECTOR_HPP
 
 # include "ft.hpp"
-//# include <iostream>
+# include <iostream>
 # include <iterator>
 
 namespace ft
@@ -79,7 +79,10 @@ public:
 public:
 
     explicit vector(const allocator_type& _alloc = allocator_type())
-		: _begin(nullptr), _end(nullptr), _end_capacity(nullptr), _alloc(_alloc) {}
+		: _begin(nullptr), _end(nullptr), _end_capacity(nullptr), _alloc(_alloc)
+	{
+		//std::cout << "define const" << std::endl; return;
+	}
 
 	template < typename InputIterator >
 	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
@@ -231,6 +234,7 @@ vector<T,Allocator>::vector (size_type n, const value_type& val,
 template <typename T, typename Allocator>
 vector<T,Allocator>::~vector<T,Allocator> ()
 {
+	//std::cout << "distructor vector" << std::endl;
 	if (_begin != nullptr)
 	{
 		for (pointer tmp = _begin; tmp != _end; ++tmp)

@@ -265,6 +265,90 @@ private:
 
 };
 
+template < typename Pr, typename Node >
+class	tree_const_iterator
+{
+private:
+	template <class T, class Compare, class Allocator>
+	friend class	tree;
+
+public:
+    typedef std::bidirectional_iterator_tag	iterator_category;
+    typedef Pr								value_type;
+	typedef std::ptrdiff_t					difference_type;
+    typedef const value_type&				reference;
+    typedef const value_type*				pointer;
+	typedef Node							value_node;
+	typedef Node*							pointer_node;
+	typedef Node&							reference_node;
+
+	tree_const_iterator ()											{ return; };
+	~tree_const_iterator ()											{ return; };
+	tree_const_iterator (pointer_node p) : p(p)						{ return; };
+	tree_const_iterator (tree_const_iterator const& oth)					{ *this = oth; };
+
+	tree_const_iterator&	operator= (tree_const_iterator const& oth)		{ this->p = oth.p; return (*this); };
+	bool			operator==(tree_const_iterator const& oth) const	{ return (p == oth.p); };
+	bool			operator!=(tree_const_iterator const& oth) const	{ return (p != oth.p); };
+	reference		operator* () const							{ return *(p->date); };
+	pointer			operator->() const							{ return p->date; };
+	tree_const_iterator&	operator++()
+	{
+		if (p->right != p->null_node)
+		{
+			p = p->right;
+			while (p->left != p->null_node)
+				p = p->left;
+		}
+		else
+		{
+			while (p != p->parent->left)
+			{
+				p = p->parent;
+				if (p == p->null_node)
+					return (*this);
+			}
+			p = p->parent;
+		}
+		return (*this);
+	}
+	tree_const_iterator	operator++(int)						{ tree_const_iterator tmp(*this); ++(*this); return (tmp); }
+	tree_const_iterator&	operator--()
+	{
+		if (p == p->null_node)
+		{
+			p = *p->begin_node;
+			while (p->right != p->null_node)
+		        p = p->right;
+			return (*this);
+		}
+		if (p->left != p->null_node)
+		{
+			p = p->left;
+			while (p->right != p->null_node)
+				p = p->right;
+		}
+		else
+		{
+			while (p == p->parent->left)
+			{
+				p = p->parent;
+				if (p == p->null_node)
+					return (*this);
+			}
+			p = p->parent;
+		}
+		return (*this);
+	}
+	tree_const_iterator	operator--(int)						{ tree_const_iterator tmp(*this); --(*this); return (tmp); }
+
+private:
+	pointer_node	p;
+
+};
+
+
+
 template <class T, class Compare = std::less<typename T::first_type>, class Allocator = std::allocator< node<T> > >
 class	tree
 {
@@ -286,7 +370,7 @@ class	tree
 		typedef T											date_type;
 		typedef T*											pointer_date_type;
 		typedef tree_iterator< T, node<T> >					tree_iterator;
-		//typedef tree_const_iterator< T, node<T> >			tree_const_iterator;
+		typedef tree_const_iterator< T, node<T> >			tree_const_iterator;
 //CONSTRUCTOR________________________________________________________________________________
 		tree(const key_compare& comp = key_compare()) : comp(comp), _size_tree(0)
 		{
@@ -320,7 +404,7 @@ class	tree
 				_size_tree = 0;
 				comp = oth.comp;
 				alloc = oth.alloc;
-				for (tree_iterator it = oth.begin(); it != oth.end(); ++it)
+				for (tree_const_iterator it = oth.begin(); it != oth.end(); ++it)
 					insert_node_p(this->root, ft::make_pair<key_type, mapped_type>(it->first, it->second));
 			}
 			return (*this);
@@ -341,15 +425,19 @@ class	tree
 				return (root);
 			return (tree_iterator(tree_min(root)));
 		}
-		tree_iterator	begin() const
+
+		tree_const_iterator	begin() const
 		{
 			if (is_null_node(root))
 				return (root);
-			return (tree_iterator(tree_min(root)));
+			pointer	x = root;
+			while (!is_null_node(x->left))
+				x = x->left;
+			return (tree_const_iterator(x));
 		}
 //END________________________________________________________________________________
 		tree_iterator	end()									{ return (tree_iterator(null_node)); }
-		tree_iterator	end() const								{ return (tree_iterator(null_node)); }
+		tree_const_iterator	end() const							{ return (tree_const_iterator(null_node)); }
 //SIZE________________________________________________________________________________
 		size_t			size() const							{ return this->_size_tree; }
 //EMPTY________________________________________________________________________________

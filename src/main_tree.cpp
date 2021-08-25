@@ -26,11 +26,14 @@ int				main( void )
 	tr.insert_node(ft::pair<char, int>('c', 30));
 	tr.insert_node(ft::pair<char, int>('d', 40));
 
-	tree< ft::pair<char, int> >	first;
+	tree< ft::pair<char, int> >::tree_iterator	it = tr.begin();
 
-	first.insert_node(ft::pair<char, int>('h', 11));
+	std::cout << it->first << std::endl;
+	/*
+	*/
 
-	first = tr;
+	//tree< ft::pair<char, int> >	first;
+
 	/*
 	tr.insert_node(new ft::pair<char, int>('e', 50));
 	tr.insert_node(new ft::pair<char, int>('f', 60));
@@ -72,11 +75,13 @@ int				main( void )
 	tr.show_debag();
 	std::cout << std::endl;
 
+	/*
 	std::cout << std::endl;
 	std::cout << "show debag main" << std::endl;
 	std::cout << "first" << std::endl;
 	first.show_debag();
 	std::cout << std::endl;
+	*/
 	/*
 	for (it = tr.begin(); it != tr.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
