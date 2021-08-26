@@ -1,6 +1,6 @@
 INCLUDE			= include
 NAME			= a.out
-SRC				=	main_tree.cpp
+SRC				=	main.cpp
 
 SRCDIR			= src
 OBJDIR			= obj

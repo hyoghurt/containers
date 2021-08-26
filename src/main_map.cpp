@@ -14,8 +14,6 @@ void	test_begin_end(const std::string& promo);
 void	test_operator_kv(const std::string& promo);
 void	test_insert_iterator(const std::string& promo);
 void	test_find(const std::string& promo);
-
-//napisat delete tree correct
 void	test_erase(const std::string& promo);
 void	test_key_compare(const std::string& promo);
 void	test_value_compare(const std::string& promo);
@@ -30,6 +28,9 @@ void	test_iterator_dec_icr(const std::string& promo);
 void	test_reverse_iterator(const std::string& promo);
 void	test_operator_copy(const std::string& promo);
 void	test_constructor(const std::string& promo);
+void	test_const_iterator(const std::string& promo);
+void	test_const_iterator_op(const std::string& promo);
+void	test_swap(const std::string& promo);
 
 
 //TEST__________________________________________________FIL
@@ -49,6 +50,7 @@ int				main( void )
 	namespace	ft = std;
 #endif
 	/*
+	*/
 	test_insert_1("TEST INSERT 1");
 	test_size("TEST SIZE EMPTY");
 	test_pair("TEST PAIR");
@@ -61,39 +63,98 @@ int				main( void )
 	test_value_compare("TEST VALUE COMPARE");
 	test_count("TEST COUNT");
 	test_insert_2("TEST INSERT 2");
-	//test_rbegin_rend("TEST RBEGIN REND");
+	test_rbegin_rend("TEST RBEGIN REND");
 	test_clear("TEST CLEAR");
 	test_lower_upper("TEST LOWER UPPER");
 	test_equal("TEST EQUAL");
-	*/
-	/*
 	test_get_alloc("TEST GET ALLOCATOR");
 	test_iterator_dec_icr("TEST ITERATOR INC DEC");
 	test_reverse_iterator("TEST REVERSE ITERATOR");
 	test_operator_copy("TEST OPERATOR COPY");
 	test_constructor("TEST CONSTRUCT");
+	/*
 	*/
-	
+	test_const_iterator("TEST CONST ITERATOR");
+	test_const_iterator_op("TEST CONST ITERATOR OP");
+	test_swap("TEST SWAP");
+
+
+
+	std::cout << "end main" << std::endl;
+	return 0;
+}
+void	test_swap(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	std::map<char,int> foo,bar;
+	foo['x']=100;
+	foo['y']=200;
+	bar['a']=11;
+	bar['b']=22;
+	bar['c']=33;
+	foo.swap(bar);
+	std::cout << "foo contains:\n";
+	for (std::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+	std::cout << "bar contains:\n";
+	for (std::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+}
+void	test_const_iterator_op(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
 	ft::map<char,int> mymap;
 
 	mymap['b'] = 100;
 	mymap['a'] = 200;
 	mymap['c'] = 300;
 
-	ft::map<char,int>::const_iterator it = mymap.begin();
+	ft::map<char,int>::iterator			it = mymap.begin();
+	ft::map<char,int>::const_iterator	it_c = mymap.begin();
+	ft::map<char,int>::const_iterator	it_e = mymap.end();
 
-	std::cout << it->first << " => " << it->second << '\n';
+	if (it == it_c)
+		std::cout << "==" << std::endl;
+	if (it != it_c)
+		std::cout << "!=" << std::endl;
 
-	// show content:
-	 /*
+	if (it_c == it)
+		std::cout << "==c" << std::endl;
+	if (it_c != it)
+		std::cout << "!=c" << std::endl;
+
+	if (it_c == it_e)
+		std::cout << "==e" << std::endl;
+	if (it_c != it_e)
+		std::cout << "!=e" << std::endl;
+}
+void	test_const_iterator(const std::string& promo)
+{
+#ifndef FT
+	namespace	ft = std;
+	std::cout << FIL << "STD " << promo << NO_C << std::endl;
+#else
+	std::cout << FIL << "FT " << promo << NO_C << std::endl;
+#endif
+	ft::map<char,int> mymap;
+
+	mymap['b'] = 100;
+	mymap['a'] = 200;
+	mymap['c'] = 300;
+
 	for (ft::map<char,int>::const_iterator it=mymap.begin(); it!=mymap.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
-	*/
-
-	std::cout << "end main" << std::endl;
-	return 0;
 }
-/*
 void	test_constructor(const std::string& promo)
 {
 #ifndef FT
@@ -708,4 +769,3 @@ void	test_size(const std::string& promo)
 	std::cout << "size = " << mp.size() << std::endl;
 	std::cout << "max_size = " << mp.max_size() << std::endl;
 }
-*/

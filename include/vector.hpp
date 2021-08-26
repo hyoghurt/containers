@@ -15,7 +15,7 @@ public:
 	template <typename Pointer>
 	class	my_iterator
 	{
-	protected:
+	private:
 		Pointer	p;
 		typedef ft::iterator_traits<Pointer>	_iter_traits;
 
@@ -52,13 +52,13 @@ public:
 		template <typename U>
 		bool			operator==(const my_iterator<U>& b)			{ return base() == b.base(); }
 		template <typename U>
-		bool			operator!=(const my_iterator<U>& b)			{ return base() != b.base(); }
+		bool			operator!=(const my_iterator<U>& b)			{ return !(*this == b); }
 		template <typename U>
 		bool			operator< (const my_iterator<U>& b)			{ return base() < b.base(); }
 		template <typename U>
 		bool			operator<=(const my_iterator<U>& b)			{ return !(base() > b.base()); }
 		template <typename U>
-		bool			operator> (const my_iterator<U>& b)			{ return base() > b.base() ; }
+		bool			operator> (const my_iterator<U>& b)			{ return base() > b.base(); }
 		template <typename U>
 		bool			operator>=(const my_iterator<U>& b)			{ return !(base() < b.base()); }
 	};
@@ -76,13 +76,7 @@ public:
 	typedef ft::reverse_iterator< iterator >			reverse_iterator;
 	typedef ft::reverse_iterator< const_iterator >		const_reverse_iterator;
 
-public:
-
-    explicit vector(const allocator_type& _alloc = allocator_type())
-		: _begin(nullptr), _end(nullptr), _end_capacity(nullptr), _alloc(_alloc)
-	{
-		//std::cout << "define const" << std::endl; return;
-	}
+    explicit vector(const allocator_type& _alloc = allocator_type());
 
 	template < typename InputIterator >
 	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
@@ -151,37 +145,12 @@ public:
 	iterator				erase(iterator first, iterator last);
 	void					swap(vector& x);
 	void					clear();
-
-	allocator_type			get_allocator() const
-	{ return allocator_type(_alloc); }
+	allocator_type			get_allocator() const		{ return allocator_type(_alloc); }
 
 	template <typename U, typename Alloc_>
-	bool					operator== (const vector<U, Alloc_>& rhs) const
-	{
-		if (size() != rhs.size())
-			return false;
-		return ( equal(begin(), end(), rhs.begin()) );
-	}
-
+	friend bool	operator== (const vector<U, Alloc_>& rhs, const vector<U, Alloc_>& lhs);
 	template <typename U, typename Alloc_>
-	bool					operator!= (const vector<U, Alloc_>& rhs) const
-	{ return !(*this == rhs); }
-
-	template <typename U, typename Alloc_>
-	bool					operator< (const vector<U, Alloc_>& rhs) const
-	{ return (lexicographical_compare( begin(), end(), rhs.begin(), rhs.end() )); }
-
-	template <typename U, typename Alloc_>
-	bool					operator<=(const vector<U, Alloc_>& rhs) const
-	{ return (! lexicographical_compare( rhs.begin(), rhs.end(), begin(), end() )); }
-
-	template <typename U, typename Alloc_>
-	bool					operator> (const vector<U, Alloc_>& rhs) const
-	{ return (lexicographical_compare( rhs.begin(), rhs.end(), begin(), end() )); }
-
-	template <typename U, typename Alloc_>
-	bool					operator>=(const vector<U, Alloc_>& rhs) const
-	{ return (! lexicographical_compare( begin(), end(), rhs.begin(), rhs.end() )); }
+	friend bool	operator< (const vector<U, Alloc_>& rhs, const vector<U, Alloc_>& lhs);
 
 private:
 	pointer					_begin;
@@ -194,8 +163,16 @@ private:
 	iterator				copy_for_insert(iterator position, size_type n, const value_type& val);
 	iterator				copy_for_insert_no_alloc(iterator position, size_type n, const value_type& val);
 	template < typename InputIterator >
-	size_t	len_input_iterator(InputIterator first, InputIterator last);
+	size_t					len_input_iterator(InputIterator first, InputIterator last);
 };
+
+
+template <typename T, typename Allocator>
+vector<T,Allocator>::vector(const allocator_type& _alloc)
+	: _begin(nullptr), _end(nullptr), _end_capacity(nullptr), _alloc(_alloc)
+{
+	//std::cout << "define const" << std::endl; return;
+}
 
 template <typename T, typename Allocator>
 template < typename InputIterator >
@@ -666,6 +643,34 @@ vector<T,Allocator>::len_input_iterator(InputIterator first, InputIterator last)
 		++len;
 	return (len);
 }
+
+template <typename U, typename Alloc_>
+bool	operator== (const vector<U, Alloc_>& rhs, const vector<U, Alloc_>& lhs)
+{
+	if (rhs.size() != lhs.size())
+		return false;
+	return ( equal(rhs.begin(), rhs.end(), lhs.begin()) );
+}
+
+template <typename U, typename Alloc_>
+bool	operator!= (const vector<U, Alloc_>& rhs, const vector<U, Alloc_>& lhs)
+{ return !(rhs == lhs); }
+
+template <typename U, typename Alloc_>
+bool	operator<  (const vector<U, Alloc_>& rhs, const vector<U, Alloc_>& lhs)
+{ return (lexicographical_compare( rhs.begin(), rhs.end(), lhs.begin(), lhs.end() )); }
+
+template <typename U, typename Alloc_>
+bool	operator>  (const vector<U, Alloc_>& rhs, const vector<U, Alloc_>& lhs)
+{ return (lhs < rhs); }
+
+template <typename U, typename Alloc_>
+bool	operator<= (const vector<U, Alloc_>& rhs, const vector<U, Alloc_>& lhs)
+{ return !(lhs < rhs); }
+
+template <typename U, typename Alloc_>
+bool	operator>= (const vector<U, Alloc_>& rhs, const vector<U, Alloc_>& lhs)
+{ return !(rhs < lhs); }
 
 }
 

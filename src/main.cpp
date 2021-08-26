@@ -1,9 +1,12 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <ctime>
+#include <sys/time.h>
 #include "vector.hpp"
 
 #define	COLO "\033[1;44;1m"
+#define TIM "\033[1;48;5;63m"
 #define NO_C "\033[0m"
 #define FIL "\033[1;48;5;55m"
 
@@ -46,6 +49,11 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
+	struct timeval	time_now;
+	gettimeofday(&time_now,nullptr);
+	//time_t msecs_time = (time_now.tv_sec % 1000) * 1000 + (time_now.tv_usec / 1000);
+	time_t msecs_time = time_now.tv_usec;
+
 	/*
 	 */
 	test_capac_size("TEST CAPACITY SIZE");
@@ -79,26 +87,16 @@ int				main( void )
 	test_const_iterator_operat("TEST CONT ITERATOR OPER");
 	/*
 	*/
-
-	ft::vector<int>	m;
-
-	m.push_back(5);
-	m.push_back(15);
-	m.push_back(4);
-
-	std::cout << m.size() << std::endl;
-	std::cout << m.capacity() << std::endl;
-
-	m.assign(2, 9);
-
-	std::cout << m.size() << std::endl;
-	std::cout << m.capacity() << std::endl;
-
-	for (ft::vector<int>::iterator it = m.begin(); it != m.end(); ++it)
-		std::cout << *it << " ";
-	std::cout << std::endl;
-
-
+	std::cout << "end main" <<  std::endl;
+	gettimeofday(&time_now,nullptr);
+#ifdef FT
+    std::cout << TIM << "FT";
+	std::cout << "	time: "  << time_now.tv_usec - msecs_time << NO_C << std::endl << std::endl;
+#else
+    std::cout << TIM << "STD";
+	std::cout << "	time: "  << time_now.tv_usec - msecs_time << NO_C << std::endl << std::endl;
+	namespace	ft = std;
+#endif
 	return (0);
 }
 

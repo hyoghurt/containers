@@ -1,4 +1,12 @@
-dir_test="src/main_stack.cpp"
+dir_test="src/main.cpp"
+
+#START=$(date +%s%N)
+# начало скрипта
+#ls
+# конец скрипта
+#END=$(date + %s%N)
+#DIFF=$((($END - $START)/10))
+#echo "It took $DIFF milliseconds"
 
 clang++ $dir_test -Iinclude -std=c++98 -o test
 ./test > std.log
