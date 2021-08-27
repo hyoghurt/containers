@@ -153,7 +153,7 @@ vector<T,Allocator>::vector (const allocator_type& _alloc)
 template <typename T, typename Allocator>
 template < typename InputIterator >
 vector<T,Allocator>::vector (InputIterator first, InputIterator last, const allocator_type& alloc,
-	typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type*)
+	typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type*) : _alloc(alloc)
 {
 	size_t		len = len_input_iterator(first, last);
 	if (len > 0)
@@ -168,7 +168,7 @@ vector<T,Allocator>::vector (InputIterator first, InputIterator last, const allo
 //CONSTRUCT_______________________________________________________________________________________
 template <typename T, typename Allocator>
 vector<T,Allocator>::vector (size_type n, const value_type& val,
-					const allocator_type& alloc)
+		const allocator_type& alloc) : _alloc(alloc)
 {
 	if (n > 0)
 	{

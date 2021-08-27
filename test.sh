@@ -42,12 +42,12 @@ if $vector
 then
 clang++ $_main -Iinclude -std=c++98 -o test
 ./test > ${_log}'_std.log'
-clang++ $_main -Iinclude -std=c++98 -D FT -o test
+clang++ $_main -Iinclude -Wall -Wextra -Werror -std=c++98 -D FT -o test
 ./test > ${_log}'_my.log'
 echo -e "\033[1;45;5;58m__TEST_VECTOR__                                                                         \033[0m"
 diff -y --suppress-common-lines ${_log}'_my.log' ${_log}'_std.log'
 rm -rf test
-clang++ $_main -Iinclude -std=c++98 -D FT -o ${_log}'_a.out'
+clang++ $_main -Iinclude -Wall -Wextra -Werror -std=c++98 -D FT -o ${_log}'_a.out'
 fi
 
 ##_____MAP
@@ -58,12 +58,12 @@ if $map
 then
 clang++ $_main -Iinclude -std=c++98 -o test
 ./test > ${_log}'_std.log'
-clang++ $_main -Iinclude -std=c++98 -D FT -o test
+clang++ $_main -Iinclude -Wall -Wextra -Werror -std=c++98 -D FT -o test
 ./test > ${_log}'_my.log'
 echo -e "\033[1;45;5;58m__TEST_MAP__                                                                         \033[0m"
 diff -y --suppress-common-lines ${_log}'_my.log' ${_log}'_std.log'
 rm -rf test
-clang++ $_main -Iinclude -std=c++98 -D FT -o ${_log}'_a.out'
+clang++ $_main -Iinclude -Wall -Wextra -Werror -std=c++98 -D FT -o ${_log}'_a.out'
 fi
 
 ##_____STACK
@@ -74,10 +74,10 @@ if $stack
 then
 clang++ $_main -Iinclude -std=c++98 -o test
 ./test > ${_log}'_std.log'
-clang++ $_main -Iinclude -std=c++98 -D FT -o test
+clang++ $_main -Iinclude -Wall -Wextra -Werror -std=c++98 -D FT -o test
 ./test > ${_log}'_my.log'
 echo -e "\033[1;45;5;58m__TEST_STACK__                                                                         \033[0m"
 diff -y --suppress-common-lines ${_log}'_my.log' ${_log}'_std.log'
 rm -rf test
-clang++ $_main -Iinclude -std=c++98 -D FT -o ${_log}'_a.out'
+clang++ $_main -Iinclude -Wall -Wextra -Werror -std=c++98 -D FT -o ${_log}'_a.out'
 fi

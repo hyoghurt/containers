@@ -104,7 +104,7 @@ void	test_swap(const std::string& promo)
 #else
 	std::cout << FIL << "FT " << promo << NO_C << std::endl;
 #endif
-	std::map<char,int> foo,bar;
+	ft::map<char,int> foo,bar;
 	foo['x']=100;
 	foo['y']=200;
 	bar['a']=11;
@@ -112,10 +112,10 @@ void	test_swap(const std::string& promo)
 	bar['c']=33;
 	foo.swap(bar);
 	std::cout << "foo contains:\n";
-	for (std::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+	for (ft::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
 	std::cout << "bar contains:\n";
-	for (std::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+	for (ft::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
 }
 void	test_const_iterator_op(const std::string& promo)

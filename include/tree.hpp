@@ -99,9 +99,9 @@ private:
 	allocator_type	_alloc;
 
 	template <typename Pr>
-	friend struct	tree_iterator;
+	friend class	tree_iterator;
 	template <typename U>
-	friend struct	tree_const_iterator;
+	friend class	tree_const_iterator;
 	template <class T, class Compare, class Allocator>
 	friend class tree;
 	template <typename P>
@@ -431,11 +431,12 @@ template <class T, class Compare, class Allocator>
 typename tree<T,Compare,Allocator>::pointer
 tree<T,Compare,Allocator>::insert_node_p (pointer start, date_type date)
 {
-	pointer	current;
+	pointer	current = root;
 	pointer	parent;
 	pointer	x;
 
-	current = start;
+	if (start != root)
+		current = root;
 	parent = null_node;
 
 	while (!is_null_node(current))
@@ -720,11 +721,7 @@ tree<T,Compare,Allocator>::insert_node (date_type date)
 template <class T, class Compare, class Allocator>
 typename tree<T,Compare,Allocator>::tree_iterator
 tree<T,Compare,Allocator>::insert_node(tree_iterator position, date_type date)
-{
-	pointer	current = position.p;
-	pointer x = insert_node_p (this->root, date);
-	return ( tree_iterator(x) );
-}
+{ return tree_iterator( insert_node_p (position.p, date) ); }
 //FIND______________________________________________________________________________________
 template <class T, class Compare, class Allocator>
 typename tree<T,Compare,Allocator>::tree_iterator
@@ -775,7 +772,7 @@ void	tree<T,Compare,Allocator>::swap(tree<T,Compare,Allocator>& x)
 {
 		ft::swap(this->null_node, x.null_node);
 		ft::swap(this->root, x.root);
-		ft::swap(this->_size_tree, x.sise_tree);
+		ft::swap(this->_size_tree, x._size_tree);
 		ft::swap(this->comp, x.comp);
 		ft::swap(this->alloc, x.alloc);
 }
