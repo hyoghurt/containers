@@ -2,8 +2,6 @@
 # define VECTOR_HPP
 
 # include "ft.hpp"
-# include <iostream>
-# include <iterator>
 
 namespace ft
 {
@@ -185,7 +183,6 @@ vector<T,Allocator>::vector (size_type n, const value_type& val,
 template <typename T, typename Allocator>
 vector<T,Allocator>::~vector<T,Allocator> ()
 {
-	//std::cout << "distructor vector" << std::endl;
 	if (_begin != nullptr)
 	{
 		for (pointer tmp = _begin; tmp != _end; ++tmp)
