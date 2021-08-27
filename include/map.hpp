@@ -227,12 +227,13 @@ void	map<Key,T,Compare,Allocator>::erase (iterator first, iterator last)
 		erase(tmp);
 	}
 }
+//SWAP_______________________________________________________________________________________________________________
 template <class Key, class T, class Compare, class Allocator>
 void	map<Key,T,Compare,Allocator>::swap (map<Key,T,Compare,Allocator>& x)
 {
-	std::swap(_base, x._base);
-	std::swap(_alloc, x._alloc);
-	std::swap(_comp, x._comp);
+	_base.swap(x._base);
+	ft::swap(_alloc, x._alloc);
+	ft::swap(_comp, x._comp);
 }
 //CLEAR_______________________________________________________________________________________________________________
 template <class Key, class T, class Compare, class Allocator>

@@ -1,6 +1,8 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <iostream>
+#include <sys/time.h>
 #include "map.hpp"
 
 #define	COLO "\033[1;44;1m"
@@ -49,6 +51,10 @@ int				main( void )
     std::cout << COLO << "STD" << NO_C << std::endl;
 	namespace	ft = std;
 #endif
+	struct timeval	time_now;
+	gettimeofday(&time_now,nullptr);
+	time_t msecs_time = (time_now.tv_sec % 100) * 1000000000 + time_now.tv_usec;
+
 	/*
 	*/
 	test_insert_1("TEST INSERT 1");
@@ -78,10 +84,17 @@ int				main( void )
 	test_const_iterator_op("TEST CONST ITERATOR OP");
 	test_swap("TEST SWAP");
 
-
-
 	std::cout << "end main" << std::endl;
-	return 0;
+	gettimeofday(&time_now,nullptr);
+	time_t msecs_end = (time_now.tv_sec % 100) * 1000000000 + time_now.tv_usec;
+#ifdef FT
+    std::cout << COLO << "FT";
+	std::cout << "	time: "  << msecs_end - msecs_time << NO_C << std::endl << std::endl;
+#else
+    std::cout << COLO << "STD";
+	std::cout << "	time: "  << msecs_end - msecs_time << NO_C << std::endl << std::endl;
+#endif
+	return (0);
 }
 void	test_swap(const std::string& promo)
 {

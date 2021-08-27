@@ -6,6 +6,13 @@
 namespace ft
 {
 
+#ifndef SWAP_HPP
+# define SWAP_HPP
+template <typename T>
+void	swap(T &a, T &b)
+{ T	tmp(a); a = b; b = tmp; }
+#endif
+
 #ifndef EQUAL_HPP
 # define EQUAL_HPP
 template <typename InputIterator1, typename InputIterator2>
@@ -51,6 +58,12 @@ template < typename Type >
 struct	enable_if<true, Type>	{ typedef Type	type; };
 #endif
 
+#ifndef IS_INTEGRAL_HPP
+# define IS_INTEGRAL_HPP
+template <typename T>
+struct	is_integral : public std::__libcpp_is_integral<typename std::remove_cv<T>::type>
+{};
+#endif
 
 #ifndef ITERATOR_TRAITS_HPP
 # define ITERATOR_TRAITS_HPP
@@ -87,20 +100,20 @@ struct iterator_traits<const T*>
 #ifndef REVERSE_ITERATOR_HPP
 # define REVERSE_ITERATOR_HPP
 template < typename _Iter >
-class	reverse_iterator : public std::iterator<	typename std::iterator_traits<_Iter>::iterator_category,
-													typename std::iterator_traits<_Iter>::value_type,
-													typename std::iterator_traits<_Iter>::difference_type,
-													typename std::iterator_traits<_Iter>::pointer,
-													typename std::iterator_traits<_Iter>::reference>
+class	reverse_iterator : public std::iterator<	typename ft::iterator_traits<_Iter>::iterator_category,
+													typename ft::iterator_traits<_Iter>::value_type,
+													typename ft::iterator_traits<_Iter>::difference_type,
+													typename ft::iterator_traits<_Iter>::pointer,
+													typename ft::iterator_traits<_Iter>::reference>
 {
 protected:
 	_Iter	current;
 
 public:
 	typedef _Iter															iterator_type;
-	typedef typename std::iterator_traits<_Iter>::difference_type			difference_type;
-	typedef typename std::iterator_traits<_Iter>::reference					reference;
-	typedef typename std::iterator_traits<_Iter>::pointer					pointer;
+	typedef typename ft::iterator_traits<_Iter>::difference_type			difference_type;
+	typedef typename ft::iterator_traits<_Iter>::reference					reference;
+	typedef typename ft::iterator_traits<_Iter>::pointer					pointer;
 
 	reverse_iterator () : current()												{ return; };
 	reverse_iterator (_Iter __x) : current(__x)									{ return; };
@@ -148,7 +161,7 @@ bool	operator>=(const reverse_iterator<_Iter>& a, const reverse_iterator<_Iter>&
 { return !(a < b); }
 
 template <typename _Iter>
-typename std::iterator_traits<_Iter>::difference_type
+typename ft::iterator_traits<_Iter>::difference_type
 operator- (const reverse_iterator<_Iter>& a, const reverse_iterator<_Iter>& b)
 { return b.base() - a.base(); }
 
@@ -182,7 +195,7 @@ bool	operator>=(const reverse_iterator<IterA>& a, const reverse_iterator<IterB>&
 { return !(a < b); }
 
 template <typename IterA, typename IterB>
-typename std::iterator_traits<IterA>::difference_type
+typename ft::iterator_traits<IterA>::difference_type
 operator- (const reverse_iterator<IterA>& a, const reverse_iterator<IterB>& b)
 { return b.base() - a.base(); }
 

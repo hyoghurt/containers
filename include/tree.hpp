@@ -2,7 +2,7 @@
 # define TREE_HPP
 
 # include "ft.hpp"
-# include <iostream>
+//# include <iostream>
 
 namespace ft
 {
@@ -264,8 +264,6 @@ class	tree
 		typedef typename T::second_type						mapped_type;
 		typedef Compare										key_compare;
 		typedef Allocator									allocator_type_val;
-//https://gcc.gnu.org/onlinedocs/gcc-4.6.3/libstdc++/api/a01067_source.html
-//string 334 ( rewrite alloc for node using rebind ) 
 		typedef typename Allocator::
 			template rebind< node<T, Allocator> >::other	allocator_type;
 		typedef typename allocator_type::reference			reference;
@@ -302,6 +300,7 @@ class	tree
 		size_t							delete_node (const key_type& key);
 		size_t							count (const key_type& key) const;
 		pointer							find_node_key (const key_type& key) const;
+		void							swap (tree& x);
 
 	private:
 		bool							is_null_node (pointer x) const;
@@ -312,8 +311,10 @@ class	tree
 		void							rotate_right (pointer x);
 		pointer							tree_min(pointer x);
 		pointer							tree_max(pointer x);
+		/*
 		void							show_debag ();
 		void							print_debag (pointer x);
+		*/
 
 		pointer			null_node;
 		pointer			root;
@@ -357,6 +358,7 @@ tree<T,Compare,Allocator>::operator= (const tree& oth)
 		_size_tree = 0;
 		comp = oth.comp;
 		alloc = oth.alloc;
+
 		for (tree_const_iterator it = oth.begin(); it != oth.end(); ++it)
 			insert_node_p(this->root, ft::make_pair<key_type, mapped_type>(it->first, it->second));
 	}
@@ -761,14 +763,24 @@ tree<T,Compare,Allocator>::find_node_key(const key_type& key) const
 		if (current->date->first == key)
 			return (current);
 		if (comp(key, current->date->first))
-		//if (key < current->date->first)
 			current = current->left;
 		else
 			current = current->right;
 	}
 	return (current);
 }
+//SWAP____________________________________________________________________________________
+template <class T, class Compare, class Allocator>
+void	tree<T,Compare,Allocator>::swap(tree<T,Compare,Allocator>& x)
+{
+		ft::swap(this->null_node, x.null_node);
+		ft::swap(this->root, x.root);
+		ft::swap(this->_size_tree, x.sise_tree);
+		ft::swap(this->comp, x.comp);
+		ft::swap(this->alloc, x.alloc);
+}
 //DEBAG________________________________________________________________________________
+/*
 template <class T, class Compare, class Allocator>
 void	tree<T,Compare,Allocator>::show_debag()
 {
@@ -836,6 +848,7 @@ void	tree<T,Compare,Allocator>::print_debag(pointer x)
 			print_debag(x->right);
 	}
 }
+*/
 //TREE_MIN________________________________________________________________________________
 template <class T, class Compare, class Allocator>
 typename tree<T,Compare,Allocator>::pointer

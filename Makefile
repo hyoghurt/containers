@@ -1,6 +1,6 @@
 INCLUDE			= include
 NAME			= a.out
-SRC				=	main.cpp
+SRC				= main_vector.cpp
 
 SRCDIR			= src
 OBJDIR			= obj

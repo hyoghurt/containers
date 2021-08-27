@@ -6,7 +6,6 @@
 #include "vector.hpp"
 
 #define	COLO "\033[1;44;1m"
-#define TIM "\033[1;48;5;63m"
 #define NO_C "\033[0m"
 #define FIL "\033[1;48;5;55m"
 
@@ -51,17 +50,16 @@ int				main( void )
 #endif
 	struct timeval	time_now;
 	gettimeofday(&time_now,nullptr);
-	//time_t msecs_time = (time_now.tv_sec % 1000) * 1000 + (time_now.tv_usec / 1000);
-	time_t msecs_time = time_now.tv_usec;
+	time_t msecs_time = (time_now.tv_sec % 100) * 1000000000 + time_now.tv_usec;
 
 	/*
-	 */
+	*/
 	test_capac_size("TEST CAPACITY SIZE");
 	test_iterator_inc_decr("TEST ITERATOR OPER");
 	test_operator("TEST OPERATOR");
 	test_front_back("TEST FRONT BACK");
 	test_oper_qr("TEST OPER []"); //operator v[]
-	test_point_allocat("TEST POIN ALLOCAT");
+	//test_point_allocat("TEST POIN ALLOCAT");
 	test_pop_back("TEST POP_BACK");
 	test_constructor("TEST CONST");
 	test_constructor_1("TEST CONST 1");
@@ -89,13 +87,13 @@ int				main( void )
 	*/
 	std::cout << "end main" <<  std::endl;
 	gettimeofday(&time_now,nullptr);
+	time_t msecs_end = (time_now.tv_sec % 100) * 1000000000 + time_now.tv_usec;
 #ifdef FT
-    std::cout << TIM << "FT";
-	std::cout << "	time: "  << time_now.tv_usec - msecs_time << NO_C << std::endl << std::endl;
+    std::cout << COLO << "FT";
+	std::cout << "	time: "  << msecs_end - msecs_time << NO_C << std::endl << std::endl;
 #else
-    std::cout << TIM << "STD";
-	std::cout << "	time: "  << time_now.tv_usec - msecs_time << NO_C << std::endl << std::endl;
-	namespace	ft = std;
+    std::cout << COLO << "STD";
+	std::cout << "	time: "  << msecs_end - msecs_time << NO_C << std::endl << std::endl;
 #endif
 	return (0);
 }
@@ -593,7 +591,6 @@ void	test_insert_4(const std::string& promo)
 
 	std::cout << std::endl;
 	std::cout << "size = " << first.size() << std::endl;
-	std::cout << "capacity = " << first.capacity() << std::endl;
 
 	c_b = first.begin();
 	c_e = first.end();
@@ -612,8 +609,6 @@ void	test_insert_3(const std::string& promo)
 #endif
 
 	ft::vector<int> first(3, 100);
-
-	std::vector<int>::iterator it;
 
 	std::cout << "size = " << first.size() << std::endl;
 	std::cout << "capacity = " << first.capacity() << std::endl;
@@ -1100,6 +1095,8 @@ void	test_capac_size(const std::string& promo)
 	v.push_back(1433);
 	std::cout << "capacity = " << v.capacity() << std::endl;
 	std::cout << "size = " << v.size() << std::endl;
+	/*
+	*/
 }
 
 void	test_iterator_inc_decr(const std::string& promo)
@@ -1345,16 +1342,16 @@ void	test_pop_back(const std::string& promo)
 #endif
     ft::vector<int>				v;
 	ft::vector<int>::iterator	it;
-	std::cout << std::endl;
 	v.push_back(32);
+	v.push_back(76);
+	v.push_back(6);
 	std::cout << "size = " << v.size() << std::endl;
 	std::cout << "capacity = " << v.capacity() << std::endl;
-	std::vector<int>::reference	i = v.front();
+	ft::vector<int>::reference	i = v.front();
 	std::cout << "i = " << i << std::endl;
-	//std::cout << &v.front() << std::endl;
 	v.pop_back();
 	std::cout << "v.front = " << v.front() << std::endl;
-	std::cout << "v.back = " << v.back() << std::endl;
+	//std::cout << "v.back = " << v.back() << std::endl;
 	std::cout << "i = " << i << std::endl;
 	std::cout << "size = " << v.size() << std::endl;
 	std::cout << "capacity = " << v.capacity() << std::endl;
